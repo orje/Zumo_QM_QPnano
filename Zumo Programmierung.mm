@@ -13,8 +13,7 @@
       </li>
     </ol>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1538675256437" FOLDED="true" ID="ID_1244246604" MODIFIED="1539523967482" TEXT="Arduino IDE">
 <icon BUILTIN="stop"/>
 <node CREATED="1538675410226" ID="ID_1322557574" MODIFIED="1538678791967" STYLE="fork" TEXT="F&#xfc;r">
@@ -288,8 +287,7 @@
       </li>
     </ol>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="idea"/>
 <icon BUILTIN="ksmiletris"/>
 </node>
@@ -361,8 +359,7 @@
       NEU: siehe und studiere Umsetzung von Nagarkar
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1539447950794" ID="ID_913780115" LINK="https://github.com/nagarkar/pololuzumo32u4" MODIFIED="1539448012023" TEXT="Nagarkar&apos;s Umsetzung"/>
 </node>
 </node>
@@ -464,17 +461,14 @@
   </body>
 </html></richcontent>
 </node>
-<node CREATED="1539527183106" ID="ID_1323765566" MODIFIED="1539530933210" TEXT="timetick generieren">
+<node CREATED="1539527183106" ID="ID_1323765566" MODIFIED="1539891205623" TEXT="timetick generieren">
 <richcontent TYPE="NOTE"><html>
   <head>
     
   </head>
   <body>
     <p>
-      Timer 4 benutzen (wird sonst vom Buzzer benutzt)
-    </p>
-    <p>
-      Miro benutzt timer 2 im CTC mode. Ich glaube ich muss den normal mode nehmen und TOV. Da schreibt nagarkar allerdings, dass der overflow schon anderweitig benutzt wird. Also weiterlesen.!?
+      Beobachten, ob stabil, da der Zeittakt erst doppelt so lang erschien und am n&#228;chsten Takt dann richtig!?
     </p>
   </body>
 </html>
