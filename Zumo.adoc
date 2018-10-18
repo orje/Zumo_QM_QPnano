@@ -1,0 +1,28 @@
+[uml,Zumo.png]
+----
+hide footbox
+
+title Zumo
+
+actor user
+entity Zumo
+boundary sensor
+boundary motor
+control counter
+
+user -> Zumo: Start_button
+loop
+    Zumo -> sensor: scan in front
+        alt no barrier
+            Zumo -> motor: drive forward
+        else barrier
+            Zumo -> counter: counter++
+                alt counter < 4
+                    Zumo -> motor: turn 90° right
+                    Zumo -> motor: drive forward
+                break counter = 4
+                    Zumo -> motor: stopp
+                end
+        end
+end
+----
