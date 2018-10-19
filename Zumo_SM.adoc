@@ -3,13 +3,12 @@
 
 [*] -down-> Start
 
-Start : char counter = 0;
+Start : uint_8 counter = 0;
 Start -down-> Scan : Start button
 
-Scan: bool counter();
 Scan: bool scan();
-Scan -right-> Drive : counter < 4 && scan == true
-Scan -left-> Turn : counter < 4 && scan == false
+Scan -right-> Drive : scan == true && counter < 4
+Scan -left-> Turn : scan == false && counter < 4
 
 Drive : counter = 0;
 Drive : TimeTick();
@@ -18,7 +17,7 @@ Drive -> Scan : TimeTick
 
 Turn : Counter++
 Turn : bool drive_turn();
-Turn -> Scan : drive == false
-Scan -down-> [*] : counter == 4 && scan == false
+Turn -> Scan : drive == true
+Scan -down-> [*] : scan == false && counter == 4
 
 ----
