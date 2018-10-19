@@ -117,6 +117,7 @@ static QState Blinky_initial(Blinky * const me) {
     /*${AOs::Blinky::SM::initial} */
     QActive_armX((QActive *)me, 0U, BSP_TICKS_PER_SEC,
         BSP_TICKS_PER_SEC/2U);
+    // Omly the second BSP_TICKS_PER_SEC has an effect.
     return Q_TRAN(&Blinky_off);
 }
 /*${AOs::Blinky::SM::off} ..................................................*/
