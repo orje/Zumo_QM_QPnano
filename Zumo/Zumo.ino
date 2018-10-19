@@ -116,7 +116,7 @@ void Q_onAssert(char const Q_ROM * const file, int line) {
 static QState Zumo_initial(Zumo * const me) {
     /*${AOs::Zumo::SM::initial} */
     QActive_armX((QActive *)me, 0U, BSP_TICKS_PER_SEC,
-        BSP_TICKS_PER_SEC/8U);
+        BSP_TICKS_PER_SEC/16U);
     return Q_TRAN(&Zumo_off);
 }
 /*${AOs::Zumo::SM::off} ....................................................*/

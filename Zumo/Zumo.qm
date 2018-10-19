@@ -6,7 +6,7 @@
    <statechart>
     <initial target="../1">
      <action>QActive_armX((QActive *)me, 0U, BSP_TICKS_PER_SEC,
-    BSP_TICKS_PER_SEC/8U);</action>
+    BSP_TICKS_PER_SEC/16U);</action>
      <initial_glyph conn="2,3,5,1,24,4,-2">
       <action box="0,-2,6,2"/>
      </initial_glyph>
