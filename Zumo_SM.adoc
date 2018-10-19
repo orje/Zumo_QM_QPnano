@@ -11,7 +11,7 @@ Scan -right-> Drive : scan == true && counter < 4
 Scan -left-> Turn : scan == false && counter < 4
 
 Drive : counter = 0;
-Drive : TimeTick();
+Drive : void TimeTick();
 Drive : void drive_forward();
 Drive -> Scan : TimeTick
 
