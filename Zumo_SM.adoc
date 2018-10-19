@@ -1,0 +1,24 @@
+[uml,Zumo_SM.png]
+----
+
+[*] -down-> Start
+
+Start : char counter = 0;
+Start -down-> Scan : Start button
+
+Scan: bool counter();
+Scan: bool scan();
+Scan -right-> Drive : counter < 4 && scan == true
+Scan -left-> Turn : counter < 4 && scan == false
+
+Drive : counter = 0;
+Drive : TimeTick();
+Drive : void drive_forward();
+Drive -> Scan : TimeTick
+
+Turn : Counter++
+Turn : bool drive_turn();
+Turn -> Scan : drive == false
+Scan -down-> [*] : counter == 4 && scan == false
+
+----

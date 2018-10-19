@@ -11,6 +11,7 @@ boundary motor
 control counter
 
 user -> Zumo: Start_button
+Zumo -> counter: Counter = 0;
 loop
     Zumo -> sensor: scan in front
         alt no barrier
@@ -19,6 +20,7 @@ loop
             Zumo -> counter: counter++
                 alt counter < 4
                     Zumo -> motor: turn 90° right
+                    Zumo -> sensor: scan in front
                     Zumo -> motor: drive forward
                 break counter = 4
                     Zumo -> motor: stopp

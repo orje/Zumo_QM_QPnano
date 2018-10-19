@@ -426,7 +426,7 @@
 <node CREATED="1538841663613" ID="ID_1987101044" MODIFIED="1539108875128" TEXT="Umfahren"/>
 </node>
 <node CREATED="1539108920688" ID="ID_475536693" MODIFIED="1539527170655" POSITION="left" TEXT="Teilaufgaben">
-<node CREATED="1539108937358" FOLDED="true" ID="ID_137728993" MODIFIED="1539194315826" TEXT="Motoren ansteuern">
+<node CREATED="1539108937358" FOLDED="true" ID="ID_137728993" MODIFIED="1539970489732" TEXT="Motoren ansteuern">
 <node CREATED="1539108974217" ID="ID_46398462" MODIFIED="1539109182480" TEXT="Gleichm&#xe4;&#xdf;igkeit synchronisieren">
 <richcontent TYPE="NOTE"><html>
   <head>
@@ -471,8 +471,7 @@
       Beobachten, ob stabil, da der Zeittakt erst doppelt so lang erschien und am n&#228;chsten Takt dann richtig!?
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1539194358878" FOLDED="true" ID="ID_188788871" MODIFIED="1539524213568" POSITION="right" TEXT="Fragen">
