@@ -1,5 +1,5 @@
 # Zumo_QM_QPnano
-This is a project to /learn/find out, how to program the Pololu Zumo with the QM/QPnano framework. It's an project for me in every way. That's the reason, why I put everything, that I think and try, into the respository.  
+This is a project to /learn/find out, how to program the Pololu Zumo with the QM/QPnano framework. It's an project for me in every way. That's the reason, why I put everything, that I think and try, into the respository. I will sort and clean it up from time to time.  
 I share everthing on GitHub for others to learn, get inspired or advice me.  
 Because of the fact, that I'm still a freetime beginner in the embedded world and the C language, I have to go step by step, trying to adapt the examples from the QM/QP framework for the ATmega328P to the ATmega32U4.  
 And because I'm yet not able to adapt the build and upload process within the QM/QPnano framework, I use following work around: I program in QM & generate the .ino file and then build/compile & upload it with the Arduino IDE.  
