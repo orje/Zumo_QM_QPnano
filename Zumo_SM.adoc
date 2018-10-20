@@ -1,23 +1,24 @@
 [uml,Zumo_SM.png]
 ----
+title Zumo sm
 
-[*] -down-> Start
+[*] -down-> start
 
-Start : uint_8 counter = 0;
-Start -down-> Scan : Start button
+start : uint_8 counter = 0;
+start -down-> scan : start button
 
-Scan: bool scan();
-Scan -right-> Drive : scan == true && counter < 4
-Scan -left-> Turn : scan == false && counter < 4
+scan: bool scan();
+scan -right-> drive : scan == true && counter < 4
+scan -left-> turn : scan == false && counter < 4
 
-Drive : counter = 0;
-Drive : void TimeTick();
-Drive : void drive_forward();
-Drive -> Scan : TimeTick
+drive : counter = 0;
+drive : void timetick();
+drive : void drive_forward();
+drive -> scan : timetick
 
-Turn : Counter++
-Turn : bool drive_turn();
-Turn -> Scan : drive == true
-Scan -down-> [*] : scan == false && counter == 4
+turn : counter++
+turn : bool drive_turn();
+turn -> scan : drive == true
 
+scan -down-> [*] : scan == false && counter == 4
 ----
