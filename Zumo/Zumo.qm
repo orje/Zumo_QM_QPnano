@@ -3,52 +3,62 @@
  <framework name="qpn"/>
  <package name="AOs" stereotype="0x02">
   <class name="Zumo" superclass="qpn::QActive">
+   <attribute name="counter" type="uint8_t" visibility="0x00" properties="0x00"/>
    <statechart>
     <initial target="../1">
-     <action>QActive_armX((QActive *)me, 0U, BSP_TICKS_PER_SEC,
-    BSP_TICKS_PER_SEC/16U);</action>
-     <initial_glyph conn="2,3,5,1,24,4,-2">
-      <action box="0,-2,6,2"/>
+     <action brief="reset counter">me-&gt;counter = 0;
+ledYellow(0);</action>
+     <initial_glyph conn="4,3,5,0,2,3">
+      <action box="0,-2,13,2"/>
      </initial_glyph>
     </initial>
-    <state name="off">
-     <entry brief="LED off">digitalWrite(LED_L, LOW);</entry>
-     <tran trig="Q_TIMEOUT" target="../../2">
-      <tran_glyph conn="2,13,3,1,24,7,-2">
-       <action box="0,-2,8,2"/>
+    <state name="start">
+     <entry brief="arm timetick">QActive_armX(&amp;me-&gt;super, 0U, BSP_TICKS_PER_SEC/10U, 0U);</entry>
+     <tran trig="Q_TIMEOUT" target="..">
+      <action brief="check start button">if (buttonA.isPressed()) {
+    QACTIVE_POST((QActive *)me, START_SIG, 0U);
+    }</action>
+      <tran_glyph conn="4,14,3,1,14">
+       <action box="0,-2,13,4"/>
       </tran_glyph>
      </tran>
-     <state_glyph node="2,5,22,11">
-      <entry box="1,2,17,4"/>
-     </state_glyph>
-    </state>
-    <state name="on">
-     <entry brief="LED on">digitalWrite(LED_L, HIGH);</entry>
-     <tran trig="Q_TIMEOUT" target="../../1">
-      <tran_glyph conn="2,26,3,1,26,-16,-4">
-       <action box="0,-2,8,2"/>
+     <tran trig="START" target="../../2">
+      <tran_glyph conn="4,20,3,0,2,4">
+       <action box="0,-2,7,2"/>
       </tran_glyph>
      </tran>
-     <state_glyph node="2,18,22,10">
-      <entry box="1,2,15,4"/>
+     <state_glyph node="4,6,14,16">
+      <entry box="1,2,12,4"/>
      </state_glyph>
     </state>
-    <state_diagram size="30,30"/>
+    <state name="scan">
+     <entry>ledYellow(1);</entry>
+     <state_glyph node="4,24,7,6">
+      <entry box="1,2,6,2"/>
+     </state_glyph>
+    </state>
+    <state_diagram size="20,32"/>
    </statechart>
   </class>
  </package>
  <directory name=".">
   <file name="Zumo.ino">
-   <text>#include &quot;qpn.h&quot;     // QP-nano framework
+   <text>#include &quot;qpn.h&quot; // QP-nano framework
 #include &quot;Arduino.h&quot; // Arduino API
+
+#include &lt;Zumo32U4.h&gt;
 
 //============================================================================
 // declare all AO classes...
 $declare(AOs::Zumo)
 //...
 
-// AO instances and event queue buffers for them...
+// AO instances, other objects and event queue buffers for them...
 Zumo AO_Zumo;
+
+// Other objects
+Zumo32U4ButtonA buttonA;
+
 static QEvt l_zumoQSto[10]; // Event queue storage for Zumo
 //...
 
@@ -62,8 +72,12 @@ QActiveCB const Q_ROM QF_active[] = {
 //============================================================================
 // various constants for the application...
 enum {
-    BSP_TICKS_PER_SEC = 100, // number of system clock ticks in one second
-    LED_L = 13               // the pin number of the on-board LED (L)
+    BSP_TICKS_PER_SEC = 100 // number of system clock ticks in one second
+};
+
+// various signals for the application...
+enum {
+    START_SIG = Q_USER_SIG // end of data
 };
 
 //............................................................................
@@ -73,9 +87,6 @@ void setup() {
 
     // initialize all AOs...
     QActive_ctor(&amp;AO_Zumo.super, Q_STATE_CAST(&amp;Zumo_initial));
-
-    // initialize the hardware used in this sketch...
-    pinMode(LED_L, OUTPUT); // set the LED-L pin to output
 }
 
 //............................................................................

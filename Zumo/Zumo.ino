@@ -16,8 +16,10 @@
 * for more details.
 */
 /*$endhead${.::Zumo.ino} ###################################################*/
-#include "qpn.h"     // QP-nano framework
+#include "qpn.h" // QP-nano framework
 #include "Arduino.h" // Arduino API
+
+#include <Zumo32U4.h>
 
 //============================================================================
 // declare all AO classes...
@@ -26,17 +28,24 @@
 typedef struct Zumo {
 /* protected: */
     QActive super;
+
+/* public: */
+    uint8_t counter;
 } Zumo;
 
 /* protected: */
 static QState Zumo_initial(Zumo * const me);
-static QState Zumo_off(Zumo * const me);
-static QState Zumo_on(Zumo * const me);
+static QState Zumo_start(Zumo * const me);
+static QState Zumo_scan(Zumo * const me);
 /*$enddecl${AOs::Zumo} #####################################################*/
 //...
 
-// AO instances and event queue buffers for them...
+// AO instances, other objects and event queue buffers for them...
 Zumo AO_Zumo;
+
+// Other objects
+Zumo32U4ButtonA buttonA;
+
 static QEvt l_zumoQSto[10]; // Event queue storage for Zumo
 //...
 
@@ -50,8 +59,12 @@ QActiveCB const Q_ROM QF_active[] = {
 //============================================================================
 // various constants for the application...
 enum {
-    BSP_TICKS_PER_SEC = 100, // number of system clock ticks in one second
-    LED_L = 13               // the pin number of the on-board LED (L)
+    BSP_TICKS_PER_SEC = 100 // number of system clock ticks in one second
+};
+
+// various signals for the application...
+enum {
+    START_SIG = Q_USER_SIG // end of data
 };
 
 //............................................................................
@@ -61,9 +74,6 @@ void setup() {
 
     // initialize all AOs...
     QActive_ctor(&AO_Zumo.super, Q_STATE_CAST(&Zumo_initial));
-
-    // initialize the hardware used in this sketch...
-    pinMode(LED_L, OUTPUT); // set the LED-L pin to output
 }
 
 //............................................................................
@@ -115,23 +125,31 @@ void Q_onAssert(char const Q_ROM * const file, int line) {
 /*${AOs::Zumo::SM} .........................................................*/
 static QState Zumo_initial(Zumo * const me) {
     /*${AOs::Zumo::SM::initial} */
-    QActive_armX((QActive *)me, 0U, BSP_TICKS_PER_SEC,
-        BSP_TICKS_PER_SEC/16U);
-    return Q_TRAN(&Zumo_off);
+    me->counter = 0;
+    ledYellow(0);
+    return Q_TRAN(&Zumo_start);
 }
-/*${AOs::Zumo::SM::off} ....................................................*/
-static QState Zumo_off(Zumo * const me) {
+/*${AOs::Zumo::SM::start} ..................................................*/
+static QState Zumo_start(Zumo * const me) {
     QState status_;
     switch (Q_SIG(me)) {
-        /*${AOs::Zumo::SM::off} */
+        /*${AOs::Zumo::SM::start} */
         case Q_ENTRY_SIG: {
-            digitalWrite(LED_L, LOW);
+            QActive_armX(&me->super, 0U, BSP_TICKS_PER_SEC/10U, 0U);
             status_ = Q_HANDLED();
             break;
         }
-        /*${AOs::Zumo::SM::off::Q_TIMEOUT} */
+        /*${AOs::Zumo::SM::start::Q_TIMEOUT} */
         case Q_TIMEOUT_SIG: {
-            status_ = Q_TRAN(&Zumo_on);
+            if (buttonA.isPressed()) {
+                QACTIVE_POST((QActive *)me, START_SIG, 0U);
+                }
+            status_ = Q_TRAN(&Zumo_start);
+            break;
+        }
+        /*${AOs::Zumo::SM::start::START} */
+        case START_SIG: {
+            status_ = Q_TRAN(&Zumo_scan);
             break;
         }
         default: {
@@ -141,19 +159,14 @@ static QState Zumo_off(Zumo * const me) {
     }
     return status_;
 }
-/*${AOs::Zumo::SM::on} .....................................................*/
-static QState Zumo_on(Zumo * const me) {
+/*${AOs::Zumo::SM::scan} ...................................................*/
+static QState Zumo_scan(Zumo * const me) {
     QState status_;
     switch (Q_SIG(me)) {
-        /*${AOs::Zumo::SM::on} */
+        /*${AOs::Zumo::SM::scan} */
         case Q_ENTRY_SIG: {
-            digitalWrite(LED_L, HIGH);
+            ledYellow(1);
             status_ = Q_HANDLED();
-            break;
-        }
-        /*${AOs::Zumo::SM::on::Q_TIMEOUT} */
-        case Q_TIMEOUT_SIG: {
-            status_ = Q_TRAN(&Zumo_off);
             break;
         }
         default: {

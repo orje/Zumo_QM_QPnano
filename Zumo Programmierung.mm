@@ -442,7 +442,19 @@
 </node>
 <node CREATED="1539109191580" ID="ID_596105360" MODIFIED="1539109204372" TEXT="Frontsensoren abtasten"/>
 <node CREATED="1539109206683" ID="ID_396289365" MODIFIED="1539109217958" TEXT="Seitensensoren abtasten"/>
-<node CREATED="1539109250003" ID="ID_335363733" MODIFIED="1539109265385" TEXT="Start/Stopp Taste"/>
+<node CREATED="1539109250003" ID="ID_335363733" MODIFIED="1540150291447" TEXT="Start/Stopp Taste">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Offenbar muss ich eine timeout-Schleife machen und dann immer wieder den Button abfragen &lt;- Ja
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
 <node CREATED="1539109306984" ID="ID_1990753561" MODIFIED="1539109518683" TEXT="Status LED">
 <richcontent TYPE="NOTE"><html>
   <head>
