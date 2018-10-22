@@ -440,9 +440,12 @@
 </html></richcontent>
 </node>
 </node>
-<node CREATED="1539109191580" ID="ID_596105360" MODIFIED="1539109204372" TEXT="Frontsensoren abtasten"/>
+<node CREATED="1539109191580" ID="ID_596105360" MODIFIED="1539109204372" TEXT="Frontsensoren abtasten">
+<node CREATED="1540200105311" ID="ID_572190175" LINK="../../../../../../F:/Users/orje/Documents/Arduino/ZumoThirdTest/ZumoThirdTest.ino" MODIFIED="1540200185407" TEXT="eigenes"/>
+<node CREATED="1540200112056" ID="ID_1245306829" LINK="../libraries/Zumo32U4/examples/FaceTowardsOpponent/FaceTowardsOpponent.ino" MODIFIED="1540200263091" TEXT="Beispiel"/>
+</node>
 <node CREATED="1539109206683" ID="ID_396289365" MODIFIED="1539109217958" TEXT="Seitensensoren abtasten"/>
-<node CREATED="1539109250003" ID="ID_335363733" MODIFIED="1540150291447" TEXT="Start/Stopp Taste">
+<node CREATED="1539109250003" ID="ID_335363733" MODIFIED="1540200086714" TEXT="Start/Stopp Taste">
 <richcontent TYPE="NOTE"><html>
   <head>
     
