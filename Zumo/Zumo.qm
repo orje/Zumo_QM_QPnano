@@ -7,7 +7,7 @@
    <statechart>
     <initial target="../1">
      <action brief="reset counter">me-&gt;counter = 0;
-ledYellow(0);</action>
+ledYellow(0); // for debug</action>
      <initial_glyph conn="4,3,5,0,2,3">
       <action box="0,-2,13,2"/>
      </initial_glyph>
@@ -17,7 +17,7 @@ ledYellow(0);</action>
      <tran trig="Q_TIMEOUT" target="..">
       <action brief="check start button">if (buttonA.isPressed()) {
     QACTIVE_POST((QActive *)me, START_SIG, 0U);
-    }</action>
+}</action>
       <tran_glyph conn="4,14,3,1,14">
        <action box="0,-2,13,4"/>
       </tran_glyph>
@@ -32,7 +32,7 @@ ledYellow(0);</action>
      </state_glyph>
     </state>
     <state name="scan">
-     <entry>ledYellow(1);</entry>
+     <entry>ledYellow(1); // for debug</entry>
      <state_glyph node="4,24,7,6">
       <entry box="1,2,6,2"/>
      </state_glyph>

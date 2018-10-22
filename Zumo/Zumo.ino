@@ -126,7 +126,7 @@ void Q_onAssert(char const Q_ROM * const file, int line) {
 static QState Zumo_initial(Zumo * const me) {
     /*${AOs::Zumo::SM::initial} */
     me->counter = 0;
-    ledYellow(0);
+    ledYellow(0); // for debug
     return Q_TRAN(&Zumo_start);
 }
 /*${AOs::Zumo::SM::start} ..................................................*/
@@ -143,7 +143,7 @@ static QState Zumo_start(Zumo * const me) {
         case Q_TIMEOUT_SIG: {
             if (buttonA.isPressed()) {
                 QACTIVE_POST((QActive *)me, START_SIG, 0U);
-                }
+            }
             status_ = Q_TRAN(&Zumo_start);
             break;
         }
@@ -165,7 +165,7 @@ static QState Zumo_scan(Zumo * const me) {
     switch (Q_SIG(me)) {
         /*${AOs::Zumo::SM::scan} */
         case Q_ENTRY_SIG: {
-            ledYellow(1);
+            ledYellow(1); // for debug
             status_ = Q_HANDLED();
             break;
         }
