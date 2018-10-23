@@ -440,9 +440,22 @@
 </html></richcontent>
 </node>
 </node>
-<node CREATED="1539109191580" ID="ID_596105360" MODIFIED="1539109204372" TEXT="Frontsensoren abtasten">
+<node CREATED="1539109191580" ID="ID_596105360" MODIFIED="1540313205401" TEXT="Frontsensoren abtasten">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Abstandswert = 0 - 6
+    </p>
+  </body>
+</html>
+</richcontent>
 <node CREATED="1540200105311" ID="ID_572190175" LINK="../../../../../../F:/Users/orje/Documents/Arduino/ZumoThirdTest/ZumoThirdTest.ino" MODIFIED="1540200185407" TEXT="eigenes"/>
-<node CREATED="1540200112056" ID="ID_1245306829" LINK="../libraries/Zumo32U4/examples/FaceTowardsOpponent/FaceTowardsOpponent.ino" MODIFIED="1540200263091" TEXT="Beispiel"/>
+<node CREATED="1540200112056" ID="ID_1245306829" LINK="../libraries/Zumo32U4/examples/FaceTowardsOpponent/FaceTowardsOpponent.ino" MODIFIED="1540313941825" TEXT="Beispiel">
+<icon BUILTIN="button_ok"/>
+</node>
 </node>
 <node CREATED="1539109206683" ID="ID_396289365" MODIFIED="1539109217958" TEXT="Seitensensoren abtasten"/>
 <node CREATED="1539109250003" ID="ID_335363733" MODIFIED="1540200086714" TEXT="Start/Stopp Taste">
@@ -455,8 +468,7 @@
       Offenbar muss ich eine timeout-Schleife machen und dann immer wieder den Button abfragen &lt;- Ja
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1539109306984" ID="ID_1990753561" MODIFIED="1539109518683" TEXT="Status LED">
 <richcontent TYPE="NOTE"><html>

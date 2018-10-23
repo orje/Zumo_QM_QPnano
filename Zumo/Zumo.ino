@@ -45,6 +45,7 @@ Zumo AO_Zumo;
 
 // Other objects
 Zumo32U4ButtonA buttonA;
+Zumo32U4ProximitySensors proxSensors;
 
 static QEvt l_zumoQSto[10]; // Event queue storage for Zumo
 //...
@@ -74,6 +75,8 @@ void setup() {
 
     // initialize all AOs...
     QActive_ctor(&AO_Zumo.super, Q_STATE_CAST(&Zumo_initial));
+
+    proxSensors.initFrontSensor();
 }
 
 //............................................................................
