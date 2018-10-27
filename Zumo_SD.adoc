@@ -5,11 +5,11 @@ hide footbox
 title Zumo sd
 
 actor user
+control timetick
 entity Zumo
+control counter
 boundary sensor
 boundary motor
-control counter
-control timetick
 
 user -> Zumo: start button
 Zumo -> counter: uint_ 8 counter = 0;
@@ -18,9 +18,8 @@ Zumo -> sensor: bool scan ();
 loop
 alt scan == true && counter < 4
     Zumo -> counter : counter = 0;
-    Zumo -> timetick : void timetick();
     Zumo -> motor : void drive_forward();
-    timetick -> sensor : timetick
+    timetick -> sensor : bool scan();
     
 else scan == false && counter < 4
     Zumo -> counter : counter++;
