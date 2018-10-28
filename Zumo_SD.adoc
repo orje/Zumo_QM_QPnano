@@ -2,31 +2,68 @@
 ----
 hide footbox
 
+
 title Zumo sd
 
+
 actor user
-control timetick
 entity Zumo
+entity display
+entity sensors
+entity motors
+entity encoders
+control startStopBtn
+control leds
 control counter
-boundary sensor
-boundary motor
+control timetick
 
-user -> Zumo: start button
-Zumo -> counter: uint_ 8 counter = 0;
-Zumo -> sensor: bool scan ();
 
-loop
-alt scan == true && counter < 4
-    Zumo -> counter : counter = 0;
-    Zumo -> motor : void drive_forward();
-    timetick -> sensor : bool scan();
-    
-else scan == false && counter < 4
-    Zumo -> counter : counter++;
-    Zumo -> motor : bool drive_turn();
-    motor -> sensor : drive == true
-        
-else scan == false && counter == 4
-    Zumo -> user : break;
-end
+note over timetick, user #EEEEEE
+Als erstes schalte ich den **Zumo** ein.
+Daraufhin fordert mich das **Display** dazu auf, den **Start/Stopp-Knopf "A"** zu drücken.
+Wenn ich den Start/Stopp-Knopf gedrückt habe, erlischt das Display und 
+der Zumo reseted den counter und startet einen **Timer**.
+Dann tastet der Zumo mit den **Sensoren** sein Vorfeld ab, um zu checken, ob es frei ist.
+Ist es frei, schaltet der Zumo die **grüne LED** ein und lässt die **Motoren** vorwärts fahren.
+Während der Vorwärtsfahrt checkt und korrigiert der Zumo mit den **Encodern** 
+den Gleichlauf der Motoren.
+Erkennt der Zumo ein Hindernis in seinem Vorfeld, schaltet er die **gelbe LED** ein und 
+dreht durch seine Motoren um 90°.
+Nach jedem Ablauf des Timers, checkt der Zumo sein Vorfeld und handelt entsprechend.
+Erkennt der Zumo nach der dritten Drehung auf der Stelle immer noch ein Hindernis, 
+schaltet der Zumo die **rote LED** ein und fordert auf dem Display zum Drücken 
+des Start/Stopp-Knopfes auf.
+Nach dem Betätigen des Start/Stopp-Knopfes erlischt die rote LED und 
+auf dem Display erscheint wieder die Aufforderung zum Betätigen des Start/Stopp-Knopfes.
+end note
+
+
+user -> Zumo : switched on
+Zumo -> display : display "Press Start!";
+
+user -> startStopBtn : pressed
+Zumo -> display : display off;
+Zumo -> timetick : arm timer;
+Zumo -> counter : counter = 0;
+Zumo -> sensors : check front;
+
+sensors -> Zumo : '== free'
+Zumo -> leds : green on;
+Zumo -> motors : drive forward;
+Zumo -> encoders : correct drive;
+
+sensors -> Zumo : '== barrier'
+Zumo -> leds : yellow on;
+Zumo -> motors : turn 90°;
+Zumo -> counter : counter++;
+
+counter -> Zumo : "== 3"
+Zumo -> leds : red on;
+Zumo -> display : display "Press Stop";
+user -> startStopBtn : pressed
+Zumo -> leds : off;
+Zumo -> display : display "Press Start!";
+
+timetick -> Zumo : timeout
+Zumo -> sensors : check front;
 ----
