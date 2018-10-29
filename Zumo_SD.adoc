@@ -8,62 +8,61 @@ title Zumo sd
 
 actor user
 entity Zumo
-entity display
-entity sensors
+entity lcd
+entity proxSensors
 entity motors
 entity encoders
-control startStopBtn
-control leds
+control buttonA
+control ledGreen
+control ledYellow
+control ledRed
 control counter
 control timetick
 
 
 note over timetick, user #EEEEEE
+
 Als erstes schalte ich den **Zumo** ein.
-Daraufhin fordert mich das **Display** dazu auf, den **Start/Stopp-Knopf "A"** zu drücken.
-Wenn ich den Start/Stopp-Knopf gedrückt habe, erlischt das Display und 
-der Zumo reseted den counter und startet einen **Timer**.
-Dann tastet der Zumo mit den **Sensoren** sein Vorfeld ab, um zu checken, ob es frei ist.
-Ist es frei, schaltet der Zumo die **grüne LED** ein und lässt die **Motoren** vorwärts fahren.
-Während der Vorwärtsfahrt checkt und korrigiert der Zumo mit den **Encodern** 
-den Gleichlauf der Motoren.
-Erkennt der Zumo ein Hindernis in seinem Vorfeld, schaltet er die **gelbe LED** ein und 
-dreht durch seine Motoren um 90°.
-Nach jedem Ablauf des Timers, checkt der Zumo sein Vorfeld und handelt entsprechend.
-Erkennt der Zumo nach der dritten Drehung auf der Stelle immer noch ein Hindernis, 
-schaltet der Zumo die **rote LED** ein und fordert auf dem Display zum Drücken 
-des Start/Stopp-Knopfes auf.
-Nach dem Betätigen des Start/Stopp-Knopfes erlischt die rote LED und 
-auf dem Display erscheint wieder die Aufforderung zum Betätigen des Start/Stopp-Knopfes.
+Daraufhin fordert mich das **lcd** dazu auf, den **buttonA** zu drücken.
+Wenn ich den **buttonA** gedrückt habe, erlischt das **lcd** und der **Zumo** reseted den **counter** und startet einen **timetick**.
+Dann tastet der **Zumo** mit den **proxSensors** sein Vorfeld ab, um zu checken, ob es frei ist.
+Ist es frei, schaltet der **Zumo** die **grüne LED** ein und lässt die **motors** vorwärts fahren.
+Während der Vorwärtsfahrt checkt und korrigiert der **Zumo** mit den **Encodern** den Gleichlauf der **motors**.
+Erkennt der **Zumo** ein Hindernis in seinem Vorfeld, schaltet er die **gelbe LED** ein und dreht durch seine **motors** um 90°.
+Nach jedem Ablauf des **timetick**, checkt der **Zumo** sein Vorfeld und handelt entsprechend.
+Erkennt der **Zumo** nach der dritten Drehung auf der Stelle immer noch ein Hindernis, schaltet der **Zumo** die **rote LED** ein und fordert auf dem **lcd** zum Drücken des **buttonA** auf.
+Nach dem Betätigen des **buttonA** erlischt die **ledRed** und auf dem **lcd** erscheint wieder die Aufforderung zum Betätigen des **buttonA**.
+
 end note
 
 
 user -> Zumo : switched on
-Zumo -> display : display "Press Start!";
+Zumo -> lcd : lcd.print(F("Press Start"));
 
-user -> startStopBtn : pressed
-Zumo -> display : display off;
-Zumo -> timetick : arm timer;
+user -> buttonA : pressed
+buttonA -> Zumo : STARTSTOP_SIG
+Zumo -> lcd : lcd.clear();
+Zumo -> timetick : QActive_armX((QActive *)me, 0U, BSP_TICKS_PER_SEC, 0U);
 Zumo -> counter : counter = 0;
-Zumo -> sensors : check front;
+Zumo -> proxSensors : check front;
 
-sensors -> Zumo : '== free'
-Zumo -> leds : green on;
+proxSensors -> Zumo : '== free'
+Zumo -> ledGreen : ledGreen(1);
 Zumo -> motors : drive forward;
 Zumo -> encoders : correct drive;
 
-sensors -> Zumo : '== barrier'
-Zumo -> leds : yellow on;
+proxSensors -> Zumo : '== barrier'
+Zumo -> ledYellow : ledYellow(1);
 Zumo -> motors : turn 90°;
 Zumo -> counter : counter++;
 
 counter -> Zumo : "== 3"
-Zumo -> leds : red on;
-Zumo -> display : display "Press Stop";
-user -> startStopBtn : pressed
-Zumo -> leds : off;
-Zumo -> display : display "Press Start!";
+Zumo -> ledRed : ledRed(1);
+Zumo -> lcd : lcd.print(F("Press Stopp"));
+user -> buttonA : pressed
+Zumo -> ledRed : ledRed(0);
+Zumo -> lcd : lcd.print(F("Press Start"));
 
 timetick -> Zumo : timeout
-Zumo -> sensors : check front;
+Zumo -> proxSensors : check front;
 ----
