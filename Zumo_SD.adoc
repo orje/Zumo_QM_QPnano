@@ -1,7 +1,7 @@
 [uml,Zumo_SD.png]
-----
-hide footbox
+--
 
+hide footbox
 
 title Zumo sd
 
@@ -62,7 +62,3 @@ Zumo -> lcd : lcd.print(F("Press Stopp"));
 user -> buttonA : pressed
 Zumo -> ledRed : ledRed(0);
 Zumo -> lcd : lcd.print(F("Press Start"));
-
-timetick -> Zumo : timeout
-Zumo -> proxSensors : check front;
-----

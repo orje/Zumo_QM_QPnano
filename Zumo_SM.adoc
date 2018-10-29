@@ -1,5 +1,5 @@
 [uml,Zumo_SM.png]
-----
+--
 title Zumo sm
 
 [*] -down-> start
@@ -8,8 +8,8 @@ start : uint_8 counter = 0;
 start -down-> scan : start button
 
 scan: bool scan();
-scan -right-> drive : scan == true && counter < 4
-scan -left-> turn : scan == false && counter < 4
+scan -right-> drive : scan == true && counter < 3
+scan -left-> turn : scan == false && counter < 3
 
 drive : counter = 0;
 drive : void timetick();
@@ -20,5 +20,4 @@ turn : counter++
 turn : bool drive_turn();
 turn -> scan : drive == true
 
-scan -down-> [*] : scan == false && counter == 4
-----
+scan -down-> [*] : scan == false && counter == 3
