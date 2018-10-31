@@ -22,15 +22,15 @@ entity ledRed
 
 note over ledRed, user #EEEEEE
 
-Als erstes schalte ich den **Zumo** ein.
-Daraufhin fordert mich das **lcd** dazu auf, den **buttonA** zu drücken.
-Wenn ich den **buttonA** gedrückt habe, erlischt das **lcd** und der **Zumo** reseted den **counter** und startet einen **timetick**.
-Dann tastet der **Zumo** mit den **proxSensors** sein Vorfeld ab, um zu checken, ob es frei ist.
-Ist es frei, schaltet der **Zumo** die **grüne LED** ein und lässt die **motors** vorwärts fahren.
+Als erstes //schalte// ich den **Zumo** ein.
+Daraufhin //fordert// mich das **lcd** dazu auf, den **buttonA** zu drücken.
+Wenn ich den **buttonA** gedrückt habe, erlischt das **lcd** und der **Zumo** setzt den **counter** auf //0// und startet einen **timetick**.
+Dann tastet der **Zumo** mit den **proxSensors** sein Vorfeld ab, um zu checken, ob es //frei// ist.
+Ist es //frei//, schaltet der **Zumo** die **grüne LED** ein und lässt die **motors** //vorwärts// fahren.
 Während der Vorwärtsfahrt checkt und korrigiert der **Zumo** mit den **Encodern** den Gleichlauf der **motors**.
-Erkennt der **Zumo** ein Hindernis in seinem Vorfeld, schaltet er die **gelbe LED** ein und dreht durch seine **motors** um 90°.
+Erkennt der **Zumo** ein //Hindernis// in seinem Vorfeld, schaltet er die **gelbe LED** ein und dreht durch seine **motors** um //90°//.
 Nach jedem Ablauf des **timetick**, checkt der **Zumo** sein Vorfeld und handelt entsprechend.
-Erkennt der **Zumo** nach der dritten Drehung auf der Stelle immer noch ein Hindernis, schaltet der **Zumo** die **rote LED** ein 
+Erkennt der **Zumo** nach der //dritten// Drehung auf der Stelle immer noch ein Hindernis, schaltet der **Zumo** die **rote LED** ein 
 und fordert auf dem **lcd** zum Drücken des **buttonA** auf.
 Nach dem Betätigen des **buttonA** erlischt die **ledRed** und auf dem **lcd** erscheint wieder die Aufforderung zum Betätigen des **buttonA**.
 
