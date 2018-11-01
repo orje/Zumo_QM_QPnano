@@ -1,4 +1,4 @@
-[uml,Zumo_SM.png]
+[uml,Zumo_sm.png]
 --
 title Zumo sm
 

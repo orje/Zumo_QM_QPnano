@@ -1,4 +1,4 @@
-[uml,Zumo_SD.png]
+[uml,Zumo_sd.png]
 --
 
 hide footbox
@@ -41,33 +41,31 @@ user -> Zumo : switched on
 Zumo -> lcd : lcd.print(F("Press Start"));
 
 user -> buttonA : pressed
-buttonA -> Zumo : STARTSTOP_SIG
+buttonA -> Zumo : BUTTON_SIG
 Zumo -> lcd : lcd.clear();
 Zumo -> counter : counter = 0;
 Zumo -> timetick : QActive_armX((QActive *)me,  \n 0U, BSP_TICKS_PER_SEC, 0U);
 
 loop
 alt no barrier
-proxSensors -> Zumo : proxSensors.countsFrontWithLeftLeds() == 0 || \n proxSensors.countsFrontWithRightLeds() == 0;
+proxSensors -> Zumo : FREE_SIG // \n proxSensors.countsFrontWithLeftLeds() == 0 || \n proxSensors.countsFrontWithRightLeds() == 0;
 Zumo -> ledGreen : ledGreen(1);
-Zumo -> motors : motors.setSpeeds(400, 400);
+Zumo -> motors : DRIVE_SIG // motors.setSpeeds(400, 400);
 Zumo -> encoders : correct drive;
 
 else barrier
-proxSensors -> Zumo : proxSensors.countsFrontWithLeftLeds() > 0 || \n proxSensors.countsFrontWithRightLeds() > 0;
+proxSensors -> Zumo : BLOCKED_SIG // \n proxSensors.countsFrontWithLeftLeds() > 0 || \n proxSensors.countsFrontWithRightLeds() > 0;
 Zumo -> ledYellow : ledYellow(1);
-Zumo -> motors : motors.setSpeeds(100, 0);
+Zumo -> motors : TURN_SIG // motors.setSpeeds(100, 0);
 Zumo -> counter : counter++;
 
 else break
-counter -> Zumo : counter == 3
+counter -> Zumo : TRAPPED_SIG // counter == 3
 Zumo -> ledRed : ledRed(1);
 Zumo -> lcd : lcd.print(F("Press Stopp"));
 end
 
 user -> buttonA : pressed
-buttonA -> Zumo : STARTSTOP_SIG
+buttonA -> Zumo : BUTTON_SIG
 Zumo -> ledRed : ledRed(0);
 Zumo -> lcd : lcd.print(F("Press Start"));
-
---
