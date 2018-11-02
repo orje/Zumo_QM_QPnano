@@ -7,17 +7,17 @@ title Zumo sd
 
 
 actor user
-control Zumo
+entity Zumo
 entity lcd
-entity buttonA
+entity motors
+control buttonA
 control counter
 control timetick
-entity proxSensors
-entity motors
-entity encoders
-entity ledGreen
-entity ledYellow
-entity ledRed
+control proxSensors
+control encoders
+control ledGreen
+control ledYellow
+control ledRed
 
 
 note over ledRed, user #EEEEEE
