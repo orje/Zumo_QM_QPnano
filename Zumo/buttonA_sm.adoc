@@ -1,0 +1,13 @@
+[uml,buttonA_sm.png]
+--
+
+title buttonA sm
+
+
+[*] -> released
+
+state released {
+state released : buttonA.isPressed()
+}
+
+state pressed
