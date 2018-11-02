@@ -2,11 +2,6 @@
 --
 title Zumo sm
 
-[*] -> zumo
 state zumo {
-[*] -> lcd_start
-lcd_start : lcd.print(F("Press Start"));
-
-lcd_start -> lcd_off : STARTSTOP_SIG
-
+[*] -> lcd
 }

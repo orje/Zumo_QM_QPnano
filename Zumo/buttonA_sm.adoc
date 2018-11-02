@@ -4,10 +4,6 @@
 title buttonA sm
 
 
-[*] -> released
-
 state released {
-state released : buttonA.isPressed()
+state released : buttonA.isPressed();
 }
-
-state pressed
