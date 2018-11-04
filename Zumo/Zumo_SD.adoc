@@ -6,7 +6,6 @@ hide footbox
 title Zumo sd
 
 
-actor user
 entity Zumo
 entity lcd
 entity motors
@@ -20,43 +19,49 @@ control ledYellow
 control ledRed
 
 
-user -> Zumo : switched on
+
 Zumo -> lcd : DISPLAY_START_SIG
 
-user -> buttonA : pressed
 buttonA -> Zumo : BUTTON_PRESSED_SIG
 Zumo -> lcd : DISPLAY_CLEAR_SIG
-Zumo -> counter : RESET_COUNTER_SIG
-Zumo -> qp : ARM_TIMER_SIG
 Zumo -> proxSensors : CHECK_FRONT_SIG
+Zumo -> qp : ARM_TIMETICK_SIG
 
 loop
+
 alt no barrier
-proxSensors -> motors : DRIVE_SIG
+proxSensors -> counter : RESET_COUNTER_SIG
+proxSensors -> ledYellow : YELLOW_OFF_SIG
+proxSensors -> ledGreen : GREEN_ON_SIG
+proxSensors -> motors : DRIVE_SIG(l=400,r=400)
+
 motors -> encoders : CORRECT_DRIVE_SIG
-proxSensors -> Zumo : DRIVE_SIG
-Zumo -> ledGreen : GREEN_ON_SIG
+encoders -> motors : DRIVE_SIG(l,r)
 
 else barrier
-proxSensors -> motors : TURN_SIG
-proxSensors -> Zumo : TURN_SIG
-Zumo -> ledYellow : YELLOW_ON_SIG
-Zumo -> motors : TURN_SIG // motors.setSpeeds(100, 0);
-Zumo -> counter : counter++;
+proxSensors -> counter : COUNTER_COUNT_SIG
+proxSensors -> ledGreen : GREEN_OFF_SIG
+proxSensors -> ledYellow : YELLOW_ON_SIG
+proxSensors -> motors : DRIVE_SIG(l=50,r=0)
 
 else break
-counter -> Zumo : TRAPPED_SIG // counter == 3
-Zumo -> ledRed : ledRed(1);
-Zumo -> lcd : lcd.print(F("Press Stopp"));
+counter -> proxSensors : COUNTER_END_SIG
+proxSensors -> ledYellow : YELLOW_OFF_SIG
+proxSensors -> ledRed : RED_ON_SIG
+
+Zumo -> lcd : DISPLAY_STOP_SIG
+
 end
 
-user -> buttonA : pressed
-buttonA -> Zumo : BUTTON_SIG
-Zumo -> ledRed : ledRed(0);
-Zumo -> lcd : lcd.print(F("Press Start"));
+proxSensors -> proxSensors : TIMETICK_SIG
+
+buttonA -> Zumo : BUTTON_PRESSED_SIG
+Zumo -> ledRed : RED_OFF_SIG
+Zumo -> lcd : DISPLAY_START_SIG
 
 
-note over ledRed, user #EEEEEE
+
+note over ledRed, Zumo #EEEEEE
 
 Als erstes schalte ich den **Zumo** ein.
 Daraufhin fordert mich das **lcd** dazu auf, den **buttonA** zu drücken.

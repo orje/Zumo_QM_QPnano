@@ -426,8 +426,8 @@
 <node CREATED="1538841663613" ID="ID_1987101044" MODIFIED="1539108875128" TEXT="Umfahren"/>
 </node>
 <node CREATED="1539108920688" ID="ID_475536693" MODIFIED="1539527170655" POSITION="left" TEXT="Teilaufgaben">
-<node CREATED="1539108937358" FOLDED="true" ID="ID_137728993" MODIFIED="1539970489732" TEXT="Motoren ansteuern">
-<node CREATED="1539108974217" ID="ID_46398462" MODIFIED="1539109182480" TEXT="Gleichm&#xe4;&#xdf;igkeit synchronisieren">
+<node CREATED="1539108937358" ID="ID_137728993" MODIFIED="1541345406942" TEXT="Motoren ansteuern">
+<node CREATED="1539108974217" ID="ID_46398462" MODIFIED="1541347782804" TEXT="Gleichm&#xe4;&#xdf;igkeit synchronisieren">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -436,8 +436,18 @@
     <p>
       Beide Encoder mitz&#228;hlen und bei Differenz den entsprechenden Motor beschleunigen, bzw. verz&#246;gern
     </p>
+    <p>
+      
+    </p>
+    <p>
+      int16_t getCountsAndResetLeft();
+    </p>
+    <p>
+      int16_t getCountsAndResetRight();
+    </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 </node>
 <node CREATED="1539109191580" ID="ID_596105360" MODIFIED="1540313205401" TEXT="Frontsensoren abtasten">
@@ -450,8 +460,7 @@
       Abstandswert = 0 - 6
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1540200105311" ID="ID_572190175" LINK="../../../../../../F:/Users/orje/Documents/Arduino/ZumoThirdTest/ZumoThirdTest.ino" MODIFIED="1540200185407" TEXT="eigenes"/>
 <node CREATED="1540200112056" ID="ID_1245306829" LINK="../libraries/Zumo32U4/examples/FaceTowardsOpponent/FaceTowardsOpponent.ino" MODIFIED="1540313941825" TEXT="Beispiel">
 <icon BUILTIN="button_ok"/>
