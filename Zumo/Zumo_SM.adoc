@@ -2,6 +2,8 @@
 --
 title Zumo sm
 
-state zumo {
-[*] -> lcd
-}
+[*] -> zumo
+state lcd
+state proxSensors
+state motors
+state encoders
