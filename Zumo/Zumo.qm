@@ -2,42 +2,54 @@
 <model version="4.3.0" links="0">
  <framework name="qpn"/>
  <package name="AOs" stereotype="0x02">
-  <class name="Zumo" superclass="qpn::QActive">
-   <attribute name="counter" type="uint8_t" visibility="0x00" properties="0x00"/>
+  <class name="LCD" superclass="qpn::QActive">
    <statechart>
-    <initial target="../1">
-     <action brief="reset counter">me-&gt;counter = 0;
-ledYellow(0); // for debug</action>
-     <initial_glyph conn="4,3,5,0,2,3">
-      <action box="0,-2,13,2"/>
-     </initial_glyph>
-    </initial>
-    <state name="start">
-     <entry brief="arm timetick">QActive_armX(&amp;me-&gt;super, 0U, BSP_TICKS_PER_SEC/10U, 0U);</entry>
-     <tran trig="Q_TIMEOUT" target="..">
-      <action brief="check start button">if (buttonA.isPressed()) {
-    QACTIVE_POST((QActive *)me, START_SIG, 0U);
-}</action>
-      <tran_glyph conn="4,14,3,1,14">
-       <action box="0,-2,13,4"/>
-      </tran_glyph>
-     </tran>
-     <tran trig="START" target="../../2">
-      <tran_glyph conn="4,20,3,0,2,4">
-       <action box="0,-2,7,2"/>
-      </tran_glyph>
-     </tran>
-     <state_glyph node="4,6,14,16">
-      <entry box="1,2,12,4"/>
-     </state_glyph>
+    <state name="lcd">
+     <initial target="../1">
+      <initial_glyph conn="4,8,5,3,2">
+       <action box="0,-3,10,2"/>
+      </initial_glyph>
+     </initial>
+     <state name="start">
+      <entry brief="&quot;start&quot;">lcd.print(&quot;press A&quot;);
+lcd.gotoXY(0, 1);
+lcd.print(&quot;to start&quot;);</entry>
+      <tran trig="BUTTON_PRESSED" target="../../2">
+       <tran_glyph conn="6,13,3,3,17">
+        <action box="0,-2,16,2"/>
+       </tran_glyph>
+      </tran>
+      <state_glyph node="6,6,15,9">
+       <entry box="1,2,8,3"/>
+      </state_glyph>
+     </state>
+     <state name="clear">
+      <entry brief="&quot; &quot;">lcd.clear();</entry>
+      <tran trig="RED_ON" target="../../3">
+       <tran_glyph conn="23,13,3,3,9">
+        <action box="0,-2,9,2"/>
+       </tran_glyph>
+      </tran>
+      <state_glyph node="23,6,7,9">
+       <entry box="1,2,6,2"/>
+      </state_glyph>
+     </state>
+     <state name="stop">
+      <entry brief="&quot;stop&quot;">lcd.print(&quot;press A&quot;);
+lcd.gotoXY(0, 1);
+lcd.print(&quot;to stop&quot;);</entry>
+      <tran trig="BUTTON_PRESSED" target="../../1">
+       <tran_glyph conn="32,13,3,3,17,4,-45,-7,2">
+        <action box="0,-2,17,2"/>
+       </tran_glyph>
+      </tran>
+      <state_glyph node="32,6,15,9">
+       <entry box="1,2,8,2"/>
+      </state_glyph>
+     </state>
+     <state_glyph node="2,2,49,17"/>
     </state>
-    <state name="scan">
-     <entry>ledYellow(1); // for debug</entry>
-     <state_glyph node="4,24,7,6">
-      <entry box="1,2,6,2"/>
-     </state_glyph>
-    </state>
-    <state_diagram size="20,32"/>
+    <state_diagram size="53,21"/>
    </statechart>
   </class>
  </package>
@@ -47,27 +59,29 @@ ledYellow(0); // for debug</action>
 #include &quot;Arduino.h&quot; // Arduino API
 
 #include &lt;Zumo32U4.h&gt;
+#include &lt;Wire.h&gt;
 
 //============================================================================
 // declare all AO classes...
-$declare(AOs::Zumo)
+$declare(AOs::LCD)
 //...
 
 // AO instances, other objects and event queue buffers for them...
-Zumo AO_Zumo;
+LCD AO_LCD;
 
 // Other objects
+Zumo32U4LCD lcd;
 Zumo32U4ButtonA buttonA;
 Zumo32U4ProximitySensors proxSensors;
 
-static QEvt l_zumoQSto[10]; // Event queue storage for Zumo
+static QEvt l_lcdQSto[10]; // Event queue storage for LCD
 //...
 
 //============================================================================
 // QF_active[] array defines all active object control blocks ----------------
 QActiveCB const Q_ROM QF_active[] = {
         { (QActive *)0,           (QEvt *)0,      0U                },
-        { (QActive *)&amp;AO_Zumo,    l_zumoQSto,     Q_DIM(l_zumoQSto) }
+        { (QActive *)&amp;AO_LCD,    l_lcdQSto,     Q_DIM(l_lcdQSto) }
 };
 
 //============================================================================
@@ -89,7 +103,7 @@ void setup() {
     QF_init(Q_DIM(QF_active));
 
     // initialize all AOs...
-    QActive_ctor(&amp;AO_Zumo.super, Q_STATE_CAST(&amp;Zumo_initial));
+    QActive_ctor(&amp;AO_LCD.super, Q_STATE_CAST(&amp;LCD_initial));
 
 //    proxSensors.initFrontSensor();
 }
@@ -133,7 +147,7 @@ void Q_onAssert(char const Q_ROM * const file, int line) {
 
 //============================================================================
 // define all AO classes (state machine)...
-$define(AOs::Zumo)
+$define(AOs::LCD)
 //...
 </text>
   </file>
