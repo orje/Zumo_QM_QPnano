@@ -25,12 +25,12 @@ lcd.print(&quot;to start&quot;);</entry>
      </state>
      <state name="clear">
       <entry brief="&quot; &quot;">lcd.clear();</entry>
-      <tran trig="RED_ON" target="../../3">
-       <tran_glyph conn="23,13,3,3,9">
+      <tran trig="TRAPPED" target="../../3">
+       <tran_glyph conn="23,13,3,3,12">
         <action box="0,-2,9,2"/>
        </tran_glyph>
       </tran>
-      <state_glyph node="23,6,7,9">
+      <state_glyph node="23,6,8,9">
        <entry box="1,2,6,2"/>
       </state_glyph>
      </state>
@@ -39,17 +39,17 @@ lcd.print(&quot;to start&quot;);</entry>
 lcd.gotoXY(0, 1);
 lcd.print(&quot;to stop&quot;);</entry>
       <tran trig="BUTTON_PRESSED" target="../../1">
-       <tran_glyph conn="32,13,3,3,17,4,-45,-7,2">
+       <tran_glyph conn="35,13,3,3,17,4,-48,-7,2">
         <action box="0,-2,17,2"/>
        </tran_glyph>
       </tran>
-      <state_glyph node="32,6,15,9">
+      <state_glyph node="35,6,15,9">
        <entry box="1,2,8,2"/>
       </state_glyph>
      </state>
-     <state_glyph node="2,2,49,17"/>
+     <state_glyph node="2,2,52,17"/>
     </state>
-    <state_diagram size="53,21"/>
+    <state_diagram size="56,21"/>
    </statechart>
   </class>
  </package>

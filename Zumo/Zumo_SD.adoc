@@ -29,7 +29,7 @@ loop
 alt no barrier
 proxSensors -> counter : RESET_COUNTER_SIG
 proxSensors -> ledYellow : YELLOW_OFF_SIG
-proxSensors -> ledGreen : GREEN_ON_SIG
+proxSensors -> ledGreen : FREE_SIG
 proxSensors -> motors : DRIVE_SIG(l=400,r=400)
 
 motors -> encoders : CORRECT_DRIVE_SIG
@@ -38,13 +38,13 @@ encoders -> motors : DRIVE_SIG(l,r)
 else barrier
 proxSensors -> counter : COUNTER_COUNT_SIG
 proxSensors -> ledGreen : GREEN_OFF_SIG
-proxSensors -> ledYellow : YELLOW_ON_SIG
+proxSensors -> ledYellow : BARRIER_SIG
 proxSensors -> motors : DRIVE_SIG(l=50,r=0)
 
 else break
 counter -> proxSensors : COUNTER_END_SIG
 proxSensors -> ledYellow : YELLOW_OFF_SIG
-proxSensors -> ledRed : RED_ON_SIG
+proxSensors -> ledRed : TRAPPED_SIG
 
 Zumo -> lcd : DISPLAY_STOP_SIG
 
