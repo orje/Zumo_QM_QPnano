@@ -3,41 +3,33 @@
  <framework name="qpn"/>
  <package name="AOs" stereotype="0x02">
   <class name="Zumo" superclass="qpn::QActive">
-   <attribute name="counter" type="uint8_t" visibility="0x00" properties="0x00"/>
    <statechart>
     <initial target="../1">
-     <action brief="reset counter">me-&gt;counter = 0;
-ledYellow(0); // for debug</action>
-     <initial_glyph conn="4,3,5,0,2,3">
-      <action box="0,-2,13,2"/>
+     <initial_glyph conn="8,2,4,0,2">
+      <action box="0,-2,10,2"/>
      </initial_glyph>
     </initial>
-    <state name="start">
-     <entry brief="arm timetick">QActive_armX(&amp;me-&gt;super, 0U, BSP_TICKS_PER_SEC/10U, 0U);</entry>
-     <tran trig="Q_TIMEOUT" target="..">
-      <action brief="check start button">if (buttonA.isPressed()) {
-    QACTIVE_POST((QActive *)me, START_SIG, 0U);
-}</action>
-      <tran_glyph conn="4,14,3,1,14">
-       <action box="0,-2,13,4"/>
+    <state name="lcd">
+     <entry>lcd.print(&quot;press A&quot;);
+QACTIVE_POST((QActive *)me, CHECK_BUTTON_SIG, 0U);</entry>
+     <tran trig="CHECK_BUTTON" target="../../2">
+      <tran_glyph conn="8,14,2,0,3">
+       <action box="0,0,15,2"/>
       </tran_glyph>
      </tran>
-     <tran trig="START" target="../../2">
-      <tran_glyph conn="4,20,3,0,2,4">
-       <action box="0,-2,7,2"/>
-      </tran_glyph>
-     </tran>
-     <state_glyph node="4,6,14,16">
-      <entry box="1,2,12,4"/>
+     <state_glyph node="6,4,45,10">
+      <entry box="1,2,44,6"/>
      </state_glyph>
     </state>
-    <state name="scan">
-     <entry>ledYellow(1); // for debug</entry>
-     <state_glyph node="4,24,7,6">
-      <entry box="1,2,6,2"/>
+    <state name="button">
+     <entry>if (buttonA.isPressed()) {
+    QACTIVE_POST_ISR(&amp;AO_Zumo.super, BUTTON_SIG, 0U);
+}</entry>
+     <state_glyph node="6,17,46,12">
+      <entry box="1,2,45,8"/>
      </state_glyph>
     </state>
-    <state_diagram size="20,32"/>
+    <state_diagram size="426,142"/>
    </statechart>
   </class>
  </package>
@@ -46,6 +38,7 @@ ledYellow(0); // for debug</action>
    <text>#include &quot;qpn.h&quot; // QP-nano framework
 #include &quot;Arduino.h&quot; // Arduino API
 
+#include &lt;Wire.h&gt;
 #include &lt;Zumo32U4.h&gt;
 
 //============================================================================
@@ -57,8 +50,8 @@ $declare(AOs::Zumo)
 Zumo AO_Zumo;
 
 // Other objects
+Zumo32U4LCD lcd;
 Zumo32U4ButtonA buttonA;
-Zumo32U4ProximitySensors proxSensors;
 
 static QEvt l_zumoQSto[10]; // Event queue storage for Zumo
 //...
@@ -78,9 +71,7 @@ enum {
 
 // various signals for the application...
 enum {
-    START_SIG = Q_USER_SIG // end of data
-    DRIVE_SIG,
-    TURN_SIG
+    _SIG = Q_USER_SIG // end of data
 };
 
 //............................................................................

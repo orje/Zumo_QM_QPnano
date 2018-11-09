@@ -19,6 +19,7 @@
 #include "qpn.h" // QP-nano framework
 #include "Arduino.h" // Arduino API
 
+#include <Wire.h>
 #include <Zumo32U4.h>
 
 //============================================================================
@@ -28,15 +29,12 @@
 typedef struct Zumo {
 /* protected: */
     QActive super;
-
-/* public: */
-    uint8_t counter;
 } Zumo;
 
 /* protected: */
 static QState Zumo_initial(Zumo * const me);
-static QState Zumo_start(Zumo * const me);
-static QState Zumo_scan(Zumo * const me);
+static QState Zumo_lcd(Zumo * const me);
+static QState Zumo_button(Zumo * const me);
 /*$enddecl${AOs::Zumo} #####################################################*/
 //...
 
@@ -44,8 +42,8 @@ static QState Zumo_scan(Zumo * const me);
 Zumo AO_Zumo;
 
 // Other objects
+Zumo32U4LCD lcd;
 Zumo32U4ButtonA buttonA;
-Zumo32U4ProximitySensors proxSensors;
 
 static QEvt l_zumoQSto[10]; // Event queue storage for Zumo
 //...
@@ -65,7 +63,7 @@ enum {
 
 // various signals for the application...
 enum {
-    START_SIG = Q_USER_SIG // end of data
+    _SIG = Q_USER_SIG // end of data
 };
 
 //............................................................................
@@ -76,7 +74,7 @@ void setup() {
     // initialize all AOs...
     QActive_ctor(&AO_Zumo.super, Q_STATE_CAST(&Zumo_initial));
 
-    proxSensors.initFrontSensor();
+//    proxSensors.initFrontSensor();
 }
 
 //............................................................................
@@ -128,31 +126,22 @@ void Q_onAssert(char const Q_ROM * const file, int line) {
 /*${AOs::Zumo::SM} .........................................................*/
 static QState Zumo_initial(Zumo * const me) {
     /*${AOs::Zumo::SM::initial} */
-    me->counter = 0;
-    ledYellow(0); // for debug
-    return Q_TRAN(&Zumo_start);
+    return Q_TRAN(&Zumo_lcd);
 }
-/*${AOs::Zumo::SM::start} ..................................................*/
-static QState Zumo_start(Zumo * const me) {
+/*${AOs::Zumo::SM::lcd} ....................................................*/
+static QState Zumo_lcd(Zumo * const me) {
     QState status_;
     switch (Q_SIG(me)) {
-        /*${AOs::Zumo::SM::start} */
+        /*${AOs::Zumo::SM::lcd} */
         case Q_ENTRY_SIG: {
-            QActive_armX(&me->super, 0U, BSP_TICKS_PER_SEC/10U, 0U);
+            lcd.print("press A");
+            QACTIVE_POST((QActive *)me, CHECK_BUTTON_SIG, 0U);
             status_ = Q_HANDLED();
             break;
         }
-        /*${AOs::Zumo::SM::start::Q_TIMEOUT} */
-        case Q_TIMEOUT_SIG: {
-            if (buttonA.isPressed()) {
-                QACTIVE_POST((QActive *)me, START_SIG, 0U);
-            }
-            status_ = Q_TRAN(&Zumo_start);
-            break;
-        }
-        /*${AOs::Zumo::SM::start::START} */
-        case START_SIG: {
-            status_ = Q_TRAN(&Zumo_scan);
+        /*${AOs::Zumo::SM::lcd::CHECK_BUTTON} */
+        case CHECK_BUTTON_SIG: {
+            status_ = Q_TRAN(&Zumo_button);
             break;
         }
         default: {
@@ -162,13 +151,15 @@ static QState Zumo_start(Zumo * const me) {
     }
     return status_;
 }
-/*${AOs::Zumo::SM::scan} ...................................................*/
-static QState Zumo_scan(Zumo * const me) {
+/*${AOs::Zumo::SM::button} .................................................*/
+static QState Zumo_button(Zumo * const me) {
     QState status_;
     switch (Q_SIG(me)) {
-        /*${AOs::Zumo::SM::scan} */
+        /*${AOs::Zumo::SM::button} */
         case Q_ENTRY_SIG: {
-            ledYellow(1); // for debug
+            if (buttonA.isPressed()) {
+                QACTIVE_POST_ISR(&AO_Zumo.super, BUTTON_SIG, 0U);
+            }
             status_ = Q_HANDLED();
             break;
         }
