@@ -4,30 +4,51 @@
  <package name="AOs" stereotype="0x02">
   <class name="Zumo" superclass="qpn::QActive">
    <statechart>
-    <initial target="../1">
-     <initial_glyph conn="8,2,4,0,2">
-      <action box="0,-2,10,2"/>
-     </initial_glyph>
-    </initial>
-    <state name="lcd">
-     <entry>lcd.print(&quot;press A&quot;);
-QACTIVE_POST((QActive *)me, CHECK_BUTTON_SIG, 0U);</entry>
-     <tran trig="CHECK_BUTTON" target="../../2">
-      <tran_glyph conn="8,14,2,0,3">
-       <action box="0,0,15,2"/>
-      </tran_glyph>
-     </tran>
-     <state_glyph node="6,4,45,10">
-      <entry box="1,2,44,6"/>
-     </state_glyph>
-    </state>
-    <state name="button">
-     <entry>if (buttonA.isPressed()) {
-    QACTIVE_POST_ISR(&amp;AO_Zumo.super, BUTTON_SIG, 0U);
-}</entry>
-     <state_glyph node="6,17,46,12">
-      <entry box="1,2,45,8"/>
-     </state_glyph>
+    <state name="zumo">
+     <state name="lcd">
+      <state name="display">
+       <entry>lcd.print(&quot;press A&quot;);</entry>
+       <state_glyph node="10,14,17,8">
+        <entry box="1,2,16,4"/>
+       </state_glyph>
+      </state>
+      <state name="off">
+       <entry>lcd.clear();</entry>
+       <state_glyph node="31,14,11,8">
+        <entry box="1,2,10,4"/>
+       </state_glyph>
+      </state>
+      <state_glyph node="6,8,40,18"/>
+     </state>
+     <state name="button">
+      <entry>if (buttonB.isPressed())</entry>
+      <state_glyph node="50,8,20,8">
+       <entry box="1,2,19,4"/>
+      </state_glyph>
+     </state>
+     <state name="proxSensors">
+      <entry>proxSensors.read();
+proxSensors.countsFrontWithLeftLeds();
+proxSensors.countsFrontWithRightLeds();
+</entry>
+      <state_glyph node="6,30,33,12">
+       <entry box="1,2,32,8"/>
+      </state_glyph>
+     </state>
+     <state name="motors">
+      <entry>motors.setSpeeds(0, 0);</entry>
+      <state_glyph node="43,30,20,8">
+       <entry box="1,2,19,4"/>
+      </state_glyph>
+     </state>
+     <state name="encoders">
+      <entry>encoders.getCountsLeft();
+encoders.getCountsRight();</entry>
+      <state_glyph node="6,46,23,10">
+       <entry box="1,2,22,6"/>
+      </state_glyph>
+     </state>
+     <state_glyph node="2,2,72,58"/>
     </state>
     <state_diagram size="426,142"/>
    </statechart>
@@ -52,6 +73,9 @@ Zumo AO_Zumo;
 // Other objects
 Zumo32U4LCD lcd;
 Zumo32U4ButtonA buttonA;
+Zumo32U4ProximitySensors proxSensors;
+Zumo32U4Motors motors;
+Zumo32U4Encoders encoders;
 
 static QEvt l_zumoQSto[10]; // Event queue storage for Zumo
 //...
@@ -82,7 +106,7 @@ void setup() {
     // initialize all AOs...
     QActive_ctor(&amp;AO_Zumo.super, Q_STATE_CAST(&amp;Zumo_initial));
 
-//    proxSensors.initFrontSensor();
+    proxSensors.initFrontSensor();
 }
 
 //............................................................................

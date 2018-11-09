@@ -1,9 +1,0 @@
-[uml,Zumo_sm.png]
---
-title Zumo sm
-
-[*] -> zumo
-state lcd
-state proxSensors
-state motors
-state encoders
