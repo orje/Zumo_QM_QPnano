@@ -1,7 +1,0 @@
-[uml,Zumo_sm.png]
---
-title Zumo sm
-
-state zumo {
-[*] -> lcd
-}
