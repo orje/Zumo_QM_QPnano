@@ -9,13 +9,8 @@
   <item name="backups">0</item>
  </group>
  <group name="windows">
-<<<<<<< HEAD
   <item id=".::Zumo.ino">0,0,586,839</item>
   <item id="AOs::Zumo::SM">0,0,738,930,*</item>
-=======
-  <item id=".::Zumo.ino">-266,0,853,1258</item>
-  <item id="AOs::LCD::SM">0,0,711,1258,*</item>
->>>>>>> few_AOs
  </group>
  <group name="search">
   <item name="options">4129280</item>
