@@ -7,23 +7,26 @@
     <state name="zumo">
      <state name="lcd">
       <state name="display">
-       <entry>lcd.print(&quot;press A&quot;);</entry>
-       <state_glyph node="10,14,17,8">
-        <entry box="1,2,16,4"/>
+       <entry brief="display_text">lcd.print(&quot;press A&quot;);</entry>
+       <state_glyph node="12,16,13,6">
+        <entry box="1,2,12,2"/>
        </state_glyph>
       </state>
       <state name="off">
-       <entry>lcd.clear();</entry>
-       <state_glyph node="31,14,11,8">
-        <entry box="1,2,10,4"/>
+       <entry brief="clear_display">lcd.clear();</entry>
+       <state_glyph node="29,16,15,6">
+        <entry box="1,2,13,2"/>
        </state_glyph>
       </state>
-      <state_glyph node="6,8,40,18"/>
+      <state_glyph node="8,10,40,16"/>
      </state>
      <state name="button">
-      <entry>if (buttonB.isPressed())</entry>
-      <state_glyph node="50,8,20,8">
-       <entry box="1,2,19,4"/>
+      <entry brief="check_button">if (buttonA.isPressed()) {
+    QACTIVE_POST((QActive *)me,
+    BUTTON_PRESSED_SIG, 0);
+    }</entry>
+      <state_glyph node="52,10,15,6">
+       <entry box="1,2,13,2"/>
       </state_glyph>
      </state>
      <state name="proxSensors">
@@ -31,26 +34,26 @@
 proxSensors.countsFrontWithLeftLeds();
 proxSensors.countsFrontWithRightLeds();
 </entry>
-      <state_glyph node="6,30,33,12">
+      <state_glyph node="8,30,33,12">
        <entry box="1,2,32,8"/>
       </state_glyph>
      </state>
      <state name="motors">
       <entry>motors.setSpeeds(0, 0);</entry>
-      <state_glyph node="43,30,20,8">
+      <state_glyph node="45,30,20,8">
        <entry box="1,2,19,4"/>
       </state_glyph>
      </state>
      <state name="encoders">
       <entry>encoders.getCountsLeft();
 encoders.getCountsRight();</entry>
-      <state_glyph node="6,46,23,10">
+      <state_glyph node="8,46,23,10">
        <entry box="1,2,22,6"/>
       </state_glyph>
      </state>
-     <state_glyph node="2,2,72,58"/>
+     <state_glyph node="4,4,67,56"/>
     </state>
-    <state_diagram size="76,62"/>
+    <state_diagram size="75,64"/>
    </statechart>
   </class>
  </package>
@@ -95,7 +98,7 @@ enum {
 
 // various signals for the application...
 enum {
-    _SIG = Q_USER_SIG // end of data
+    BUTTON_PRESSED_SIG = Q_USER_SIG // end of data
 };
 
 //............................................................................

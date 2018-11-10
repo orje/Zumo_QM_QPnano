@@ -21,13 +21,13 @@ control ledRed
 
 Zumo -> lcd : "press A"
 buttonA -> lcd : BUTTON_PRESSED_SIG\n"clear"
-Zumo -> proxSensors : CHECK_FRONT_SIG
-Zumo -> qp : ARM_TIMETICK_SIG
+buttonA -> proxSensors : BUTTON_PRESSED_SIG\n"check"
 
 loop
 
 alt no barrier
 proxSensors -> counter : RESET_COUNTER_SIG
+proxSensors -> ledYellow : RED_OFF_SIG
 proxSensors -> ledYellow : YELLOW_OFF_SIG
 proxSensors -> ledGreen : FREE_SIG
 proxSensors -> motors : DRIVE_SIG(l=400,r=400)
@@ -53,7 +53,7 @@ end
 proxSensors -> proxSensors : TIMETICK_SIG
 
 buttonA -> lcd : BUTTON_PRESSED_SIG\n"press A"
-Zumo -> ledRed : RED_OFF_SIG
+
 
 
 
