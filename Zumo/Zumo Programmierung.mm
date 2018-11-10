@@ -1,7 +1,7 @@
 <map version="1.0.1">
 <!-- To view this file, download free mind mapping software FreeMind from http://freemind.sourceforge.net -->
 <node CREATED="1538675159476" ID="ID_1984811301" MODIFIED="1539524198961" TEXT="Zumo Programmierung">
-<node CREATED="1538675191977" FOLDED="true" ID="ID_187336572" MODIFIED="1539524213567" POSITION="right" TEXT="Welche Programmierumgebung benutzen?">
+<node CREATED="1538675191977" FOLDED="true" ID="ID_187336572" MODIFIED="1541876471735" POSITION="right" TEXT="Welche Programmierumgebung benutzen?">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -13,8 +13,10 @@
       </li>
     </ol>
   </body>
-</html></richcontent>
-<node CREATED="1538675256437" FOLDED="true" ID="ID_1244246604" MODIFIED="1539523967482" TEXT="Arduino IDE">
+</html>
+</richcontent>
+<icon BUILTIN="button_ok"/>
+<node CREATED="1538675256437" FOLDED="true" ID="ID_1244246604" MODIFIED="1541876440857" TEXT="Arduino IDE">
 <icon BUILTIN="stop"/>
 <node CREATED="1538675410226" ID="ID_1322557574" MODIFIED="1538678791967" STYLE="fork" TEXT="F&#xfc;r">
 <node CREATED="1538677713704" ID="ID_176583447" MODIFIED="1538678787630">
@@ -364,8 +366,11 @@
 </node>
 </node>
 </node>
-<node CREATED="1538840348728" ID="ID_365015684" MODIFIED="1538840384635" POSITION="left" TEXT="Welches Designtool benutzen?"/>
-<node CREATED="1538840427200" FOLDED="true" ID="ID_1276132013" MODIFIED="1539524213567" POSITION="right" TEXT="Was soll der Zumo machen?">
+<node CREATED="1538840348728" FOLDED="true" ID="ID_365015684" MODIFIED="1541876540249" POSITION="left" TEXT="Welches Designtool benutzen?">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1541876529287" ID="ID_25110167" MODIFIED="1541876533560" TEXT="adoc"/>
+</node>
+<node CREATED="1538840427200" FOLDED="true" ID="ID_1276132013" MODIFIED="1541876476876" POSITION="right" TEXT="Was soll der Zumo machen?">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -380,8 +385,10 @@
       </li>
     </ol>
   </body>
-</html></richcontent>
-<node CREATED="1538841643470" ID="ID_1633283069" MODIFIED="1539108622699" TEXT="Abdrehen">
+</html>
+</richcontent>
+<icon BUILTIN="button_ok"/>
+<node CREATED="1538841643470" ID="ID_1633283069" MODIFIED="1541876374527" TEXT="Abdrehen">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -420,13 +427,14 @@
       </li>
     </ol>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
 <node CREATED="1538841663613" ID="ID_1987101044" MODIFIED="1539108875128" TEXT="Umfahren"/>
 </node>
-<node CREATED="1539108920688" ID="ID_475536693" MODIFIED="1539527170655" POSITION="left" TEXT="Teilaufgaben">
-<node CREATED="1539108937358" ID="ID_137728993" MODIFIED="1541345406942" TEXT="Motoren ansteuern">
+<node CREATED="1539108920688" FOLDED="true" ID="ID_475536693" MODIFIED="1541876558244" POSITION="left" TEXT="Teilaufgaben">
+<node CREATED="1539108937358" FOLDED="true" ID="ID_137728993" MODIFIED="1541876549949" TEXT="Motoren ansteuern">
 <node CREATED="1539108974217" ID="ID_46398462" MODIFIED="1541347782804" TEXT="Gleichm&#xe4;&#xdf;igkeit synchronisieren">
 <richcontent TYPE="NOTE"><html>
   <head>
@@ -446,11 +454,10 @@
       int16_t getCountsAndResetRight();
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
-<node CREATED="1539109191580" ID="ID_596105360" MODIFIED="1540313205401" TEXT="Frontsensoren abtasten">
+<node CREATED="1539109191580" FOLDED="true" ID="ID_596105360" MODIFIED="1541876557065" TEXT="Frontsensoren abtasten">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -460,7 +467,8 @@
       Abstandswert = 0 - 6
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <node CREATED="1540200105311" ID="ID_572190175" LINK="../../../../../../F:/Users/orje/Documents/Arduino/ZumoThirdTest/ZumoThirdTest.ino" MODIFIED="1540200185407" TEXT="eigenes"/>
 <node CREATED="1540200112056" ID="ID_1245306829" LINK="../libraries/Zumo32U4/examples/FaceTowardsOpponent/FaceTowardsOpponent.ino" MODIFIED="1540313941825" TEXT="Beispiel">
 <icon BUILTIN="button_ok"/>
@@ -510,10 +518,52 @@
 </html></richcontent>
 </node>
 </node>
-<node CREATED="1539194358878" FOLDED="true" ID="ID_188788871" MODIFIED="1539524213568" POSITION="right" TEXT="Fragen">
-<node CREATED="1539194370910" ID="ID_521364719" MODIFIED="1539194380004" TEXT="Timer 3 benutzen?"/>
+<node CREATED="1539194358878" ID="ID_188788871" MODIFIED="1541878657296" POSITION="right" TEXT="Fragen">
+<node CREATED="1541876563589" ID="ID_668761038" MODIFIED="1541878830877" TEXT="2 Parameter &#xfc;bergeben">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      F&#252;r das Fahren brauche ich zwei Parameter, da ich zwei Motoren ansteuern muss.
+    </p>
+    <p>
+      Kann ich an ein XYZ_SIG, zwei Parameter &#252;bergeben? Irgendwie scheint Miro das ja auch im game zu machen (Parameter x, y)!?
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Oder definiere ich ein 2-Byte-Parameter und lege einen Wert ins LSB und einen ins MSB?
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Irgendwie so:
+    </p>
+    <b>uint8_t x = (uint8_t)Q_PAR(me); </b>
+
+    <p style="margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; text-indent: 0px">
+      <b>uint8_t y = (uint8_t)(Q_PAR(me) &gt;&gt; 8); </b>
+    </p>
+    <p style="margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; text-indent: 0px">
+      uint8_t bmp = (uint8_t)(Q_PAR(me) &gt;&gt; 16);
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Wo setze ich Q_PARAM_SIZE?
+    </p>
+  </body>
+</html>
+</richcontent>
 </node>
-<node CREATED="1539195597155" FOLDED="true" ID="ID_1394309608" MODIFIED="1539524213568" POSITION="right" TEXT="Infos">
+</node>
+<node CREATED="1539195597155" FOLDED="true" ID="ID_1394309608" MODIFIED="1541876491277" POSITION="right" TEXT="Infos">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1539195605739" ID="ID_819545712" MODIFIED="1539196565475" TEXT="32U4 = Micro (= Leonardo)"/>
 <node CREATED="1539196101019" ID="ID_910783163" MODIFIED="1539196185602" TEXT="Motor = 410 RPM = 65 cm/s"/>
 <node CREATED="1539197559942" ID="ID_310958718" MODIFIED="1539199999929" TEXT="Encoderimpulse/Umdrehung = 75.81 &#xd7; 12 &#x2248; 909.7 CPR">

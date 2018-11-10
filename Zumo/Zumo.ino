@@ -33,8 +33,14 @@ typedef struct Zumo {
 
 /* protected: */
 static QState Zumo_initial(Zumo * const me);
+static QState Zumo_zumo(Zumo * const me);
 static QState Zumo_lcd(Zumo * const me);
+static QState Zumo_display(Zumo * const me);
+static QState Zumo_off(Zumo * const me);
 static QState Zumo_button(Zumo * const me);
+static QState Zumo_proxSensors(Zumo * const me);
+static QState Zumo_motors(Zumo * const me);
+static QState Zumo_encoders(Zumo * const me);
 /*$enddecl${AOs::Zumo} #####################################################*/
 //...
 
@@ -44,6 +50,9 @@ Zumo AO_Zumo;
 // Other objects
 Zumo32U4LCD lcd;
 Zumo32U4ButtonA buttonA;
+Zumo32U4ProximitySensors proxSensors;
+Zumo32U4Motors motors;
+Zumo32U4Encoders encoders;
 
 static QEvt l_zumoQSto[10]; // Event queue storage for Zumo
 //...
@@ -63,7 +72,8 @@ enum {
 
 // various signals for the application...
 enum {
-    _SIG = Q_USER_SIG // end of data
+    BUTTON_PRESSED_SIG = Q_USER_SIG // end of data
+    DRIVE_SIG
 };
 
 //............................................................................
@@ -74,7 +84,7 @@ void setup() {
     // initialize all AOs...
     QActive_ctor(&AO_Zumo.super, Q_STATE_CAST(&Zumo_initial));
 
-//    proxSensors.initFrontSensor();
+    proxSensors.initFrontSensor();
 }
 
 //............................................................................
@@ -124,26 +134,10 @@ void Q_onAssert(char const Q_ROM * const file, int line) {
 /*$define${AOs::Zumo} ######################################################*/
 /*${AOs::Zumo} .............................................................*/
 /*${AOs::Zumo::SM} .........................................................*/
-static QState Zumo_initial(Zumo * const me) {
-    /*${AOs::Zumo::SM::initial} */
-    return Q_TRAN(&Zumo_lcd);
-}
-/*${AOs::Zumo::SM::lcd} ....................................................*/
-static QState Zumo_lcd(Zumo * const me) {
+/*${AOs::Zumo::SM::zumo} ...................................................*/
+static QState Zumo_zumo(Zumo * const me) {
     QState status_;
     switch (Q_SIG(me)) {
-        /*${AOs::Zumo::SM::lcd} */
-        case Q_ENTRY_SIG: {
-            lcd.print("press A");
-            QACTIVE_POST((QActive *)me, CHECK_BUTTON_SIG, 0U);
-            status_ = Q_HANDLED();
-            break;
-        }
-        /*${AOs::Zumo::SM::lcd::CHECK_BUTTON} */
-        case CHECK_BUTTON_SIG: {
-            status_ = Q_TRAN(&Zumo_button);
-            break;
-        }
         default: {
             status_ = Q_SUPER(&QHsm_top);
             break;
@@ -151,20 +145,123 @@ static QState Zumo_lcd(Zumo * const me) {
     }
     return status_;
 }
-/*${AOs::Zumo::SM::button} .................................................*/
-static QState Zumo_button(Zumo * const me) {
+/*${AOs::Zumo::SM::zumo::lcd} ..............................................*/
+static QState Zumo_lcd(Zumo * const me) {
     QState status_;
     switch (Q_SIG(me)) {
-        /*${AOs::Zumo::SM::button} */
+        default: {
+            status_ = Q_SUPER(&Zumo_zumo);
+            break;
+        }
+    }
+    return status_;
+}
+/*${AOs::Zumo::SM::zumo::lcd::display} .....................................*/
+static QState Zumo_display(Zumo * const me) {
+    QState status_;
+    switch (Q_SIG(me)) {
+        /*${AOs::Zumo::SM::zumo::lcd::display} */
         case Q_ENTRY_SIG: {
-            if (buttonA.isPressed()) {
-                QACTIVE_POST_ISR(&AO_Zumo.super, BUTTON_SIG, 0U);
-            }
+            lcd.print("press A");
             status_ = Q_HANDLED();
             break;
         }
         default: {
-            status_ = Q_SUPER(&QHsm_top);
+            status_ = Q_SUPER(&Zumo_lcd);
+            break;
+        }
+    }
+    return status_;
+}
+/*${AOs::Zumo::SM::zumo::lcd::off} .........................................*/
+static QState Zumo_off(Zumo * const me) {
+    QState status_;
+    switch (Q_SIG(me)) {
+        /*${AOs::Zumo::SM::zumo::lcd::off} */
+        case Q_ENTRY_SIG: {
+            lcd.clear();
+            status_ = Q_HANDLED();
+            break;
+        }
+        default: {
+            status_ = Q_SUPER(&Zumo_lcd);
+            break;
+        }
+    }
+    return status_;
+}
+/*${AOs::Zumo::SM::zumo::button} ...........................................*/
+static QState Zumo_button(Zumo * const me) {
+    QState status_;
+    switch (Q_SIG(me)) {
+        /*${AOs::Zumo::SM::zumo::button} */
+        case Q_ENTRY_SIG: {
+            if (buttonA.isPressed()) {
+                QACTIVE_POST((QActive *)me,
+                BUTTON_PRESSED_SIG, 0);
+                }
+            status_ = Q_HANDLED();
+            break;
+        }
+        default: {
+            status_ = Q_SUPER(&Zumo_zumo);
+            break;
+        }
+    }
+    return status_;
+}
+/*${AOs::Zumo::SM::zumo::proxSensors} ......................................*/
+static QState Zumo_proxSensors(Zumo * const me) {
+    QState status_;
+    switch (Q_SIG(me)) {
+        /*${AOs::Zumo::SM::zumo::proxSensors} */
+        case Q_ENTRY_SIG: {
+            proxSensors.read();
+            if (proxSensors.countsFrontWithLeftLeds() == 0
+            & proxSensors.countsFrontWithRightLeds() == 0) {
+                QACTIVE_POST((QActive *)me,
+                DRIVE_SIG, 400, 400);
+                }
+            status_ = Q_HANDLED();
+            break;
+        }
+        default: {
+            status_ = Q_SUPER(&Zumo_zumo);
+            break;
+        }
+    }
+    return status_;
+}
+/*${AOs::Zumo::SM::zumo::motors} ...........................................*/
+static QState Zumo_motors(Zumo * const me) {
+    QState status_;
+    switch (Q_SIG(me)) {
+        /*${AOs::Zumo::SM::zumo::motors} */
+        case Q_ENTRY_SIG: {
+            motors.setSpeeds(0, 0);
+            status_ = Q_HANDLED();
+            break;
+        }
+        default: {
+            status_ = Q_SUPER(&Zumo_zumo);
+            break;
+        }
+    }
+    return status_;
+}
+/*${AOs::Zumo::SM::zumo::encoders} .........................................*/
+static QState Zumo_encoders(Zumo * const me) {
+    QState status_;
+    switch (Q_SIG(me)) {
+        /*${AOs::Zumo::SM::zumo::encoders} */
+        case Q_ENTRY_SIG: {
+            encoders.getCountsLeft();
+            encoders.getCountsRight();
+            status_ = Q_HANDLED();
+            break;
+        }
+        default: {
+            status_ = Q_SUPER(&Zumo_zumo);
             break;
         }
     }

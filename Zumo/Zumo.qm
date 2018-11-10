@@ -31,29 +31,31 @@
      </state>
      <state name="proxSensors">
       <entry>proxSensors.read();
-proxSensors.countsFrontWithLeftLeds();
-proxSensors.countsFrontWithRightLeds();
-</entry>
-      <state_glyph node="8,30,33,12">
-       <entry box="1,2,32,8"/>
+if (proxSensors.countsFrontWithLeftLeds() == 0
+&amp; proxSensors.countsFrontWithRightLeds() == 0) {
+    QACTIVE_POST((QActive *)me,
+    DRIVE_SIG, 400, 400);
+    }</entry>
+      <state_glyph node="8,30,37,18">
+       <entry box="1,2,36,14"/>
       </state_glyph>
      </state>
      <state name="motors">
       <entry>motors.setSpeeds(0, 0);</entry>
-      <state_glyph node="45,30,20,8">
+      <state_glyph node="35,52,20,8">
        <entry box="1,2,19,4"/>
       </state_glyph>
      </state>
      <state name="encoders">
       <entry>encoders.getCountsLeft();
 encoders.getCountsRight();</entry>
-      <state_glyph node="8,46,23,10">
+      <state_glyph node="8,52,23,10">
        <entry box="1,2,22,6"/>
       </state_glyph>
      </state>
-     <state_glyph node="4,4,67,56"/>
+     <state_glyph node="4,4,67,62"/>
     </state>
-    <state_diagram size="75,64"/>
+    <state_diagram size="75,70"/>
    </statechart>
   </class>
  </package>
@@ -99,6 +101,7 @@ enum {
 // various signals for the application...
 enum {
     BUTTON_PRESSED_SIG = Q_USER_SIG // end of data
+    DRIVE_SIG
 };
 
 //............................................................................
