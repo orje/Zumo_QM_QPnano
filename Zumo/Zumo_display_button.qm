@@ -16,7 +16,8 @@
     BUTTON_PRESSED_SIG, 0);
     }
 
-QActive_armX((QActive *)me, 0U, BSP_TICKS_PER_SEC, 0U);</entry>
+QActive_armX((QActive *)me,
+    0U, BSP_TICKS_PER_SEC, 0U);</entry>
      <exit>QActive_disarmX((QActive *)me, 0U);</exit>
      <tran trig="Q_TIMEOUT" target="..">
       <tran_glyph conn="4,16,3,1,20,-8,-2">
