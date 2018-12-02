@@ -1,0 +1,74 @@
+[uml,Zumo_sd_new.png]
+--
+
+hide footbox
+
+title Zumo sd
+
+
+entity Zumo
+entity lcd
+control motors
+control buttonA
+control counter
+control qp
+control proxSensors
+control encoders
+control ledGreen
+control ledYellow
+control ledRed
+
+
+Zumo -> lcd : "press A"
+buttonA -> lcd : BUTTON_PRESSED_SIG\n"clear"
+buttonA -> proxSensors : BUTTON_PRESSED_SIG\n"check"
+
+loop
+
+alt no barrier
+proxSensors -> counter : RESET_COUNTER_SIG
+proxSensors -> ledYellow : RED_OFF_SIG
+proxSensors -> ledYellow : YELLOW_OFF_SIG
+proxSensors -> ledGreen : FREE_SIG
+proxSensors -> motors : DRIVE_SIG(l=400,r=400)
+
+motors -> encoders : CORRECT_DRIVE_SIG
+encoders -> motors : DRIVE_SIG(l,r)
+
+else barrier
+proxSensors -> counter : COUNTER_COUNT_SIG
+proxSensors -> ledGreen : GREEN_OFF_SIG
+proxSensors -> ledYellow : BARRIER_SIG
+proxSensors -> motors : DRIVE_SIG(l=50,r=0)
+
+else break
+counter -> proxSensors : COUNTER_END_SIG
+proxSensors -> ledYellow : YELLOW_OFF_SIG
+proxSensors -> ledRed : TRAPPED_SIG
+
+Zumo -> lcd : DISPLAY_STOP_SIG
+
+end
+
+proxSensors -> proxSensors : TIMETICK_SIG
+
+buttonA -> lcd : BUTTON_PRESSED_SIG\n"press A"
+
+
+
+
+note over ledRed, Zumo #EEEEEE
+
+Als erstes schalte ich den **Zumo** ein.
+Daraufhin fordert mich das **lcd** dazu auf, den **buttonA** zu drücken.
+Wenn ich den **buttonA** gedrückt habe, erlischt das **lcd** und der **Zumo** setzt den **counter** auf 0 und startet einen **timetick**.
+Dann tastet der **Zumo** mit den **proxSensors** sein Vorfeld ab, um zu checken, ob es frei ist.
+Ist es frei, schaltet der **Zumo** die **grüne LED** ein und lässt die **motors** vorwärts fahren.
+Während der Vorwärtsfahrt checkt und korrigiert der **Zumo** mit den **Encodern** den Gleichlauf der **motors**.
+Erkennt der **Zumo** ein Hindernis in seinem Vorfeld, schaltet er die **gelbe LED** ein und dreht durch seine **motors** um 90°.
+Nach jedem Ablauf des **timetick**, checkt der **Zumo** sein Vorfeld und handelt entsprechend.
+Erkennt der **Zumo** nach der dritten Drehung auf der Stelle immer noch ein Hindernis, schaltet der **Zumo** die **rote LED** ein 
+und fordert auf dem **lcd** zum Drücken des **buttonA** auf.
+Nach dem Betätigen des **buttonA** erlischt die **ledRed** und auf dem **lcd** erscheint wieder die Aufforderung zum Betätigen des **buttonA**.
+
+end note
