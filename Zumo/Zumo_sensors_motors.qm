@@ -3,21 +3,24 @@
  <framework name="qpn"/>
  <package name="AOs" stereotype="0x02">
   <class name="Zumo" superclass="qpn::QActive">
+   <attribute name="leftSpeed = 0;" type="uint16_t" visibility="0x00" properties="0x00"/>
+   <attribute name="rightSpeed = 0;" type="uint16_t" visibility="0x00" properties="0x00"/>
    <statechart>
     <initial target="../1">
-     <action>lcd.print(&quot;press A&quot;);</action>
+     <action>ledYellow(1);
+lcd.print(&quot;press A&quot;);</action>
      <initial_glyph conn="4,4,5,0,2,2">
-      <action box="0,-2,10,2"/>
+      <action box="0,-2,4,2"/>
      </initial_glyph>
     </initial>
     <state name="button">
-     <entry>if (buttonA.isPressed()) {
+     <entry>QActive_armX((QActive *)me,
+    0U, BSP_TICKS_PER_SEC / 10U, 0U);
+
+if (buttonA.isPressed()) {
     QACTIVE_POST((QActive *)me,
     BUTTON_PRESSED_SIG, 0);
-    }
-
-QActive_armX((QActive *)me,
-    0U, BSP_TICKS_PER_SEC, 0U);</entry>
+    }</entry>
      <exit>QActive_disarmX((QActive *)me, 0U);</exit>
      <tran trig="Q_TIMEOUT" target="..">
       <tran_glyph conn="4,16,3,1,20,-8,-2">
@@ -25,8 +28,10 @@ QActive_armX((QActive *)me,
       </tran_glyph>
      </tran>
      <tran trig="BUTTON_PRESSED" target="../../2">
-      <action>lcd.clear();</action>
-      <tran_glyph conn="4,20,3,3,22,-12,2">
+      <action>ledYellow(0);
+ledGreen(1);
+lcd.clear();</action>
+      <tran_glyph conn="4,20,3,3,22,-12,4">
        <action box="0,-2,17,2"/>
       </tran_glyph>
      </tran>
@@ -35,10 +40,49 @@ QActive_armX((QActive *)me,
       <exit box="1,4,4,2"/>
      </state_glyph>
     </state>
-    <state name="sensors">
-     <state_glyph node="28,6,22,16"/>
+    <state name="motors">
+     <entry>QActive_armX((QActive *)me,
+    0U, BSP_TICKS_PER_SEC, 0U);
+
+motors.setSpeeds(me-&gt;leftSpeed, me-&gt;rightSpeed);</entry>
+     <exit>QActive_disarmX((QActive *)me, 0U);</exit>
+     <tran trig="Q_TIMEOUT" target="../../3">
+      <tran_glyph conn="30,16,3,3,13,-8,2">
+       <action box="0,-2,10,2"/>
+      </tran_glyph>
+     </tran>
+     <state_glyph node="30,6,11,12">
+      <entry box="1,2,4,2"/>
+      <exit box="1,4,4,2"/>
+     </state_glyph>
     </state>
-    <state_diagram size="67,62"/>
+    <state name="sensors">
+     <entry>uint8_t l, r, s;
+uint16_t v;
+
+proxSensors.read();
+
+l = proxSensors.countsFrontWithLeftLeds();
+r = proxSensors.countsFrontWithRightLeds();
+
+s = (l + r) / 2U;
+
+v = 400U - (s * 400U / 6U);
+
+me-&gt;leftSpeed = v;
+me-&gt;rightSpeed = v;
+
+QACTIVE_POST((QActive *)me, SPEED_SIG, 0U);</entry>
+     <tran trig="SPEED" target="../../2">
+      <tran_glyph conn="45,14,3,3,10,6,-27,-10,2">
+       <action box="0,-2,7,2"/>
+      </tran_glyph>
+     </tran>
+     <state_glyph node="45,6,8,10">
+      <entry box="1,2,4,2"/>
+     </state_glyph>
+    </state>
+    <state_diagram size="58,24"/>
    </statechart>
   </class>
  </package>
@@ -83,7 +127,8 @@ enum {
 
 // various signals for the application...
 enum {
-    BUTTON_PRESSED_SIG = Q_USER_SIG // end of data
+    BUTTON_PRESSED_SIG = Q_USER_SIG, // end of data
+    SPEED_SIG
 };
 
 //............................................................................
