@@ -1,57 +1,61 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<model version="4.3.1" links="0">
+<model version="4.3.0" links="0">
  <framework name="qpn"/>
  <package name="AOs" stereotype="0x02">
   <class name="Zumo" superclass="qpn::QActive">
-   <attribute name="leftSpeed = 0;" type="uint16_t" visibility="0x02" properties="0x00"/>
-   <attribute name="rightSpeed = 0;" type="uint16_t" visibility="0x02" properties="0x00"/>
    <statechart>
-    <initial target="../1">
-     <initial_glyph conn="4,4,5,0,2,3">
-      <action box="0,-2,4,2"/>
-     </initial_glyph>
-    </initial>
-    <state name="sensors">
-     <entry>uint8_t l, r, s;
-uint16_t v;
-
-proxSensors.read();
-l = proxSensors.countsFrontWithLeftLeds();
-r = proxSensors.countsFrontWithRightLeds();
-
-s = (l + r) / 2U;
-v = 400U - (s * 400U / 6U);
-
-me-&gt;leftSpeed = v;
-me-&gt;rightSpeed = v;
-
-QACTIVE_POST((QActive *)me, SPEED_SIG, 0);</entry>
-     <tran trig="SPEED" target="../../2">
-      <tran_glyph conn="4,14,3,3,9,-5,2">
-       <action box="0,-2,7,2"/>
-      </tran_glyph>
-     </tran>
-     <state_glyph node="4,7,7,9">
-      <entry box="1,2,4,2"/>
-     </state_glyph>
+    <state name="zumo">
+     <state name="lcd">
+      <state name="display">
+       <entry brief="display_text">lcd.print(&quot;press A&quot;);</entry>
+       <state_glyph node="12,16,13,6">
+        <entry box="1,2,12,2"/>
+       </state_glyph>
+      </state>
+      <state name="off">
+       <entry brief="clear_display">lcd.clear();</entry>
+       <state_glyph node="29,16,15,6">
+        <entry box="1,2,13,2"/>
+       </state_glyph>
+      </state>
+      <state_glyph node="8,10,40,16"/>
+     </state>
+     <state name="button">
+      <entry brief="check_button">if (buttonA.isPressed()) {
+    QACTIVE_POST((QActive *)me,
+    BUTTON_PRESSED_SIG, 0);
+    }</entry>
+      <state_glyph node="52,10,15,6">
+       <entry box="1,2,13,2"/>
+      </state_glyph>
+     </state>
+     <state name="proxSensors">
+      <entry>proxSensors.read();
+if (proxSensors.countsFrontWithLeftLeds() == 0
+&amp; proxSensors.countsFrontWithRightLeds() == 0) {
+    QACTIVE_POST((QActive *)me,
+    DRIVE_SIG, 400, 400);
+    }</entry>
+      <state_glyph node="8,30,37,18">
+       <entry box="1,2,36,14"/>
+      </state_glyph>
+     </state>
+     <state name="motors">
+      <entry>motors.setSpeeds(0, 0);</entry>
+      <state_glyph node="35,52,20,8">
+       <entry box="1,2,19,4"/>
+      </state_glyph>
+     </state>
+     <state name="encoders">
+      <entry>encoders.getCountsLeft();
+encoders.getCountsRight();</entry>
+      <state_glyph node="8,52,23,10">
+       <entry box="1,2,22,6"/>
+      </state_glyph>
+     </state>
+     <state_glyph node="4,4,67,62"/>
     </state>
-    <state name="motors">
-     <documentation>Falls kein &quot;Dauerfeuer&quot; benötigt wird, kann die CPU-Last mit dosierten timeticks, statt dem SCAN_SIG, reduziert werden.
-QActive_armX((QActive *)me, 0U, BSP_TICKS_PER_SEC, 0U);
-QActive_disarmX((QActive *)me, 0U);</documentation>
-     <entry>motors.setSpeeds(me-&gt;leftSpeed, me-&gt;rightSpeed);
-
-QACTIVE_POST((QActive *)me, SCAN_SIG, 0);</entry>
-     <tran trig="SCAN" target="../../1">
-      <tran_glyph conn="15,14,3,3,9,4,-22,-9,2">
-       <action box="0,-2,6,2"/>
-      </tran_glyph>
-     </tran>
-     <state_glyph node="15,7,7,9">
-      <entry box="1,2,4,2"/>
-     </state_glyph>
-    </state>
-    <state_diagram size="26,20"/>
+    <state_diagram size="75,70"/>
    </statechart>
   </class>
  </package>
@@ -72,11 +76,11 @@ $declare(AOs::Zumo)
 Zumo AO_Zumo;
 
 // Other objects
-// Zumo32U4LCD lcd;
-// Zumo32U4ButtonA buttonA;
+Zumo32U4LCD lcd;
+Zumo32U4ButtonA buttonA;
 Zumo32U4ProximitySensors proxSensors;
 Zumo32U4Motors motors;
-// Zumo32U4Encoders encoders;
+Zumo32U4Encoders encoders;
 
 static QEvt l_zumoQSto[10]; // Event queue storage for Zumo
 //...
@@ -96,8 +100,8 @@ enum {
 
 // various signals for the application...
 enum {
-    SPEED_SIG = Q_USER_SIG, // end of data
-    SCAN_SIG
+    BUTTON_PRESSED_SIG = Q_USER_SIG // end of data
+    DRIVE_SIG
 };
 
 //............................................................................

@@ -1,4 +1,4 @@
-[uml,Zumo_sd_new.png]
+[uml,Zumo_sd.png]
 --
 
 hide footbox
