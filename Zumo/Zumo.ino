@@ -37,6 +37,7 @@ typedef struct Zumo {
 
 /* protected: */
 static QState Zumo_initial(Zumo * const me);
+static QState Zumo_run(Zumo * const me);
 static QState Zumo_sensors(Zumo * const me);
 static QState Zumo_motors(Zumo * const me);
 /*$enddecl${AOs::Zumo} #####################################################*/
@@ -46,8 +47,8 @@ static QState Zumo_motors(Zumo * const me);
 Zumo AO_Zumo;
 
 // Other objects
-// Zumo32U4LCD lcd;
-// Zumo32U4ButtonA buttonA;
+Zumo32U4LCD lcd;
+Zumo32U4ButtonA buttonA;
 Zumo32U4ProximitySensors proxSensors;
 Zumo32U4Motors motors;
 // Zumo32U4Encoders encoders;
@@ -70,8 +71,8 @@ enum {
 
 // various signals for the application...
 enum {
-    SPEED_SIG = Q_USER_SIG, // end of data
-    SCAN_SIG
+    BUTTON_PRESSED_SIG = Q_USER_SIG, // end of data
+    SPEED_SIG
 };
 
 //............................................................................
@@ -134,13 +135,54 @@ void Q_onAssert(char const Q_ROM * const file, int line) {
 /*${AOs::Zumo::SM} .........................................................*/
 static QState Zumo_initial(Zumo * const me) {
     /*${AOs::Zumo::SM::initial} */
-    return Q_TRAN(&Zumo_sensors);
+    lcd.print("press A");
+    return Q_TRAN(&Zumo_run);
 }
-/*${AOs::Zumo::SM::sensors} ................................................*/
+/*${AOs::Zumo::SM::run} ....................................................*/
+static QState Zumo_run(Zumo * const me) {
+    QState status_;
+    switch (Q_SIG(me)) {
+        /*${AOs::Zumo::SM::run} */
+        case Q_ENTRY_SIG: {
+            if (buttonA.isPressed()) {
+                QACTIVE_POST((QActive *)me,
+                BUTTON_PRESSED_SIG, 0);
+                }
+
+            QActive_armX((QActive *)me,
+                0U, BSP_TICKS_PER_SEC, 0U);
+            status_ = Q_HANDLED();
+            break;
+        }
+        /*${AOs::Zumo::SM::run} */
+        case Q_EXIT_SIG: {
+            QActive_disarmX((QActive *)me, 0U);
+            status_ = Q_HANDLED();
+            break;
+        }
+        /*${AOs::Zumo::SM::run::BUTTON_PRESSED} */
+        case BUTTON_PRESSED_SIG: {
+            lcd.clear();
+            status_ = Q_TRAN(&Zumo_sensors);
+            break;
+        }
+        /*${AOs::Zumo::SM::run::Q_TIMEOUT} */
+        case Q_TIMEOUT_SIG: {
+            status_ = Q_TRAN(&Zumo_run);
+            break;
+        }
+        default: {
+            status_ = Q_SUPER(&QHsm_top);
+            break;
+        }
+    }
+    return status_;
+}
+/*${AOs::Zumo::SM::run::sensors} ...........................................*/
 static QState Zumo_sensors(Zumo * const me) {
     QState status_;
     switch (Q_SIG(me)) {
-        /*${AOs::Zumo::SM::sensors} */
+        /*${AOs::Zumo::SM::run::sensors} */
         case Q_ENTRY_SIG: {
             uint8_t l, r, s;
             uint16_t v;
@@ -159,45 +201,47 @@ static QState Zumo_sensors(Zumo * const me) {
             status_ = Q_HANDLED();
             break;
         }
-        /*${AOs::Zumo::SM::sensors::SPEED} */
+        /*${AOs::Zumo::SM::run::sensors::SPEED} */
         case SPEED_SIG: {
             status_ = Q_TRAN(&Zumo_motors);
             break;
         }
         default: {
-            status_ = Q_SUPER(&QHsm_top);
+            status_ = Q_SUPER(&Zumo_run);
             break;
         }
     }
     return status_;
 }
-/*${AOs::Zumo::SM::motors} .................................................*/
+/*${AOs::Zumo::SM::run::motors} ............................................*/
 static QState Zumo_motors(Zumo * const me) {
     QState status_;
     switch (Q_SIG(me)) {
-        /*${AOs::Zumo::SM::motors} */
+        /*${AOs::Zumo::SM::run::motors} */
         case Q_ENTRY_SIG: {
             motors.setSpeeds(me->leftSpeed, me->rightSpeed);
 
-            // QACTIVE_POST((QActive *)me, SCAN_SIG, 0);
+            QActive_armX((QActive *)me,
+                0U, BSP_TICKS_PER_SEC / 4U, 0U);
+                // less CPU load, but accurate scan
 
-            QActive_armX((QActive *)me, 0U, BSP_TICKS_PER_SEC / 4U, 0U);
+            // QACTIVE_POST((QActive *)me, SCAN_SIG, 0);  // high CPU load
             status_ = Q_HANDLED();
             break;
         }
-        /*${AOs::Zumo::SM::motors} */
+        /*${AOs::Zumo::SM::run::motors} */
         case Q_EXIT_SIG: {
             QActive_disarmX((QActive *)me, 0U);
             status_ = Q_HANDLED();
             break;
         }
-        /*${AOs::Zumo::SM::motors::Q_TIMEOUT} */
+        /*${AOs::Zumo::SM::run::motors::Q_TIMEOUT} */
         case Q_TIMEOUT_SIG: {
             status_ = Q_TRAN(&Zumo_sensors);
             break;
         }
         default: {
-            status_ = Q_SUPER(&QHsm_top);
+            status_ = Q_SUPER(&Zumo_run);
             break;
         }
     }

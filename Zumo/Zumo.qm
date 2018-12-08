@@ -7,12 +7,33 @@
    <attribute name="rightSpeed = 0;" type="uint16_t" visibility="0x02" properties="0x00"/>
    <statechart>
     <initial target="../1">
-     <initial_glyph conn="4,4,5,0,2,3">
+     <action>lcd.print(&quot;press A&quot;);</action>
+     <initial_glyph conn="4,4,5,0,2,2">
       <action box="0,-2,4,2"/>
      </initial_glyph>
     </initial>
-    <state name="sensors">
-     <entry>uint8_t l, r, s;
+    <state name="run">
+     <entry>if (buttonA.isPressed()) {
+    QACTIVE_POST((QActive *)me,
+    BUTTON_PRESSED_SIG, 0);
+    }
+
+QActive_armX((QActive *)me,
+    0U, BSP_TICKS_PER_SEC, 0U);</entry>
+     <exit>QActive_disarmX((QActive *)me, 0U);</exit>
+     <tran trig="BUTTON_PRESSED" target="../2">
+      <action>lcd.clear();</action>
+      <tran_glyph conn="4,16,3,0,14,2">
+       <action box="0,-2,17,2"/>
+      </tran_glyph>
+     </tran>
+     <tran trig="Q_TIMEOUT" target="..">
+      <tran_glyph conn="4,35,3,3,40,4,-42,-31,2">
+       <action box="0,-2,10,2"/>
+      </tran_glyph>
+     </tran>
+     <state name="sensors">
+      <entry>uint8_t l, r, s;
 uint16_t v;
 
 proxSensors.read();
@@ -26,39 +47,44 @@ me-&gt;leftSpeed = v;
 me-&gt;rightSpeed = v;
 
 QACTIVE_POST((QActive *)me, SPEED_SIG, 0);</entry>
-     <tran trig="SPEED" target="../../2">
-      <tran_glyph conn="4,14,3,3,9,-5,2">
-       <action box="0,-2,7,2"/>
-      </tran_glyph>
-     </tran>
-     <state_glyph node="4,7,7,9">
-      <entry box="1,2,4,2"/>
-     </state_glyph>
-    </state>
-    <state name="motors">
-     <documentation>Falls kein &quot;Dauerfeuer&quot; benötigt wird, kann die CPU-Last mit dosiertem timetick, statt dem SCAN_SIG, reduziert werden:
+      <tran trig="SPEED" target="../../3">
+       <tran_glyph conn="16,25,3,3,9,-5,2">
+        <action box="0,-2,7,2"/>
+       </tran_glyph>
+      </tran>
+      <state_glyph node="16,18,7,9">
+       <entry box="1,2,4,2"/>
+      </state_glyph>
+     </state>
+     <state name="motors">
+      <documentation>Falls kein &quot;Dauerfeuer&quot; benötigt wird, kann die CPU-Last mit dosiertem timetick, statt dem SCAN_SIG, reduziert werden:
 QActive_armX((QActive *)me, 0U, BSP_TICKS_PER_SEC, 0U);
 QActive_disarmX((QActive *)me, 0U);
 Q_TIMEOUT</documentation>
-     <entry>motors.setSpeeds(me-&gt;leftSpeed, me-&gt;rightSpeed);
+      <entry>motors.setSpeeds(me-&gt;leftSpeed, me-&gt;rightSpeed);
 
 QActive_armX((QActive *)me, 
     0U, BSP_TICKS_PER_SEC / 4U, 0U);
     // less CPU load, but accurate scan
 
 // QACTIVE_POST((QActive *)me, SCAN_SIG, 0);  // high CPU load</entry>
-     <exit>QActive_disarmX((QActive *)me, 0U);</exit>
-     <tran trig="Q_TIMEOUT" target="../../1">
-      <tran_glyph conn="15,16,3,3,13,4,-26,-11,2">
-       <action box="0,-2,11,2"/>
-      </tran_glyph>
-     </tran>
-     <state_glyph node="15,7,11,11">
+      <exit>QActive_disarmX((QActive *)me, 0U);</exit>
+      <tran trig="Q_TIMEOUT" target="../../2">
+       <tran_glyph conn="27,27,3,3,13,4,-26,-11,2">
+        <action box="0,-2,11,2"/>
+       </tran_glyph>
+      </tran>
+      <state_glyph node="27,18,11,11">
+       <entry box="1,2,4,2"/>
+       <exit box="1,4,6,2"/>
+      </state_glyph>
+     </state>
+     <state_glyph node="4,6,38,31">
       <entry box="1,2,4,2"/>
-      <exit box="1,4,6,2"/>
+      <exit box="1,4,4,2"/>
      </state_glyph>
     </state>
-    <state_diagram size="30,22"/>
+    <state_diagram size="46,41"/>
    </statechart>
   </class>
  </package>
@@ -79,8 +105,8 @@ $declare(AOs::Zumo)
 Zumo AO_Zumo;
 
 // Other objects
-// Zumo32U4LCD lcd;
-// Zumo32U4ButtonA buttonA;
+Zumo32U4LCD lcd;
+Zumo32U4ButtonA buttonA;
 Zumo32U4ProximitySensors proxSensors;
 Zumo32U4Motors motors;
 // Zumo32U4Encoders encoders;
@@ -103,7 +129,8 @@ enum {
 
 // various signals for the application...
 enum {
-    SPEED_SIG = Q_USER_SIG // end of data
+    BUTTON_PRESSED_SIG = Q_USER_SIG, // end of data
+    SPEED_SIG
 };
 
 //............................................................................

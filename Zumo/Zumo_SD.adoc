@@ -8,7 +8,7 @@ hide footbox
 title Zumo SD
 
 
-note over proxSensors, motors #EEEEEE
+note over user, motors #EEEEEE
 
 Die **proxSensors** scannen die Front des Zumo und übergeben entfernungsabhänige Geschwindigkeitswerte // SPEED // an die **motors**.
 Per // TIMEOUT // wird der Regelkreis zeitgesteuert wiederholt.
@@ -16,9 +16,12 @@ Per // TIMEOUT // wird der Regelkreis zeitgesteuert wiederholt.
 end note
 
 
+actor user
 control proxSensors
 control motors
 
+
+user -> proxSensors : BUTTON
 
 proxSensors -> motors : SPEED
 
