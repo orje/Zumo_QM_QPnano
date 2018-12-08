@@ -71,7 +71,7 @@ enum {
 
 // various signals for the application...
 enum {
-    BUTTON_PRESSED_SIG = Q_USER_SIG, // end of data
+    BUTTON_SIG = Q_USER_SIG, // end of data
     SPEED_SIG
 };
 
@@ -146,7 +146,7 @@ static QState Zumo_run(Zumo * const me) {
         case Q_ENTRY_SIG: {
             if (buttonA.isPressed()) {
                 QACTIVE_POST((QActive *)me,
-                BUTTON_PRESSED_SIG, 0);
+                BUTTON_SIG, 0);
                 }
 
             QActive_armX((QActive *)me,
@@ -160,8 +160,8 @@ static QState Zumo_run(Zumo * const me) {
             status_ = Q_HANDLED();
             break;
         }
-        /*${AOs::Zumo::SM::run::BUTTON_PRESSED} */
-        case BUTTON_PRESSED_SIG: {
+        /*${AOs::Zumo::SM::run::BUTTON} */
+        case BUTTON_SIG: {
             lcd.clear();
             status_ = Q_TRAN(&Zumo_sensors);
             break;

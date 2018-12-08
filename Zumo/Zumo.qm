@@ -8,7 +8,7 @@
    <statechart>
     <initial target="../1">
      <action>lcd.print(&quot;press A&quot;);</action>
-     <initial_glyph conn="4,4,5,0,2,2">
+     <initial_glyph conn="4,3,5,0,2,2">
       <action box="0,-2,4,2"/>
      </initial_glyph>
     </initial>
@@ -23,12 +23,12 @@ QActive_armX((QActive *)me,
      <exit>QActive_disarmX((QActive *)me, 0U);</exit>
      <tran trig="BUTTON" target="../2">
       <action>lcd.clear();</action>
-      <tran_glyph conn="4,16,3,0,8,2">
+      <tran_glyph conn="4,14,3,0,8,2">
        <action box="0,-2,9,2"/>
       </tran_glyph>
      </tran>
      <tran trig="Q_TIMEOUT" target="..">
-      <tran_glyph conn="4,35,3,3,35,4,-37,-31,2">
+      <tran_glyph conn="4,32,3,3,35,4,-37,-29,2">
        <action box="0,-2,11,2"/>
       </tran_glyph>
      </tran>
@@ -48,11 +48,11 @@ me-&gt;rightSpeed = v;
 
 QACTIVE_POST((QActive *)me, SPEED_SIG, 0);</entry>
       <tran trig="SPEED" target="../../3">
-       <tran_glyph conn="10,25,3,3,10,-4,2">
+       <tran_glyph conn="10,23,3,3,10,-5,2">
         <action box="0,-2,8,2"/>
        </tran_glyph>
       </tran>
-      <state_glyph node="10,18,8,9">
+      <state_glyph node="10,16,8,9">
        <entry box="1,2,4,2"/>
       </state_glyph>
      </state>
@@ -70,21 +70,21 @@ QActive_armX((QActive *)me,
 // QACTIVE_POST((QActive *)me, SCAN_SIG, 0);  // high CPU load</entry>
       <exit>QActive_disarmX((QActive *)me, 0U);</exit>
       <tran trig="Q_TIMEOUT" target="../../2">
-       <tran_glyph conn="22,28,3,3,13,4,-27,-12,2">
+       <tran_glyph conn="22,25,3,3,13,4,-27,-11,2">
         <action box="0,-2,11,2"/>
        </tran_glyph>
       </tran>
-      <state_glyph node="22,19,11,11">
+      <state_glyph node="22,16,11,11">
        <entry box="1,2,4,2"/>
        <exit box="1,4,4,2"/>
       </state_glyph>
      </state>
-     <state_glyph node="4,6,33,31">
+     <state_glyph node="4,5,33,29">
       <entry box="1,2,4,2"/>
       <exit box="1,4,4,2"/>
      </state_glyph>
     </state>
-    <state_diagram size="41,41"/>
+    <state_diagram size="41,38"/>
    </statechart>
   </class>
  </package>
