@@ -36,22 +36,29 @@ QACTIVE_POST((QActive *)me, SPEED_SIG, 0);</entry>
      </state_glyph>
     </state>
     <state name="motors">
-     <documentation>Falls kein &quot;Dauerfeuer&quot; benötigt wird, kann die CPU-Last mit dosierten timeticks, statt dem SCAN_SIG, reduziert werden.
+     <documentation>Falls kein &quot;Dauerfeuer&quot; benötigt wird, kann die CPU-Last mit dosiertem timetick, statt dem SCAN_SIG, reduziert werden:
 QActive_armX((QActive *)me, 0U, BSP_TICKS_PER_SEC, 0U);
-QActive_disarmX((QActive *)me, 0U);</documentation>
+QActive_disarmX((QActive *)me, 0U);
+Q_TIMEOUT</documentation>
      <entry>motors.setSpeeds(me-&gt;leftSpeed, me-&gt;rightSpeed);
 
-QACTIVE_POST((QActive *)me, SCAN_SIG, 0);</entry>
-     <tran trig="SCAN" target="../../1">
-      <tran_glyph conn="15,14,3,3,9,4,-22,-9,2">
-       <action box="0,-2,6,2"/>
+QActive_armX((QActive *)me, 
+    0U, BSP_TICKS_PER_SEC / 4U, 0U);
+    // less CPU load, but accurate scan
+
+// QACTIVE_POST((QActive *)me, SCAN_SIG, 0);  // high CPU load</entry>
+     <exit>QActive_disarmX((QActive *)me, 0U);</exit>
+     <tran trig="Q_TIMEOUT" target="../../1">
+      <tran_glyph conn="15,16,3,3,13,4,-26,-11,2">
+       <action box="0,-2,11,2"/>
       </tran_glyph>
      </tran>
-     <state_glyph node="15,7,7,9">
+     <state_glyph node="15,7,11,11">
       <entry box="1,2,4,2"/>
+      <exit box="1,4,6,2"/>
      </state_glyph>
     </state>
-    <state_diagram size="26,20"/>
+    <state_diagram size="30,22"/>
    </statechart>
   </class>
  </package>
@@ -96,8 +103,7 @@ enum {
 
 // various signals for the application...
 enum {
-    SPEED_SIG = Q_USER_SIG, // end of data
-    SCAN_SIG
+    SPEED_SIG = Q_USER_SIG // end of data
 };
 
 //............................................................................

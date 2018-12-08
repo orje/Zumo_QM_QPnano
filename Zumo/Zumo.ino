@@ -179,12 +179,20 @@ static QState Zumo_motors(Zumo * const me) {
         case Q_ENTRY_SIG: {
             motors.setSpeeds(me->leftSpeed, me->rightSpeed);
 
-            QACTIVE_POST((QActive *)me, SCAN_SIG, 0);
+            // QACTIVE_POST((QActive *)me, SCAN_SIG, 0);
+
+            QActive_armX((QActive *)me, 0U, BSP_TICKS_PER_SEC / 4U, 0U);
             status_ = Q_HANDLED();
             break;
         }
-        /*${AOs::Zumo::SM::motors::SCAN} */
-        case SCAN_SIG: {
+        /*${AOs::Zumo::SM::motors} */
+        case Q_EXIT_SIG: {
+            QActive_disarmX((QActive *)me, 0U);
+            status_ = Q_HANDLED();
+            break;
+        }
+        /*${AOs::Zumo::SM::motors::Q_TIMEOUT} */
+        case Q_TIMEOUT_SIG: {
             status_ = Q_TRAN(&Zumo_sensors);
             break;
         }
