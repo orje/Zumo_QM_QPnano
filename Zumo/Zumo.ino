@@ -184,18 +184,18 @@ static QState Zumo_sensors(Zumo * const me) {
     switch (Q_SIG(me)) {
         /*${AOs::Zumo::SM::run::sensors} */
         case Q_ENTRY_SIG: {
-            uint8_t l, r, s;
-            uint16_t v;
+            uint8_t l, r;
+            uint16_t vl, vr;
 
             proxSensors.read();
             l = proxSensors.countsFrontWithLeftLeds();
             r = proxSensors.countsFrontWithRightLeds();
 
-            s = (l + r) / 2U;
-            v = 400U - (s * 400U / 6U);
+            vl = 400U - (400U / 6U * r);
+            vr = 400U - (400U / 6U * l);
 
-            me->leftSpeed = v;
-            me->rightSpeed = v;
+            me->leftSpeed = vl;
+            me->rightSpeed = vr;
 
             QACTIVE_POST((QActive *)me, SPEED_SIG, 0);
             status_ = Q_HANDLED();

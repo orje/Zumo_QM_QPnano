@@ -13,8 +13,7 @@
       </li>
     </ol>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1538675256437" FOLDED="true" ID="ID_1244246604" MODIFIED="1541876440857" TEXT="Arduino IDE">
 <icon BUILTIN="stop"/>
@@ -385,8 +384,7 @@
       </li>
     </ol>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1538841643470" ID="ID_1633283069" MODIFIED="1541876374527" TEXT="Abdrehen">
 <richcontent TYPE="NOTE"><html>
@@ -427,8 +425,7 @@
       </li>
     </ol>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
 <node CREATED="1538841663613" ID="ID_1987101044" MODIFIED="1539108875128" TEXT="Umfahren"/>
@@ -467,8 +464,7 @@
       Abstandswert = 0 - 6
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1540200105311" ID="ID_572190175" LINK="../../../../../../F:/Users/orje/Documents/Arduino/ZumoThirdTest/ZumoThirdTest.ino" MODIFIED="1540200185407" TEXT="eigenes"/>
 <node CREATED="1540200112056" ID="ID_1245306829" LINK="../libraries/Zumo32U4/examples/FaceTowardsOpponent/FaceTowardsOpponent.ino" MODIFIED="1540313941825" TEXT="Beispiel">
 <icon BUILTIN="button_ok"/>
@@ -519,7 +515,7 @@
 </node>
 </node>
 <node CREATED="1539194358878" ID="ID_188788871" MODIFIED="1541878657296" POSITION="right" TEXT="Fragen">
-<node CREATED="1541876563589" ID="ID_668761038" MODIFIED="1541878830877" TEXT="2 Parameter &#xfc;bergeben">
+<node CREATED="1541876563589" ID="ID_668761038" MODIFIED="1544813109401" TEXT="2 Parameter &#xfc;bergeben">
 <richcontent TYPE="NOTE"><html>
   <head>
     
