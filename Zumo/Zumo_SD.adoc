@@ -8,17 +8,18 @@ hide footbox
 title Zumo SD
 
 
+actor user
+control proxSensors
+control motors
+
+
 note over user, motors #EEEEEE
 
+Der user startet durch betätigen des buttons.
 Die **proxSensors** scannen die Front des Zumo und übergeben entfernungsabhänige Geschwindigkeitswerte // SPEED // an die **motors**.
 Per // TIMEOUT // wird der Regelkreis zeitgesteuert wiederholt.
 
 end note
-
-
-actor user
-control proxSensors
-control motors
 
 
 user -> proxSensors : BUTTON
