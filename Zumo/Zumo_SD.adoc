@@ -15,7 +15,7 @@ control motors
 
 note over user, motors #EEEEEE
 
-Der user startet durch betätigen des buttons.
+Der user startet durch Betätigen des buttons.
 Die **proxSensors** scannen die Front des Zumo und übergeben entfernungsabhänige Geschwindigkeitswerte // SPEED // an die **motors**.
 Per // TIMEOUT // wird der Regelkreis zeitgesteuert wiederholt.
 

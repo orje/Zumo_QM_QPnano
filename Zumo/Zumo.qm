@@ -61,13 +61,15 @@ QACTIVE_POST((QActive *)me, SPEED_SIG, 0);</entry>
 QActive_armX((QActive *)me, 0U, BSP_TICKS_PER_SEC, 0U);
 QActive_disarmX((QActive *)me, 0U);
 Q_TIMEOUT</documentation>
-      <entry>motors.setSpeeds(me-&gt;leftSpeed, me-&gt;rightSpeed);
+      <entry>motors.setSpeeds
+    (me-&gt;leftSpeed, me-&gt;rightSpeed);
 
-QActive_armX((QActive *)me, 
+QActive_armX((QActive *)me,
     0U, BSP_TICKS_PER_SEC / 4U, 0U);
     // less CPU load, but accurate scan
 
-// QACTIVE_POST((QActive *)me, SCAN_SIG, 0);  // high CPU load</entry>
+// QACTIVE_POST((QActive *)me, SCAN_SIG, 0);
+    // high CPU load</entry>
       <exit>QActive_disarmX((QActive *)me, 0U);</exit>
       <tran trig="Q_TIMEOUT" target="../../2">
        <tran_glyph conn="22,25,3,3,13,4,-27,-11,2">
