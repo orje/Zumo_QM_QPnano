@@ -514,7 +514,7 @@
 </html></richcontent>
 </node>
 </node>
-<node CREATED="1539194358878" ID="ID_188788871" MODIFIED="1541878657296" POSITION="right" TEXT="Fragen">
+<node CREATED="1539194358878" FOLDED="true" ID="ID_188788871" MODIFIED="1545406610546" POSITION="right" TEXT="Fragen">
 <node CREATED="1541876563589" ID="ID_668761038" MODIFIED="1544813109401" TEXT="2 Parameter &#xfc;bergeben">
 <richcontent TYPE="NOTE"><html>
   <head>
@@ -554,11 +554,10 @@
       Wo setze ich Q_PARAM_SIZE?
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
-<node CREATED="1539195597155" FOLDED="true" ID="ID_1394309608" MODIFIED="1541876491277" POSITION="right" TEXT="Infos">
+<node CREATED="1539195597155" ID="ID_1394309608" MODIFIED="1545406613920" POSITION="right" TEXT="Infos">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1539195605739" ID="ID_819545712" MODIFIED="1539196565475" TEXT="32U4 = Micro (= Leonardo)"/>
 <node CREATED="1539196101019" ID="ID_910783163" MODIFIED="1539196185602" TEXT="Motor = 410 RPM = 65 cm/s"/>
@@ -586,6 +585,8 @@
   </body>
 </html></richcontent>
 </node>
+<node CREATED="1545406625155" ID="ID_389826269" MODIFIED="1545406679615" TEXT="ProximitySensors = 0 (!!!) - 6"/>
+<node CREATED="1545406687958" ID="ID_844648342" MODIFIED="1545406775302" TEXT="Motors = 0 - 400 (2 Byte!!!)"/>
 </node>
 </node>
 </map>
