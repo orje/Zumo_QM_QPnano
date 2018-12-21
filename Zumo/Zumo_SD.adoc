@@ -24,6 +24,7 @@ end note
 
 user -> proxSensors : BUTTON
 
-proxSensors -> motors : SPEED
+proxSensors -> motors : SPEED (no barrier)
+proxSensors -> motors : SPEED (barrier)
 
 motors -> proxSensors : TIMEOUT
