@@ -3,8 +3,8 @@
  <framework name="qpn"/>
  <package name="AOs" stereotype="0x02">
   <class name="Zumo" superclass="qpn::QActive">
-   <attribute name="leftSpeed = 0;" type="uint16_t" visibility="0x02" properties="0x00"/>
-   <attribute name="rightSpeed = 0;" type="uint16_t" visibility="0x02" properties="0x00"/>
+   <attribute name="leftSpeed = 0;" type="int16_t" visibility="0x02" properties="0x00"/>
+   <attribute name="rightSpeed = 0;" type="int16_t" visibility="0x02" properties="0x00"/>
    <statechart>
     <initial target="../1">
      <action>lcd.print(&quot;press A&quot;);</action>
@@ -34,14 +34,21 @@ QActive_armX((QActive *)me,
      </tran>
      <state name="sensors">
       <entry>uint8_t l, r;
-uint16_t vl, vr;
+int16_t vl, vr;
 
 proxSensors.read();
-l = proxSensors.countsFrontWithLeftLeds();
-r = proxSensors.countsFrontWithRightLeds();
+l = proxSensors.countsFrontWithLeftLeds() + 1; // eliminate 0, because of division
+r = proxSensors.countsFrontWithRightLeds() + 1; // eliminate 0, because of division
 
-vl = 400U - (400U / 6U * r);
-vr = 400U - (400U / 6U * l);
+if (l &lt; 7U) {
+    vl = 400 - (400 / 7U * l);
+    }
+else {vl = -100;}
+
+if (r &lt; 7U) {
+    vr = 400 - (400 / 7U * r);
+    }
+else {vr = -100;}
 
 me-&gt;leftSpeed = vl;
 me-&gt;rightSpeed = vr;

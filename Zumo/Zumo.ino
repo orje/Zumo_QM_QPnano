@@ -31,8 +31,8 @@ typedef struct Zumo {
     QActive super;
 
 /* private: */
-    uint16_t leftSpeed = 0;;
-    uint16_t rightSpeed = 0;;
+    int16_t leftSpeed = 0;;
+    int16_t rightSpeed = 0;;
 } Zumo;
 
 /* protected: */
@@ -185,14 +185,22 @@ static QState Zumo_sensors(Zumo * const me) {
         /*${AOs::Zumo::SM::run::sensors} */
         case Q_ENTRY_SIG: {
             uint8_t l, r;
-            uint16_t vl, vr;
+            int16_t vl, vr;
 
             proxSensors.read();
-            l = proxSensors.countsFrontWithLeftLeds();
-            r = proxSensors.countsFrontWithRightLeds();
+            l = proxSensors.countsFrontWithLeftLeds() + 1; // eliminate 0, because of division
+            r = proxSensors.countsFrontWithRightLeds() + 1; // eliminate 0, because of division
 
-            vl = 400U - (400U / 6U * r);
-            vr = 400U - (400U / 6U * l);
+            if (l < 7U) {
+                vl =  400 - (400 / 7U * l);
+                }
+            else {vl = -100;}
+
+            if (r < 7U) {
+                vr =  400 - (400 / 7U * r);
+                }
+            else {vr = -100;}
+
 
             me->leftSpeed = vl;
             me->rightSpeed = vr;
