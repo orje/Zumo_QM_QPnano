@@ -219,13 +219,15 @@ static QState Zumo_motors(Zumo * const me) {
     switch (Q_SIG(me)) {
         /*${AOs::Zumo::SM::run::motors} */
         case Q_ENTRY_SIG: {
-            motors.setSpeeds(me->leftSpeed, me->rightSpeed);
+            motors.setSpeeds
+                (me->leftSpeed, me->rightSpeed);
 
             QActive_armX((QActive *)me,
                 0U, BSP_TICKS_PER_SEC / 4U, 0U);
                 // less CPU load, but accurate scan
 
-            // QACTIVE_POST((QActive *)me, SCAN_SIG, 0);  // high CPU load
+            // QACTIVE_POST((QActive *)me, SCAN_SIG, 0);
+                // high CPU load
             status_ = Q_HANDLED();
             break;
         }
