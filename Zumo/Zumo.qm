@@ -23,12 +23,12 @@ QActive_armX((QActive *)me,
      <exit>QActive_disarmX((QActive *)me, 0U);</exit>
      <tran trig="BUTTON" target="../2">
       <action>lcd.clear();</action>
-      <tran_glyph conn="4,14,3,0,8,2">
+      <tran_glyph conn="4,14,3,0,6,2">
        <action box="0,-2,9,2"/>
       </tran_glyph>
      </tran>
      <tran trig="Q_TIMEOUT" target="..">
-      <tran_glyph conn="4,32,3,3,35,4,-37,-29,2">
+      <tran_glyph conn="4,32,3,3,33,4,-35,-29,2">
        <action box="0,-2,11,2"/>
       </tran_glyph>
      </tran>
@@ -41,25 +41,25 @@ l = proxSensors.countsFrontWithLeftLeds() + 1; // eliminate 0, because of divisi
 r = proxSensors.countsFrontWithRightLeds() + 1; // eliminate 0, because of division
 
 if (l &lt; 7U) {
-    vl = 400 - (400 / 7U * l);
+    vl = 400 - (400 / (7U * l));
     }
-else {vl = -100;}
+else {vl = -50;}
 
 if (r &lt; 7U) {
-    vr = 400 - (400 / 7U * r);
+    vr = 400 - (400 / (7U * r));
     }
-else {vr = -100;}
+else {vr = -50;}
 
 me-&gt;leftSpeed = vl;
 me-&gt;rightSpeed = vr;
 
 QACTIVE_POST((QActive *)me, SPEED_SIG, 0);</entry>
       <tran trig="SPEED" target="../../3">
-       <tran_glyph conn="10,23,3,3,10,-5,2">
+       <tran_glyph conn="8,23,3,3,10,-5,2">
         <action box="0,-2,8,2"/>
        </tran_glyph>
       </tran>
-      <state_glyph node="10,16,8,9">
+      <state_glyph node="8,16,8,9">
        <entry box="1,2,4,2"/>
       </state_glyph>
      </state>
@@ -79,21 +79,21 @@ QActive_armX((QActive *)me,
     // high CPU load</entry>
       <exit>QActive_disarmX((QActive *)me, 0U);</exit>
       <tran trig="Q_TIMEOUT" target="../../2">
-       <tran_glyph conn="22,25,3,3,13,4,-27,-11,2">
+       <tran_glyph conn="20,25,3,3,13,4,-27,-11,2">
         <action box="0,-2,11,2"/>
        </tran_glyph>
       </tran>
-      <state_glyph node="22,16,11,11">
+      <state_glyph node="20,16,11,11">
        <entry box="1,2,4,2"/>
        <exit box="1,4,4,2"/>
       </state_glyph>
      </state>
-     <state_glyph node="4,5,33,29">
+     <state_glyph node="4,5,31,29">
       <entry box="1,2,4,2"/>
       <exit box="1,4,4,2"/>
      </state_glyph>
     </state>
-    <state_diagram size="41,38"/>
+    <state_diagram size="39,38"/>
    </statechart>
   </class>
  </package>

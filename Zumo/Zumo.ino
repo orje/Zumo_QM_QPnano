@@ -192,15 +192,14 @@ static QState Zumo_sensors(Zumo * const me) {
             r = proxSensors.countsFrontWithRightLeds() + 1; // eliminate 0, because of division
 
             if (l < 7U) {
-                vl =  400 - (400 / 7U * l);
+                vl = 400 - (400 / (7U * l));
                 }
-            else {vl = -100;}
+            else {vl = -50;}
 
             if (r < 7U) {
-                vr =  400 - (400 / 7U * r);
+                vr = 400 - (400 / (7U * r));
                 }
-            else {vr = -100;}
-
+            else {vr = -50;}
 
             me->leftSpeed = vl;
             me->rightSpeed = vr;
