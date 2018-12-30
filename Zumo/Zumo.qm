@@ -33,25 +33,30 @@ QActive_armX((QActive *)me,
       </tran_glyph>
      </tran>
      <state name="sensors">
-      <documentation>linearer Zusammenhang von Barriereabstand zu Motordrehung:
+      <documentation>Messabstandswerte s = 0 - 6
+Motorgeschwindigkeitswerte v = 0 - 400
 
- l, r | vl, vr
---------------
- 0    |  400
---------------
- 6    | -100
+linearer Zusammenhang von Barriereabstand zu Motordrehung
+z.B.:
+ ls, rs | vl, vr
+----------------
+ 0      |  400
+----------------
+ 6      | -100
 
 Delta l, r   = 6
-Delta vl, vr = 500</documentation>
-      <entry>uint8_t l, r;
-int16_t vl, vr;
+Delta vl, vr = 500
+
+https://rechneronline.de/funktionsgraphen/</documentation>
+      <entry>// uint8_t l, r;
+int16_t sl, sr, vl, vr;
 
 proxSensors.read();
-l = proxSensors.countsFrontWithLeftLeds();
-r = proxSensors.countsFrontWithRightLeds();
+sl = proxSensors.countsFrontWithLeftLeds();
+sr = proxSensors.countsFrontWithRightLeds();
 
-vl = -500/6*r+400;
-vr = -500/6*l+400;
+vl = -2.5 * pow(sr, 3) + 400;
+vr = -2.5 * pow(sl, 3) + 400;
 
 me-&gt;leftSpeed = vl;
 me-&gt;rightSpeed = vr;

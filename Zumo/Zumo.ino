@@ -38,6 +38,8 @@ typedef struct Zumo {
 /* protected: */
 static QState Zumo_initial(Zumo * const me);
 static QState Zumo_run(Zumo * const me);
+
+//rechneronline.de/funktionsgraphen/
 static QState Zumo_sensors(Zumo * const me);
 static QState Zumo_motors(Zumo * const me);
 /*$enddecl${AOs::Zumo} #####################################################*/
@@ -178,21 +180,23 @@ static QState Zumo_run(Zumo * const me) {
     }
     return status_;
 }
+
+//rechneronline.de/funktionsgraphen/
 /*${AOs::Zumo::SM::run::sensors} ...........................................*/
 static QState Zumo_sensors(Zumo * const me) {
     QState status_;
     switch (Q_SIG(me)) {
         /*${AOs::Zumo::SM::run::sensors} */
         case Q_ENTRY_SIG: {
-            uint8_t l, r;
-            int16_t vl, vr;
+            // uint8_t l, r;
+            int16_t sl, sr, vl, vr;
 
             proxSensors.read();
-            l = proxSensors.countsFrontWithLeftLeds();
-            r = proxSensors.countsFrontWithRightLeds();
+            sl = proxSensors.countsFrontWithLeftLeds();
+            sr = proxSensors.countsFrontWithRightLeds();
 
-            vl = -500/6*r+400;
-            vr = -500/6*l+400;
+            vl = -2.5 * pow(sr, 3) + 400;
+            vr = -2.5 * pow(sl, 3) + 400;
 
             me->leftSpeed = vl;
             me->rightSpeed = vr;
