@@ -1,9 +1,0 @@
-[uml,Zumo_Fahrregelung.png]
---
-
-title Fahrregelung
-
-[*]-down->sensors
-sensors-down->Beschleunigung : Abstand < 1
-sensors-down->Regelung : Abstand 1 - 6
-sensors-down->Wende : Geschwindigkeit = 0
