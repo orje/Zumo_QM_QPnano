@@ -16,7 +16,7 @@ control motors
 note over user, motors #EEEEEE
 
 Der user startet durch Betätigen des buttons.
-Die **proxSensors** scannen die Front des Zumo und übergeben entfernungsabhänige Geschwindigkeitswerte // SPEED // an die **motors**.
+Die **proxSensors** scannen die Front des Zumo und übergeben entfernungsabhänige Geschwindigkeitswerte // VELOCITY // an die **motors**.
 Per // TIMEOUT // wird der Regelkreis zeitgesteuert wiederholt.
 
 end note
@@ -24,7 +24,5 @@ end note
 
 user -> proxSensors : BUTTON
 
-proxSensors -> motors : SPEED (no barrier)
-proxSensors -> motors : SPEED (barrier)
-
+proxSensors -> motors : VELOCITY
 motors -> proxSensors : TIMEOUT

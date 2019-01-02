@@ -514,7 +514,7 @@
 </html></richcontent>
 </node>
 </node>
-<node CREATED="1539194358878" FOLDED="true" ID="ID_188788871" MODIFIED="1545406610546" POSITION="right" TEXT="Fragen">
+<node CREATED="1539194358878" ID="ID_188788871" MODIFIED="1546430797032" POSITION="right" TEXT="Fragen">
 <node CREATED="1541876563589" ID="ID_668761038" MODIFIED="1544813109401" TEXT="2 Parameter &#xfc;bergeben">
 <richcontent TYPE="NOTE"><html>
   <head>
@@ -557,7 +557,7 @@
 </html></richcontent>
 </node>
 </node>
-<node CREATED="1539195597155" ID="ID_1394309608" MODIFIED="1545406613920" POSITION="right" TEXT="Infos">
+<node CREATED="1539195597155" FOLDED="true" ID="ID_1394309608" MODIFIED="1546439476742" POSITION="right" TEXT="Infos">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1539195605739" ID="ID_819545712" MODIFIED="1539196565475" TEXT="32U4 = Micro (= Leonardo)"/>
 <node CREATED="1539196101019" ID="ID_910783163" MODIFIED="1539196185602" TEXT="Motor = 410 RPM = 65 cm/s"/>
@@ -587,6 +587,24 @@
 </node>
 <node CREATED="1545406625155" ID="ID_389826269" MODIFIED="1545406679615" TEXT="ProximitySensors = 0 (!!!) - 6"/>
 <node CREATED="1545406687958" ID="ID_844648342" MODIFIED="1545406775302" TEXT="Motors = 0 - 400 (2 Byte!!!)"/>
+<node CREATED="1546369572644" ID="ID_1017890351" MODIFIED="1546439472014" TEXT="Formel f&#xfc;r Abstand und Geschwindigkeit">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      https://rechneronline.de/funktionsgraphen/
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      http://www.nachlernmaterial.de/wie-kann-ich-aus-einem-graphen-die-funktionsgleichung-bestimmen-und-umgekehrt/
+    </p>
+  </body>
+</html></richcontent>
+</node>
 </node>
 </node>
 </map>
