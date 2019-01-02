@@ -34,7 +34,7 @@ QActive_armX((QActive *)me,
        <action box="0,-2,11,2"/>
       </tran_glyph>
      </tran>
-     <state name="control">
+     <state name="measure">
       <entry>proxSensors.read();
 me-&gt;leftBarrier = proxSensors.countsFrontWithLeftLeds();
 me-&gt;rightBarrier = proxSensors.countsFrontWithRightLeds();

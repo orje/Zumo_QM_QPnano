@@ -3,12 +3,12 @@
 
 title drive control
 
-[*] -down-> sensors
-sensors -down-> accelerate : s <= 1
+[*] -down-> measure
+measure -down-> accelerate : s <= 1
 accelerate : v = 50++
-sensors --down-> control : 1 < s && s <= 6
-control : vl = -18 * (sr - 1) ^ 2 + 400
-control : vr = -18 * (sl - 1) ^ 2 + 400
-sensors -down-> turn : v == 0
+measure --down-> drive : 1 < s && s <= 6
+drive : vl = -18 * (sr - 1) ^ 2 + 400
+drive : vr = -18 * (sl - 1) ^ 2 + 400
+measure -down-> turn : v == 0
 turn : vl = 50
 turn : vr = 0

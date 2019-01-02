@@ -40,7 +40,7 @@ typedef struct Zumo {
 /* protected: */
 static QState Zumo_initial(Zumo * const me);
 static QState Zumo_run(Zumo * const me);
-static QState Zumo_control(Zumo * const me);
+static QState Zumo_measure(Zumo * const me);
 static QState Zumo_accelerate(Zumo * const me);
 static QState Zumo_drive(Zumo * const me);
 static QState Zumo_turn(Zumo * const me);
@@ -169,7 +169,7 @@ static QState Zumo_run(Zumo * const me) {
         /*${AOs::Zumo::SM::run::BUTTON} */
         case BUTTON_SIG: {
             lcd.clear();
-            status_ = Q_TRAN(&Zumo_control);
+            status_ = Q_TRAN(&Zumo_measure);
             break;
         }
         /*${AOs::Zumo::SM::run::Q_TIMEOUT} */
@@ -184,11 +184,11 @@ static QState Zumo_run(Zumo * const me) {
     }
     return status_;
 }
-/*${AOs::Zumo::SM::run::control} ...........................................*/
-static QState Zumo_control(Zumo * const me) {
+/*${AOs::Zumo::SM::run::measure} ...........................................*/
+static QState Zumo_measure(Zumo * const me) {
     QState status_;
     switch (Q_SIG(me)) {
-        /*${AOs::Zumo::SM::run::control} */
+        /*${AOs::Zumo::SM::run::measure} */
         case Q_ENTRY_SIG: {
             proxSensors.read();
             me->leftBarrier = proxSensors.countsFrontWithLeftLeds();
@@ -217,28 +217,28 @@ static QState Zumo_control(Zumo * const me) {
             status_ = Q_HANDLED();
             break;
         }
-        /*${AOs::Zumo::SM::run::control} */
+        /*${AOs::Zumo::SM::run::measure} */
         case Q_EXIT_SIG: {
             QActive_disarmX((QActive *)me, 0U);
             status_ = Q_HANDLED();
             break;
         }
-        /*${AOs::Zumo::SM::run::control::Q_TIMEOUT} */
+        /*${AOs::Zumo::SM::run::measure::Q_TIMEOUT} */
         case Q_TIMEOUT_SIG: {
-            status_ = Q_TRAN(&Zumo_control);
+            status_ = Q_TRAN(&Zumo_measure);
             break;
         }
-        /*${AOs::Zumo::SM::run::control::ACC} */
+        /*${AOs::Zumo::SM::run::measure::ACC} */
         case ACC_SIG: {
             status_ = Q_TRAN(&Zumo_accelerate);
             break;
         }
-        /*${AOs::Zumo::SM::run::control::DRIVE} */
+        /*${AOs::Zumo::SM::run::measure::DRIVE} */
         case DRIVE_SIG: {
             status_ = Q_TRAN(&Zumo_drive);
             break;
         }
-        /*${AOs::Zumo::SM::run::control::TURN} */
+        /*${AOs::Zumo::SM::run::measure::TURN} */
         case TURN_SIG: {
             status_ = Q_TRAN(&Zumo_turn);
             break;
@@ -250,11 +250,11 @@ static QState Zumo_control(Zumo * const me) {
     }
     return status_;
 }
-/*${AOs::Zumo::SM::run::control::accelerate} ...............................*/
+/*${AOs::Zumo::SM::run::measure::accelerate} ...............................*/
 static QState Zumo_accelerate(Zumo * const me) {
     QState status_;
     switch (Q_SIG(me)) {
-        /*${AOs::Zumo::SM::run::control::accelerate} */
+        /*${AOs::Zumo::SM::run::measure::accelerate} */
         case Q_ENTRY_SIG: {
             me->leftSpeed = me->leftSpeed + 50;
             me->rightSpeed = me->rightSpeed + 50;
@@ -264,17 +264,17 @@ static QState Zumo_accelerate(Zumo * const me) {
             break;
         }
         default: {
-            status_ = Q_SUPER(&Zumo_control);
+            status_ = Q_SUPER(&Zumo_measure);
             break;
         }
     }
     return status_;
 }
-/*${AOs::Zumo::SM::run::control::drive} ....................................*/
+/*${AOs::Zumo::SM::run::measure::drive} ....................................*/
 static QState Zumo_drive(Zumo * const me) {
     QState status_;
     switch (Q_SIG(me)) {
-        /*${AOs::Zumo::SM::run::control::drive} */
+        /*${AOs::Zumo::SM::run::measure::drive} */
         case Q_ENTRY_SIG: {
             me->leftSpeed = -18 * pow((me->rightBarrier - 1),2) + 400;
             me->rightSpeed = -18 * pow((me->leftBarrier - 1),2) + 400;
@@ -282,24 +282,24 @@ static QState Zumo_drive(Zumo * const me) {
             break;
         }
         default: {
-            status_ = Q_SUPER(&Zumo_control);
+            status_ = Q_SUPER(&Zumo_measure);
             break;
         }
     }
     return status_;
 }
-/*${AOs::Zumo::SM::run::control::turn} .....................................*/
+/*${AOs::Zumo::SM::run::measure::turn} .....................................*/
 static QState Zumo_turn(Zumo * const me) {
     QState status_;
     switch (Q_SIG(me)) {
-        /*${AOs::Zumo::SM::run::control::turn} */
+        /*${AOs::Zumo::SM::run::measure::turn} */
         case Q_ENTRY_SIG: {
             motors.setSpeeds(50U, 0U);
             status_ = Q_HANDLED();
             break;
         }
         default: {
-            status_ = Q_SUPER(&Zumo_control);
+            status_ = Q_SUPER(&Zumo_measure);
             break;
         }
     }
