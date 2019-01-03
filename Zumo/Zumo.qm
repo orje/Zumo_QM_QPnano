@@ -54,9 +54,8 @@ QActive_armX((QActive *)me,
         <guard brief="s&lt;=1">me-&gt;leftBarrier &lt;= 1
 &amp;&amp; me-&gt;rightBarrier &lt;= 1</guard>
         <choice target="../../../2">
-         <guard brief="v&lt;200">me-&gt;leftSpeed&lt;200
-&amp;&amp; me-&gt;rightSpeed&lt;200
-</guard>
+         <guard brief="v&lt;200">me-&gt;leftSpeed &lt; 200
+&amp;&amp; me-&gt;rightSpeed &lt; 200</guard>
          <choice_glyph conn="32,22,5,3,8">
           <action box="1,-2,7,2"/>
          </choice_glyph>
@@ -66,7 +65,7 @@ QActive_armX((QActive *)me,
         </choice_glyph>
        </choice>
        <choice target="../../3">
-        <guard brief="s=1-6">1 &lt; me-&gt;leftBarrier
+        <guard brief="s&lt;2-6">1 &lt; me-&gt;leftBarrier
 &amp;&amp; me-&gt;leftBarrier &lt;= 6
 &amp;&amp; 1 &lt; me-&gt;rightBarrier
 &amp;&amp; me-&gt;rightBarrier &lt;= 6</guard>
@@ -95,8 +94,8 @@ motors.setSpeeds(me-&gt;leftSpeed, me-&gt;rightSpeed);</entry>
        </state_glyph>
       </state>
       <state name="drive">
-       <entry>me-&gt;leftSpeed = -12 * pow((me-&gt;rightBarrier - 1),2) + 200;
-me-&gt;rightSpeed = -12 * pow((me-&gt;leftBarrier - 1),2) + 200;
+       <entry>me-&gt;leftSpeed = -400 / 5 * (me-&gt;rightBarrier - 1) + 200;
+me-&gt;rightSpeed = -400 / 5 * (me-&gt;leftBarrier - 1) + 200;
 
 motors.setSpeeds(me-&gt;leftSpeed, me-&gt;rightSpeed);</entry>
        <state_glyph node="40,28,9,6">

@@ -217,9 +217,8 @@ static QState Zumo_measure(Zumo * const me) {
                 && me->rightBarrier <= 1)
             {
                 /*${AOs::Zumo::SM::run::measure::DRIVE::[s<=1]::[v<200]} */
-                if (me->leftSpeed<200
-                    && me->rightSpeed<200
-)
+                if (me->leftSpeed < 200
+                    && me->rightSpeed < 200)
                 {
                     status_ = Q_TRAN(&Zumo_accelerate);
                 }
@@ -227,7 +226,7 @@ static QState Zumo_measure(Zumo * const me) {
                     status_ = Q_UNHANDLED();
                 }
             }
-            /*${AOs::Zumo::SM::run::measure::DRIVE::[s=1-6]} */
+            /*${AOs::Zumo::SM::run::measure::DRIVE::[s<2-6]} */
             else if (1 < me->leftBarrier
                      && me->leftBarrier <= 6
                      && 1 < me->rightBarrier
@@ -279,8 +278,8 @@ static QState Zumo_drive(Zumo * const me) {
     switch (Q_SIG(me)) {
         /*${AOs::Zumo::SM::run::measure::drive} */
         case Q_ENTRY_SIG: {
-            me->leftSpeed = -12 * pow((me->rightBarrier - 1),2) + 200;
-            me->rightSpeed = -12 * pow((me->leftBarrier - 1),2) + 200;
+            me->leftSpeed = -400 / 5 * (me->rightBarrier - 1) + 200;
+            me->rightSpeed = -400 / 5 * (me->leftBarrier - 1) + 200;
 
             motors.setSpeeds(me->leftSpeed, me->rightSpeed);
             status_ = Q_HANDLED();
