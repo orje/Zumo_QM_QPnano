@@ -76,9 +76,7 @@ enum {
 // various signals for the application...
 enum {
     BUTTON_SIG = Q_USER_SIG, // end of data
-    ACC_SIG,
-    DRIVE_SIG,
-    TURN_SIG
+    DRIVE_SIG
 };
 
 //............................................................................
@@ -156,7 +154,7 @@ static QState Zumo_run(Zumo * const me) {
                 }
 
             QActive_armX((QActive *)me,
-                0U, BSP_TICKS_PER_SEC, 0U);
+                0U, BSP_TICKS_PER_SEC/10U, 0U);
             status_ = Q_HANDLED();
             break;
         }
@@ -194,26 +192,10 @@ static QState Zumo_measure(Zumo * const me) {
             me->leftBarrier = proxSensors.countsFrontWithLeftLeds();
             me->rightBarrier = proxSensors.countsFrontWithRightLeds();
 
-            if (
-                me->leftBarrier <= 1
-                && me->rightBarrier <= 1) {
-                    QACTIVE_POST((QActive *)me, ACC_SIG, 0);
-                    }
-            else if (
-                1 < me->leftBarrier
-                && me->leftBarrier <= 6
-                && 1 < me->rightBarrier
-                && me->rightBarrier <= 6) {
-                    QACTIVE_POST((QActive *)me, DRIVE_SIG, 0);
-                    }
-            else if (
-                me->leftBarrier == 0
-                && me->rightBarrier == 0) {
-                    QACTIVE_POST((QActive *)me, TURN_SIG, 0);
-                    }
+            QACTIVE_POST((QActive *)me, DRIVE_SIG, 0);
 
             QActive_armX((QActive *)me,
-                0U, BSP_TICKS_PER_SEC, 0U);
+                0U, BSP_TICKS_PER_SEC/10U, 0U);
             status_ = Q_HANDLED();
             break;
         }
@@ -228,19 +210,40 @@ static QState Zumo_measure(Zumo * const me) {
             status_ = Q_TRAN(&Zumo_measure);
             break;
         }
-        /*${AOs::Zumo::SM::run::measure::ACC} */
-        case ACC_SIG: {
-            status_ = Q_TRAN(&Zumo_accelerate);
-            break;
-        }
         /*${AOs::Zumo::SM::run::measure::DRIVE} */
         case DRIVE_SIG: {
-            status_ = Q_TRAN(&Zumo_drive);
-            break;
-        }
-        /*${AOs::Zumo::SM::run::measure::TURN} */
-        case TURN_SIG: {
-            status_ = Q_TRAN(&Zumo_turn);
+            /*${AOs::Zumo::SM::run::measure::DRIVE::[s<=1]} */
+            if (me->leftBarrier <= 1
+                && me->rightBarrier <= 1)
+            {
+                /*${AOs::Zumo::SM::run::measure::DRIVE::[s<=1]::[v<400]} */
+                if (me->leftSpeed<400
+                    && me->rightSpeed<400
+)
+                {
+                    status_ = Q_TRAN(&Zumo_accelerate);
+                }
+                else {
+                    status_ = Q_UNHANDLED();
+                }
+            }
+            /*${AOs::Zumo::SM::run::measure::DRIVE::[s=1-6]} */
+            else if (1 < me->leftBarrier
+                     && me->leftBarrier <= 6
+                     && 1 < me->rightBarrier
+                     && me->rightBarrier <= 6)
+            {
+                status_ = Q_TRAN(&Zumo_drive);
+            }
+            /*${AOs::Zumo::SM::run::measure::DRIVE::[v=0]} */
+            else if (me->leftSpeed == 0
+                     && me->rightSpeed == 0)
+            {
+                status_ = Q_TRAN(&Zumo_turn);
+            }
+            else {
+                status_ = Q_UNHANDLED();
+            }
             break;
         }
         default: {
@@ -256,8 +259,8 @@ static QState Zumo_accelerate(Zumo * const me) {
     switch (Q_SIG(me)) {
         /*${AOs::Zumo::SM::run::measure::accelerate} */
         case Q_ENTRY_SIG: {
-            me->leftSpeed = me->leftSpeed + 50;
-            me->rightSpeed = me->rightSpeed + 50;
+            me->leftSpeed++;
+            me->rightSpeed++;
 
             motors.setSpeeds(me->leftSpeed, me->rightSpeed);
             status_ = Q_HANDLED();
@@ -278,6 +281,8 @@ static QState Zumo_drive(Zumo * const me) {
         case Q_ENTRY_SIG: {
             me->leftSpeed = -18 * pow((me->rightBarrier - 1),2) + 400;
             me->rightSpeed = -18 * pow((me->leftBarrier - 1),2) + 400;
+
+            motors.setSpeeds(me->leftSpeed, me->rightSpeed);
             status_ = Q_HANDLED();
             break;
         }

@@ -21,7 +21,7 @@
     }
 
 QActive_armX((QActive *)me,
-    0U, BSP_TICKS_PER_SEC, 0U);</entry>
+    0U, BSP_TICKS_PER_SEC/10U, 0U);</entry>
      <exit>QActive_disarmX((QActive *)me, 0U);</exit>
      <tran trig="BUTTON" target="../2">
       <action>lcd.clear();</action>
@@ -30,7 +30,7 @@ QActive_armX((QActive *)me,
       </tran_glyph>
      </tran>
      <tran trig="Q_TIMEOUT" target="..">
-      <tran_glyph conn="4,52,3,1,31">
+      <tran_glyph conn="4,52,3,1,49">
        <action box="0,-2,11,2"/>
       </tran_glyph>
      </tran>
@@ -39,80 +39,87 @@ QActive_armX((QActive *)me,
 me-&gt;leftBarrier = proxSensors.countsFrontWithLeftLeds();
 me-&gt;rightBarrier = proxSensors.countsFrontWithRightLeds();
 
-if (
-    me-&gt;leftBarrier &lt;= 1
-    &amp;&amp; me-&gt;rightBarrier &lt;= 1) {
-        QACTIVE_POST((QActive *)me, ACC_SIG, 0);
-        }
-else if (
-    1 &lt; me-&gt;leftBarrier
-    &amp;&amp; me-&gt;leftBarrier &lt;= 6
-    &amp;&amp; 1 &lt; me-&gt;rightBarrier
-    &amp;&amp; me-&gt;rightBarrier &lt;= 6) {
-        QACTIVE_POST((QActive *)me, DRIVE_SIG, 0);
-        }
-else if (
-    me-&gt;leftBarrier == 0
-    &amp;&amp; me-&gt;rightBarrier == 0) {
-        QACTIVE_POST((QActive *)me, TURN_SIG, 0);
-        }
+QACTIVE_POST((QActive *)me, DRIVE_SIG, 0);
 
 QActive_armX((QActive *)me,
-    0U, BSP_TICKS_PER_SEC, 0U);</entry>
+    0U, BSP_TICKS_PER_SEC/10U, 0U);</entry>
       <exit>QActive_disarmX((QActive *)me, 0U);</exit>
       <tran trig="Q_TIMEOUT" target="..">
-       <tran_glyph conn="14,46,3,1,19">
+       <tran_glyph conn="14,46,3,1,37">
         <action box="0,-2,11,2"/>
        </tran_glyph>
       </tran>
-      <tran trig="ACC" target="../4">
-       <tran_glyph conn="14,22,3,3,8">
-        <action box="0,-2,6,2"/>
-       </tran_glyph>
-      </tran>
-      <tran trig="DRIVE" target="../5">
-       <tran_glyph conn="14,30,3,3,8">
-        <action box="0,-2,7,2"/>
-       </tran_glyph>
-      </tran>
-      <tran trig="TURN" target="../6">
-       <tran_glyph conn="14,38,3,3,8">
+      <tran trig="DRIVE">
+       <choice>
+        <guard brief="s&lt;=1">me-&gt;leftBarrier &lt;= 1
+&amp;&amp; me-&gt;rightBarrier &lt;= 1</guard>
+        <choice target="../../../2">
+         <guard brief="v&lt;400">me-&gt;leftSpeed&lt;400
+&amp;&amp; me-&gt;rightSpeed&lt;400
+</guard>
+         <choice_glyph conn="32,22,5,3,8">
+          <action box="1,-2,7,2"/>
+         </choice_glyph>
+        </choice>
+        <choice_glyph conn="23,30,4,-1,-8,9">
+         <action box="1,-10,7,2"/>
+        </choice_glyph>
+       </choice>
+       <choice target="../../3">
+        <guard brief="s=1-6">1 &lt; me-&gt;leftBarrier
+&amp;&amp; me-&gt;leftBarrier &lt;= 6
+&amp;&amp; 1 &lt; me-&gt;rightBarrier
+&amp;&amp; me-&gt;rightBarrier &lt;= 6</guard>
+        <choice_glyph conn="23,30,5,3,17">
+         <action box="1,-2,7,2"/>
+        </choice_glyph>
+       </choice>
+       <choice target="../../4">
+        <guard brief="v=0">me-&gt;leftSpeed == 0
+&amp;&amp; me-&gt;rightSpeed == 0</guard>
+        <choice_glyph conn="23,30,4,3,8,17">
+         <action box="1,6,6,2"/>
+        </choice_glyph>
+       </choice>
+       <tran_glyph conn="14,30,3,-1,9">
         <action box="0,-2,7,2"/>
        </tran_glyph>
       </tran>
       <state name="accelerate">
-       <entry>me-&gt;leftSpeed = me-&gt;leftSpeed + 50;
-me-&gt;rightSpeed = me-&gt;rightSpeed + 50;
+       <entry>me-&gt;leftSpeed++;
+me-&gt;rightSpeed++;
 
 motors.setSpeeds(me-&gt;leftSpeed, me-&gt;rightSpeed);</entry>
-       <state_glyph node="22,20,9,6">
+       <state_glyph node="40,20,9,6">
         <entry box="1,2,4,2"/>
        </state_glyph>
       </state>
       <state name="drive">
        <entry>me-&gt;leftSpeed = -18 * pow((me-&gt;rightBarrier - 1),2) + 400;
-me-&gt;rightSpeed = -18 * pow((me-&gt;leftBarrier - 1),2) + 400;</entry>
-       <state_glyph node="22,28,7,6">
+me-&gt;rightSpeed = -18 * pow((me-&gt;leftBarrier - 1),2) + 400;
+
+motors.setSpeeds(me-&gt;leftSpeed, me-&gt;rightSpeed);</entry>
+       <state_glyph node="40,28,9,6">
         <entry box="1,2,4,2"/>
        </state_glyph>
       </state>
       <state name="turn">
        <entry>motors.setSpeeds(50U, 0U);</entry>
-       <state_glyph node="22,36,7,6">
+       <state_glyph node="40,36,9,6">
         <entry box="1,2,4,2"/>
        </state_glyph>
       </state>
-      <state_glyph node="14,12,19,36">
+      <state_glyph node="14,12,37,36">
        <entry box="1,2,4,2"/>
        <exit box="1,4,4,2"/>
       </state_glyph>
      </state>
-     <state_glyph node="4,5,31,49">
+     <state_glyph node="4,5,49,49">
       <entry box="1,2,4,2"/>
       <exit box="1,4,4,2"/>
      </state_glyph>
     </state>
-    <state_diagram size="37,56"/>
+    <state_diagram size="55,56"/>
    </statechart>
   </class>
  </package>
@@ -158,9 +165,7 @@ enum {
 // various signals for the application...
 enum {
     BUTTON_SIG = Q_USER_SIG, // end of data
-    ACC_SIG,
-    DRIVE_SIG,
-    TURN_SIG
+    DRIVE_SIG
 };
 
 //............................................................................

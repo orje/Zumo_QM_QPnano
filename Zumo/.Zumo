@@ -9,8 +9,8 @@
   <item name="backups">0</item>
  </group>
  <group name="windows">
-  <item id="AOs::Zumo::SM">0,0,922,1258,*</item>
-  <item id=".::Zumo.ino">0,24,508,1258</item>
+  <item id="AOs::Zumo::SM">0,0,565,864,*</item>
+  <item id=".::Zumo.ino">0,0,508,1258</item>
  </group>
  <group name="search">
   <item name="options">4129280</item>
