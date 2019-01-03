@@ -4,8 +4,8 @@
 title drive control
 
 [*] -down-> measure
-measure -down-> accelerate : s <= 1
-accelerate : v = 50++
+measure -down-> accelerate : s <= 1 && v < 400
+accelerate : v++
 measure --down-> drive : 1 < s && s <= 6
 drive : vl = -18 * (sr - 1) ^ 2 + 400
 drive : vr = -18 * (sl - 1) ^ 2 + 400
