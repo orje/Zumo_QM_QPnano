@@ -70,7 +70,15 @@ QActiveCB const Q_ROM QF_active[] = {
 //============================================================================
 // various constants for the application...
 enum {
-    BSP_TICKS_PER_SEC = 100 // number of system clock ticks in one second
+    BSP_TICKS_PER_SEC = 100, // number of system clock ticks in one second
+    /*
+    Scheitelfunktionsgleichung
+    y = a * (x - d) ^ 2 + e
+    */
+    a = -400/5,
+    e = 200U,
+    d = 1U,
+    TURN_SPEED = 100U
 };
 
 // various signals for the application...
@@ -212,13 +220,13 @@ static QState Zumo_measure(Zumo * const me) {
         }
         /*${AOs::Zumo::SM::run::measure::DRIVE} */
         case DRIVE_SIG: {
-            /*${AOs::Zumo::SM::run::measure::DRIVE::[s<=1]} */
-            if (me->leftBarrier <= 1
-                && me->rightBarrier <= 1)
+            /*${AOs::Zumo::SM::run::measure::DRIVE::[s<=SCHEITELPUNKT_Y]} */
+            if (me->leftBarrier <= d
+                && me->rightBarrier <= d)
             {
-                /*${AOs::Zumo::SM::run::measure::DRIVE::[s<=1]::[v<200]} */
-                if (me->leftSpeed < 200
-                    && me->rightSpeed < 200)
+                /*${AOs::Zumo::SM::run::measure::DRIVE::[s<=SCHEITELPUNK~::[v<SCHEITELPUNKT_X]} */
+                if (me->leftSpeed < e
+                    && me->rightSpeed < e)
                 {
                     status_ = Q_TRAN(&Zumo_accelerate);
                 }
@@ -227,9 +235,9 @@ static QState Zumo_measure(Zumo * const me) {
                 }
             }
             /*${AOs::Zumo::SM::run::measure::DRIVE::[s<2-6]} */
-            else if (1 < me->leftBarrier
+            else if (d < me->leftBarrier
                      && me->leftBarrier <= 6
-                     && 1 < me->rightBarrier
+                     && d < me->rightBarrier
                      && me->rightBarrier <= 6)
             {
                 status_ = Q_TRAN(&Zumo_drive);
@@ -278,8 +286,8 @@ static QState Zumo_drive(Zumo * const me) {
     switch (Q_SIG(me)) {
         /*${AOs::Zumo::SM::run::measure::drive} */
         case Q_ENTRY_SIG: {
-            me->leftSpeed = -400 / 5 * (me->rightBarrier - 1) + 200;
-            me->rightSpeed = -400 / 5 * (me->leftBarrier - 1) + 200;
+            me->leftSpeed = a * (me->rightBarrier - d) + e;
+            me->rightSpeed = a * (me->leftBarrier - d) + e;
 
             motors.setSpeeds(me->leftSpeed, me->rightSpeed);
             status_ = Q_HANDLED();
@@ -298,7 +306,7 @@ static QState Zumo_turn(Zumo * const me) {
     switch (Q_SIG(me)) {
         /*${AOs::Zumo::SM::run::measure::turn} */
         case Q_ENTRY_SIG: {
-            motors.setSpeeds(50U, 0U);
+            motors.setSpeeds(TURN_SPEED, 0U);
             status_ = Q_HANDLED();
             break;
         }

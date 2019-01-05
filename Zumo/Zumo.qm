@@ -51,11 +51,11 @@ QActive_armX((QActive *)me,
       </tran>
       <tran trig="DRIVE">
        <choice>
-        <guard brief="s&lt;=1">me-&gt;leftBarrier &lt;= 1
-&amp;&amp; me-&gt;rightBarrier &lt;= 1</guard>
+        <guard brief="s&lt;=d">me-&gt;leftBarrier &lt;= d
+&amp;&amp; me-&gt;rightBarrier &lt;= d</guard>
         <choice target="../../../2">
-         <guard brief="v&lt;200">me-&gt;leftSpeed &lt; 200
-&amp;&amp; me-&gt;rightSpeed &lt; 200</guard>
+         <guard brief="v&lt;e">me-&gt;leftSpeed &lt; e
+&amp;&amp; me-&gt;rightSpeed &lt; e</guard>
          <choice_glyph conn="32,22,5,3,8">
           <action box="1,-2,7,2"/>
          </choice_glyph>
@@ -65,9 +65,9 @@ QActive_armX((QActive *)me,
         </choice_glyph>
        </choice>
        <choice target="../../3">
-        <guard brief="s&lt;2-6">1 &lt; me-&gt;leftBarrier
+        <guard brief="s&lt;2-6">d &lt; me-&gt;leftBarrier
 &amp;&amp; me-&gt;leftBarrier &lt;= 6
-&amp;&amp; 1 &lt; me-&gt;rightBarrier
+&amp;&amp; d &lt; me-&gt;rightBarrier
 &amp;&amp; me-&gt;rightBarrier &lt;= 6</guard>
         <choice_glyph conn="23,30,5,3,17">
          <action box="1,-2,7,2"/>
@@ -94,8 +94,8 @@ motors.setSpeeds(me-&gt;leftSpeed, me-&gt;rightSpeed);</entry>
        </state_glyph>
       </state>
       <state name="drive">
-       <entry>me-&gt;leftSpeed = -400 / 5 * (me-&gt;rightBarrier - 1) + 200;
-me-&gt;rightSpeed = -400 / 5 * (me-&gt;leftBarrier - 1) + 200;
+       <entry>me-&gt;leftSpeed = a * (me-&gt;rightBarrier - d) + e;
+me-&gt;rightSpeed = a * (me-&gt;leftBarrier - d) + e;
 
 motors.setSpeeds(me-&gt;leftSpeed, me-&gt;rightSpeed);</entry>
        <state_glyph node="40,28,9,6">
@@ -103,7 +103,7 @@ motors.setSpeeds(me-&gt;leftSpeed, me-&gt;rightSpeed);</entry>
        </state_glyph>
       </state>
       <state name="turn">
-       <entry>motors.setSpeeds(50U, 0U);</entry>
+       <entry>motors.setSpeeds(TURN_SPEED, 0U);</entry>
        <state_glyph node="40,36,9,6">
         <entry box="1,2,4,2"/>
        </state_glyph>
@@ -158,7 +158,15 @@ QActiveCB const Q_ROM QF_active[] = {
 //============================================================================
 // various constants for the application...
 enum {
-    BSP_TICKS_PER_SEC = 100 // number of system clock ticks in one second
+    BSP_TICKS_PER_SEC = 100, // number of system clock ticks in one second
+    /*
+    Scheitelfunktionsgleichung
+    y = a * (x - d) ^ 2 + e
+    */
+    a = -400/5,
+    e = 200U,
+    d = 1U,
+    TURN_SPEED = 100U
 };
 
 // various signals for the application...
