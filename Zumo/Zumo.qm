@@ -3,6 +3,7 @@
  <framework name="qpn"/>
  <package name="AOs" stereotype="0x02">
   <class name="Zumo" superclass="qpn::QActive">
+   <documentation>https://rechneronline.de/funktionsgraphen/</documentation>
    <attribute name="leftBarrier" type="uint8_t" visibility="0x02" properties="0x00"/>
    <attribute name="rightBarrier" type="uint8_t" visibility="0x02" properties="0x00"/>
    <attribute name="leftSpeed" type="int16_t" visibility="0x02" properties="0x00"/>
@@ -36,8 +37,10 @@ QActive_armX((QActive *)me,
      </tran>
      <state name="measure">
       <entry>proxSensors.read();
-me-&gt;leftBarrier = proxSensors.countsFrontWithLeftLeds();
-me-&gt;rightBarrier = proxSensors.countsFrontWithRightLeds();
+me-&gt;leftBarrier =
+    proxSensors.countsFrontWithLeftLeds();
+me-&gt;rightBarrier =
+    proxSensors.countsFrontWithRightLeds();
 
 QACTIVE_POST((QActive *)me, DRIVE_SIG, 0);
 
@@ -94,8 +97,9 @@ motors.setSpeeds(me-&gt;leftSpeed, me-&gt;rightSpeed);</entry>
        </state_glyph>
       </state>
       <state name="drive">
-       <entry>me-&gt;leftSpeed = a * (me-&gt;rightBarrier - d) + e;
-me-&gt;rightSpeed = a * (me-&gt;leftBarrier - d) + e;
+       <documentation>https://rechneronline.de/funktionsgraphen/</documentation>
+       <entry>me-&gt;leftSpeed = a * pow((me-&gt;rightBarrier - d), 2) + e;
+me-&gt;rightSpeed = a * pow((me-&gt;leftBarrier - d), 2) + e;
 
 motors.setSpeeds(me-&gt;leftSpeed, me-&gt;rightSpeed);</entry>
        <state_glyph node="40,28,9,6">
@@ -159,12 +163,9 @@ QActiveCB const Q_ROM QF_active[] = {
 // various constants for the application...
 enum {
     BSP_TICKS_PER_SEC = 100, // number of system clock ticks in one second
-    /*
-    Scheitelfunktionsgleichung
-    y = a * (x - d) ^ 2 + e
-    */
-    a = -400/5,
-    e = 200U,
+    // Scheitelfunktionsgleichung: y = a * (x - d) ^ 2 + e
+    a = -32,
+    e = 400U,
     d = 1U,
     TURN_SPEED = 100U
 };

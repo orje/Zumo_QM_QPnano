@@ -25,6 +25,8 @@
 //============================================================================
 // declare all AO classes...
 /*$declare${AOs::Zumo} #####################################################*/
+
+//rechneronline.de/funktionsgraphen/
 /*${AOs::Zumo} .............................................................*/
 typedef struct Zumo {
 /* protected: */
@@ -42,6 +44,8 @@ static QState Zumo_initial(Zumo * const me);
 static QState Zumo_run(Zumo * const me);
 static QState Zumo_measure(Zumo * const me);
 static QState Zumo_accelerate(Zumo * const me);
+
+//rechneronline.de/funktionsgraphen/
 static QState Zumo_drive(Zumo * const me);
 static QState Zumo_turn(Zumo * const me);
 /*$enddecl${AOs::Zumo} #####################################################*/
@@ -71,12 +75,9 @@ QActiveCB const Q_ROM QF_active[] = {
 // various constants for the application...
 enum {
     BSP_TICKS_PER_SEC = 100, // number of system clock ticks in one second
-    /*
-    Scheitelfunktionsgleichung
-    y = a * (x - d) ^ 2 + e
-    */
-    a = -400/5,
-    e = 200U,
+    // Scheitelfunktionsgleichung: y = a * (x - d) ^ 2 + e
+    a = -32,
+    e = 400U,
     d = 1U,
     TURN_SPEED = 100U
 };
@@ -143,6 +144,8 @@ void Q_onAssert(char const Q_ROM * const file, int line) {
 #endif
 
 /*$define${AOs::Zumo} ######################################################*/
+
+//rechneronline.de/funktionsgraphen/
 /*${AOs::Zumo} .............................................................*/
 /*${AOs::Zumo::SM} .........................................................*/
 static QState Zumo_initial(Zumo * const me) {
@@ -197,8 +200,10 @@ static QState Zumo_measure(Zumo * const me) {
         /*${AOs::Zumo::SM::run::measure} */
         case Q_ENTRY_SIG: {
             proxSensors.read();
-            me->leftBarrier = proxSensors.countsFrontWithLeftLeds();
-            me->rightBarrier = proxSensors.countsFrontWithRightLeds();
+            me->leftBarrier =
+                proxSensors.countsFrontWithLeftLeds();
+            me->rightBarrier =
+                proxSensors.countsFrontWithRightLeds();
 
             QACTIVE_POST((QActive *)me, DRIVE_SIG, 0);
 
@@ -220,11 +225,11 @@ static QState Zumo_measure(Zumo * const me) {
         }
         /*${AOs::Zumo::SM::run::measure::DRIVE} */
         case DRIVE_SIG: {
-            /*${AOs::Zumo::SM::run::measure::DRIVE::[s<=SCHEITELPUNKT_Y]} */
+            /*${AOs::Zumo::SM::run::measure::DRIVE::[s<=d]} */
             if (me->leftBarrier <= d
                 && me->rightBarrier <= d)
             {
-                /*${AOs::Zumo::SM::run::measure::DRIVE::[s<=SCHEITELPUNK~::[v<SCHEITELPUNKT_X]} */
+                /*${AOs::Zumo::SM::run::measure::DRIVE::[s<=d]::[v<e]} */
                 if (me->leftSpeed < e
                     && me->rightSpeed < e)
                 {
@@ -280,14 +285,16 @@ static QState Zumo_accelerate(Zumo * const me) {
     }
     return status_;
 }
+
+//rechneronline.de/funktionsgraphen/
 /*${AOs::Zumo::SM::run::measure::drive} ....................................*/
 static QState Zumo_drive(Zumo * const me) {
     QState status_;
     switch (Q_SIG(me)) {
         /*${AOs::Zumo::SM::run::measure::drive} */
         case Q_ENTRY_SIG: {
-            me->leftSpeed = a * (me->rightBarrier - d) + e;
-            me->rightSpeed = a * (me->leftBarrier - d) + e;
+            me->leftSpeed = a * pow((me->rightBarrier - d), 2) + e;
+            me->rightSpeed = a * pow((me->leftBarrier - d), 2) + e;
 
             motors.setSpeeds(me->leftSpeed, me->rightSpeed);
             status_ = Q_HANDLED();
