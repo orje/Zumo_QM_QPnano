@@ -365,156 +365,7 @@
 </node>
 </node>
 </node>
-<node CREATED="1538840348728" FOLDED="true" ID="ID_365015684" MODIFIED="1541876540249" POSITION="left" TEXT="Welches Designtool benutzen?">
-<icon BUILTIN="button_ok"/>
-<node CREATED="1541876529287" ID="ID_25110167" MODIFIED="1541876533560" TEXT="adoc"/>
-</node>
-<node CREATED="1538840427200" FOLDED="true" ID="ID_1276132013" MODIFIED="1541876476876" POSITION="right" TEXT="Was soll der Zumo machen?">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <ol>
-      <li>
-        Auf Starttaste warten
-      </li>
-      <li>
-        Umfeld abtasten
-      </li>
-    </ol>
-  </body>
-</html></richcontent>
-<icon BUILTIN="button_ok"/>
-<node CREATED="1538841643470" ID="ID_1633283069" MODIFIED="1541876374527" TEXT="Abdrehen">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <ol>
-      <li>
-        Hindernisfreiheit checken
-
-        <ol>
-          <li>
-            Hindernisfreiheit frei:
-
-            <ol>
-              <li>
-                vorw&#228;rts fahren
-              </li>
-            </ol>
-          </li>
-          <li>
-            Hindernisfreiheit nicht frei
-
-            <ol>
-              <li>
-                90&#176; nach rechts drehen
-              </li>
-            </ol>
-          </li>
-          <li>
-            nach 4 mal abdrehen, stoppen und signalisieren
-          </li>
-          <li>
-            nach 1 min von vorne anfangen
-          </li>
-        </ol>
-      </li>
-    </ol>
-  </body>
-</html></richcontent>
-<icon BUILTIN="button_ok"/>
-</node>
-<node CREATED="1538841663613" ID="ID_1987101044" MODIFIED="1539108875128" TEXT="Umfahren"/>
-</node>
-<node CREATED="1539108920688" FOLDED="true" ID="ID_475536693" MODIFIED="1541876558244" POSITION="left" TEXT="Teilaufgaben">
-<node CREATED="1539108937358" FOLDED="true" ID="ID_137728993" MODIFIED="1541876549949" TEXT="Motoren ansteuern">
-<node CREATED="1539108974217" ID="ID_46398462" MODIFIED="1541347782804" TEXT="Gleichm&#xe4;&#xdf;igkeit synchronisieren">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      Beide Encoder mitz&#228;hlen und bei Differenz den entsprechenden Motor beschleunigen, bzw. verz&#246;gern
-    </p>
-    <p>
-      
-    </p>
-    <p>
-      int16_t getCountsAndResetLeft();
-    </p>
-    <p>
-      int16_t getCountsAndResetRight();
-    </p>
-  </body>
-</html></richcontent>
-</node>
-</node>
-<node CREATED="1539109191580" FOLDED="true" ID="ID_596105360" MODIFIED="1541876557065" TEXT="Frontsensoren abtasten">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      Abstandswert = 0 - 6
-    </p>
-  </body>
-</html></richcontent>
-<node CREATED="1540200105311" ID="ID_572190175" LINK="../../../../../../F:/Users/orje/Documents/Arduino/ZumoThirdTest/ZumoThirdTest.ino" MODIFIED="1540200185407" TEXT="eigenes"/>
-<node CREATED="1540200112056" ID="ID_1245306829" LINK="../libraries/Zumo32U4/examples/FaceTowardsOpponent/FaceTowardsOpponent.ino" MODIFIED="1540313941825" TEXT="Beispiel">
-<icon BUILTIN="button_ok"/>
-</node>
-</node>
-<node CREATED="1539109206683" ID="ID_396289365" MODIFIED="1539109217958" TEXT="Seitensensoren abtasten"/>
-<node CREATED="1539109250003" ID="ID_335363733" MODIFIED="1540200086714" TEXT="Start/Stopp Taste">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      Offenbar muss ich eine timeout-Schleife machen und dann immer wieder den Button abfragen &lt;- Ja
-    </p>
-  </body>
-</html></richcontent>
-</node>
-<node CREATED="1539109306984" ID="ID_1990753561" MODIFIED="1539109518683" TEXT="Status LED">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      gr&#252;n = okay
-    </p>
-    <p>
-      gelb = suche
-    </p>
-    <p>
-      rot = gebe auf
-    </p>
-  </body>
-</html></richcontent>
-</node>
-<node CREATED="1539527183106" ID="ID_1323765566" MODIFIED="1539891205623" TEXT="timetick generieren">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      Beobachten, ob stabil, da der Zeittakt erst doppelt so lang erschien und am n&#228;chsten Takt dann richtig!?
-    </p>
-  </body>
-</html></richcontent>
-</node>
-</node>
-<node CREATED="1539194358878" ID="ID_188788871" MODIFIED="1546430797032" POSITION="right" TEXT="Fragen">
+<node CREATED="1539194358878" FOLDED="true" ID="ID_188788871" MODIFIED="1546970496318" POSITION="right" TEXT="Fragen">
 <node CREATED="1541876563589" ID="ID_668761038" MODIFIED="1544813109401" TEXT="2 Parameter &#xfc;bergeben">
 <richcontent TYPE="NOTE"><html>
   <head>
@@ -557,7 +408,7 @@
 </html></richcontent>
 </node>
 </node>
-<node CREATED="1539195597155" FOLDED="true" ID="ID_1394309608" MODIFIED="1546439476742" POSITION="right" TEXT="Infos">
+<node CREATED="1539195597155" FOLDED="true" ID="ID_1394309608" MODIFIED="1546970499048" POSITION="right" TEXT="Infos">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1539195605739" ID="ID_819545712" MODIFIED="1539196565475" TEXT="32U4 = Micro (= Leonardo)"/>
 <node CREATED="1539196101019" ID="ID_910783163" MODIFIED="1539196185602" TEXT="Motor = 410 RPM = 65 cm/s"/>
@@ -604,6 +455,121 @@
     </p>
   </body>
 </html></richcontent>
+</node>
+</node>
+<node CREATED="1538840348728" FOLDED="true" ID="ID_365015684" MODIFIED="1541876540249" POSITION="right" TEXT="Welches Designtool benutzen?">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1541876529287" ID="ID_25110167" MODIFIED="1541876533560" TEXT="adoc"/>
+</node>
+<node CREATED="1538840427200" FOLDED="true" ID="ID_1276132013" MODIFIED="1546971298495" POSITION="left" TEXT="Was soll der Zumo machen?">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1539108920688" FOLDED="true" ID="ID_475536693" MODIFIED="1546970524494" TEXT="Teilaufgaben">
+<node CREATED="1539108937358" FOLDED="true" ID="ID_137728993" MODIFIED="1546970508300" TEXT="Motoren ansteuern">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Speed-Wert = 0 - 400
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="button_ok"/>
+<node CREATED="1539108974217" ID="ID_46398462" MODIFIED="1541347782804" TEXT="Gleichm&#xe4;&#xdf;igkeit synchronisieren">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Beide Encoder mitz&#228;hlen und bei Differenz den entsprechenden Motor beschleunigen, bzw. verz&#246;gern
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      int16_t getCountsAndResetLeft();
+    </p>
+    <p>
+      int16_t getCountsAndResetRight();
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1539109191580" ID="ID_596105360" MODIFIED="1546970262916" TEXT="Frontsensoren abtasten">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Abstandswert = 0 - 6
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1539109206683" ID="ID_396289365" MODIFIED="1539109217958" TEXT="Seitensensoren abtasten"/>
+<node CREATED="1539109250003" ID="ID_335363733" MODIFIED="1546970183926" TEXT="Start-Taste">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Offenbar muss ich eine timeout-Schleife machen und dann immer wieder den Button abfragen &lt;- Ja
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1539109306984" ID="ID_1990753561" MODIFIED="1539109518683" TEXT="Status LED">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      gr&#252;n = okay
+    </p>
+    <p>
+      gelb = suche
+    </p>
+    <p>
+      rot = gebe auf
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1539527183106" ID="ID_1323765566" MODIFIED="1546970390198" TEXT="timetick generieren">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Der timetick ist stabil. Ich bin mir nur noch nicht &#252;berdie korrekte Zeitdauer im Klaren.
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="help"/>
+</node>
+</node>
+<node CREATED="1546970408663" ID="ID_1980648924" MODIFIED="1546971289152" TEXT="Algorithmus">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Problem: Die beiden Abstandssensoren sehen zu sehr das selbe, daher ist der Unterscheidungswert zu gering (bei einem Range von 0 - 6)
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="yes"/>
 </node>
 </node>
 </node>
