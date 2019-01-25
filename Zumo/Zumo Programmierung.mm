@@ -365,7 +365,7 @@
 </node>
 </node>
 </node>
-<node CREATED="1539194358878" FOLDED="true" ID="ID_188788871" MODIFIED="1546970496318" POSITION="right" TEXT="Fragen">
+<node CREATED="1539194358878" FOLDED="true" ID="ID_188788871" MODIFIED="1548267735114" POSITION="right" TEXT="Fragen">
 <node CREATED="1541876563589" ID="ID_668761038" MODIFIED="1544813109401" TEXT="2 Parameter &#xfc;bergeben">
 <richcontent TYPE="NOTE"><html>
   <head>
@@ -408,7 +408,7 @@
 </html></richcontent>
 </node>
 </node>
-<node CREATED="1539195597155" FOLDED="true" ID="ID_1394309608" MODIFIED="1546970499048" POSITION="right" TEXT="Infos">
+<node CREATED="1539195597155" FOLDED="true" ID="ID_1394309608" MODIFIED="1548267748936" POSITION="right" TEXT="Infos">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1539195605739" ID="ID_819545712" MODIFIED="1539196565475" TEXT="32U4 = Micro (= Leonardo)"/>
 <node CREATED="1539196101019" ID="ID_910783163" MODIFIED="1539196185602" TEXT="Motor = 410 RPM = 65 cm/s"/>
@@ -461,10 +461,10 @@
 <icon BUILTIN="button_ok"/>
 <node CREATED="1541876529287" ID="ID_25110167" MODIFIED="1541876533560" TEXT="adoc"/>
 </node>
-<node CREATED="1538840427200" FOLDED="true" ID="ID_1276132013" MODIFIED="1546971298495" POSITION="left" TEXT="Was soll der Zumo machen?">
+<node CREATED="1538840427200" ID="ID_1276132013" MODIFIED="1548267531773" POSITION="left" TEXT="Was soll der Zumo machen?">
 <icon BUILTIN="button_ok"/>
-<node CREATED="1539108920688" FOLDED="true" ID="ID_475536693" MODIFIED="1546970524494" TEXT="Teilaufgaben">
-<node CREATED="1539108937358" FOLDED="true" ID="ID_137728993" MODIFIED="1546970508300" TEXT="Motoren ansteuern">
+<node CREATED="1539108920688" ID="ID_475536693" MODIFIED="1548267761391" TEXT="Teilaufgaben">
+<node CREATED="1539108937358" ID="ID_137728993" MODIFIED="1548267776070" TEXT="Motoren ansteuern">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -511,6 +511,7 @@
 </html></richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
+<node CREATED="1548267814460" ID="ID_922834610" MODIFIED="1548267844445" TEXT="Kollision abtasten"/>
 <node CREATED="1539109206683" ID="ID_396289365" MODIFIED="1539109217958" TEXT="Seitensensoren abtasten"/>
 <node CREATED="1539109250003" ID="ID_335363733" MODIFIED="1546970183926" TEXT="Start-Taste">
 <richcontent TYPE="NOTE"><html>
@@ -557,7 +558,7 @@
 <icon BUILTIN="help"/>
 </node>
 </node>
-<node CREATED="1546970408663" ID="ID_1980648924" MODIFIED="1546971289152" TEXT="Algorithmus">
+<node CREATED="1546970408663" ID="ID_1980648924" MODIFIED="1548351698966" TEXT="Algorithmus">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -565,6 +566,45 @@
   <body>
     <p>
       Problem: Die beiden Abstandssensoren sehen zu sehr das selbe, daher ist der Unterscheidungswert zu gering (bei einem Range von 0 - 6)
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Die abstandsgef&#252;hrte Geschwindigkeit wird nicht bis auf 0 runtergefahren, um eine Kollision festzustellen, wenn der Zumo sich festf&#228;hrt, wenn der Totbereich der Sensoren erreicht ist.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      the program reads the x and y components of acceleration (ignoring z), and detects a&#160;contact when the magnitude of the 3-period average of the x-y vector exceeds an empirically&#160;determined XY_ACCELERATION_THRESHOLD
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      // check for contact, but ignore readings immediately after turning or losing contact
+    </p>
+    <p>
+      bool check_for_contact()
+    </p>
+    <p>
+      {
+    </p>
+    <p>
+      &#160;&#160;static long threshold_squared = (long) XY_ACCELERATION_THRESHOLD * (long) XY_ACCELERATION_THRESHOLD;
+    </p>
+    <p>
+      &#160;&#160;return (lsm303.ss_xy_avg() &gt;&#160;&#160;threshold_squared) &amp;&amp; \
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;(loop_start_time - last_turn_time &gt; MIN_DELAY_AFTER_TURN) &amp;&amp; \
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;(loop_start_time - contact_made_time &gt; MIN_DELAY_BETWEEN_CONTACTS);
+    </p>
+    <p>
+      }
     </p>
   </body>
 </html>
