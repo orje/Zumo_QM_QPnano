@@ -75,10 +75,14 @@ QActiveCB const Q_ROM QF_active[] = {
 // various constants for the application...
 enum {
     BSP_TICKS_PER_SEC = 100, // number of system clock ticks in one second
+
     // Scheitelfunktionsgleichung: y = a * (x - d) ^ 2 + e
-    a = -32,
-    e = 400U,
-    d = 1U,
+    // Steigungsdreieck m = delta y / delta x
+    // Funktionsgleichung: y = a * x + e
+    a = -87,   // Steigung
+    e = 400U,  // Scheitelpunkt y
+    d = 1U,    // Scheitelpunkt x
+
     TURN_SPEED = 100U
 };
 
@@ -271,8 +275,8 @@ static QState Zumo_accelerate(Zumo * const me) {
     switch (Q_SIG(me)) {
         /*${AOs::Zumo::SM::run::measure::accelerate} */
         case Q_ENTRY_SIG: {
-            me->leftSpeed++;
-            me->rightSpeed++;
+            me->leftSpeed = me->leftSpeed + 10U;
+            me->rightSpeed = me->rightSpeed + 10U;
 
             motors.setSpeeds(me->leftSpeed, me->rightSpeed);
             status_ = Q_HANDLED();
@@ -293,8 +297,13 @@ static QState Zumo_drive(Zumo * const me) {
     switch (Q_SIG(me)) {
         /*${AOs::Zumo::SM::run::measure::drive} */
         case Q_ENTRY_SIG: {
+            /*
             me->leftSpeed = a * pow((me->rightBarrier - d), 2) + e;
             me->rightSpeed = a * pow((me->leftBarrier - d), 2) + e;
+            */
+
+            me->leftSpeed = a * me->rightBarrier + e;
+            me->rightSpeed = a * me->leftBarrier + e;
 
             motors.setSpeeds(me->leftSpeed, me->rightSpeed);
             status_ = Q_HANDLED();

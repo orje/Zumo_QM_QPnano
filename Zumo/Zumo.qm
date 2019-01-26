@@ -10,33 +10,33 @@
    <attribute name="rightSpeed" type="int16_t" visibility="0x02" properties="0x00"/>
    <statechart>
     <initial target="../1">
-     <action>lcd.print(&quot;press A&quot;);</action>
+     <action brief="display">lcd.print(&quot;press A&quot;);</action>
      <initial_glyph conn="4,3,5,0,2,2">
-      <action box="0,-2,4,2"/>
+      <action box="0,-2,8,2"/>
      </initial_glyph>
     </initial>
     <state name="run">
-     <entry>if (buttonA.isPressed()) {
+     <entry brief="check button, start time">if (buttonA.isPressed()) {
     QACTIVE_POST((QActive *)me,
     BUTTON_SIG, 0);
     }
 
 QActive_armX((QActive *)me,
     0U, BSP_TICKS_PER_SEC/10U, 0U);</entry>
-     <exit>QActive_disarmX((QActive *)me, 0U);</exit>
+     <exit brief="end time">QActive_disarmX((QActive *)me, 0U);</exit>
      <tran trig="BUTTON" target="../2">
-      <action>lcd.clear();</action>
-      <tran_glyph conn="4,14,3,3,10">
-       <action box="0,-2,9,2"/>
+      <action brief="clear display">lcd.clear();</action>
+      <tran_glyph conn="4,16,3,3,10">
+       <action box="0,-4,12,4"/>
       </tran_glyph>
      </tran>
      <tran trig="Q_TIMEOUT" target="..">
-      <tran_glyph conn="4,52,3,1,49">
+      <tran_glyph conn="4,54,3,1,61">
        <action box="0,-2,11,2"/>
       </tran_glyph>
      </tran>
      <state name="measure">
-      <entry>proxSensors.read();
+      <entry brief="read sensors, start time">proxSensors.read();
 me-&gt;leftBarrier =
     proxSensors.countsFrontWithLeftLeds();
 me-&gt;rightBarrier =
@@ -46,9 +46,9 @@ QACTIVE_POST((QActive *)me, DRIVE_SIG, 0);
 
 QActive_armX((QActive *)me,
     0U, BSP_TICKS_PER_SEC/10U, 0U);</entry>
-      <exit>QActive_disarmX((QActive *)me, 0U);</exit>
+      <exit brief="end time">QActive_disarmX((QActive *)me, 0U);</exit>
       <tran trig="Q_TIMEOUT" target="..">
-       <tran_glyph conn="14,46,3,1,37">
+       <tran_glyph conn="14,48,3,1,49">
         <action box="0,-2,11,2"/>
        </tran_glyph>
       </tran>
@@ -59,11 +59,11 @@ QActive_armX((QActive *)me,
         <choice target="../../../2">
          <guard brief="v&lt;e">me-&gt;leftSpeed &lt; e
 &amp;&amp; me-&gt;rightSpeed &lt; e</guard>
-         <choice_glyph conn="32,22,5,3,8">
-          <action box="1,-2,7,2"/>
+         <choice_glyph conn="32,24,5,3,8">
+          <action box="1,-2,6,2"/>
          </choice_glyph>
         </choice>
-        <choice_glyph conn="23,30,4,-1,-8,9">
+        <choice_glyph conn="23,32,4,-1,-8,9">
          <action box="1,-10,7,2"/>
         </choice_glyph>
        </choice>
@@ -72,57 +72,62 @@ QActive_armX((QActive *)me,
 &amp;&amp; me-&gt;leftBarrier &lt;= 6
 &amp;&amp; d &lt; me-&gt;rightBarrier
 &amp;&amp; me-&gt;rightBarrier &lt;= 6</guard>
-        <choice_glyph conn="23,30,5,3,17">
+        <choice_glyph conn="23,32,5,3,17">
          <action box="1,-2,7,2"/>
         </choice_glyph>
        </choice>
        <choice target="../../4">
         <guard brief="v=0">me-&gt;leftSpeed == 0
 &amp;&amp; me-&gt;rightSpeed == 0</guard>
-        <choice_glyph conn="23,30,4,3,8,17">
+        <choice_glyph conn="23,32,4,3,8,17">
          <action box="1,6,6,2"/>
         </choice_glyph>
        </choice>
-       <tran_glyph conn="14,30,3,-1,9">
+       <tran_glyph conn="14,32,3,-1,9">
         <action box="0,-2,7,2"/>
        </tran_glyph>
       </tran>
       <state name="accelerate">
-       <entry>me-&gt;leftSpeed++;
-me-&gt;rightSpeed++;
+       <entry brief="accelerate motors">me-&gt;leftSpeed = me-&gt;leftSpeed + 10U;
+me-&gt;rightSpeed = me-&gt;rightSpeed + 10U;
 
 motors.setSpeeds(me-&gt;leftSpeed, me-&gt;rightSpeed);</entry>
-       <state_glyph node="40,20,9,6">
-        <entry box="1,2,4,2"/>
+       <state_glyph node="40,22,21,6">
+        <entry box="1,2,17,2"/>
        </state_glyph>
       </state>
       <state name="drive">
        <documentation>https://rechneronline.de/funktionsgraphen/</documentation>
-       <entry>me-&gt;leftSpeed = a * pow((me-&gt;rightBarrier - d), 2) + e;
+       <entry brief="control motors speeds">/*
+me-&gt;leftSpeed = a * pow((me-&gt;rightBarrier - d), 2) + e;
 me-&gt;rightSpeed = a * pow((me-&gt;leftBarrier - d), 2) + e;
+*/
+
+me-&gt;leftSpeed = a * me-&gt;rightBarrier + e;
+me-&gt;rightSpeed = a * me-&gt;leftBarrier + e;
 
 motors.setSpeeds(me-&gt;leftSpeed, me-&gt;rightSpeed);</entry>
-       <state_glyph node="40,28,9,6">
-        <entry box="1,2,4,2"/>
+       <state_glyph node="40,30,21,6">
+        <entry box="1,2,20,2"/>
        </state_glyph>
       </state>
       <state name="turn">
-       <entry>motors.setSpeeds(TURN_SPEED, 0U);</entry>
-       <state_glyph node="40,36,9,6">
-        <entry box="1,2,4,2"/>
+       <entry brief="turn left">motors.setSpeeds(TURN_SPEED, 0U);</entry>
+       <state_glyph node="40,38,21,6">
+        <entry box="1,2,10,2"/>
        </state_glyph>
       </state>
-      <state_glyph node="14,12,37,36">
-       <entry box="1,2,4,2"/>
-       <exit box="1,4,4,2"/>
+      <state_glyph node="14,14,49,36">
+       <entry box="1,2,21,2"/>
+       <exit box="1,4,10,2"/>
       </state_glyph>
      </state>
-     <state_glyph node="4,5,49,49">
-      <entry box="1,2,4,2"/>
-      <exit box="1,4,4,2"/>
+     <state_glyph node="4,5,61,51">
+      <entry box="1,2,20,2"/>
+      <exit box="1,4,10,2"/>
      </state_glyph>
     </state>
-    <state_diagram size="55,56"/>
+    <state_diagram size="67,58"/>
    </statechart>
   </class>
  </package>
@@ -163,10 +168,14 @@ QActiveCB const Q_ROM QF_active[] = {
 // various constants for the application...
 enum {
     BSP_TICKS_PER_SEC = 100, // number of system clock ticks in one second
+
     // Scheitelfunktionsgleichung: y = a * (x - d) ^ 2 + e
-    a = -32,
-    e = 400U,
-    d = 1U,
+    // Steigungsdreieck m = delta y / delta x
+    // Funktionsgleichung: y = a * x + e
+    a = -87,   // Steigung
+    e = 400U,  // Scheitelpunkt y
+    d = 1U,    // Scheitelpunkt x
+
     TURN_SPEED = 100U
 };
 
