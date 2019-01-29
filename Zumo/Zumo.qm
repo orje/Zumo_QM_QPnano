@@ -77,8 +77,8 @@ QActive_armX((QActive *)me,
         </choice_glyph>
        </choice>
        <choice target="../../4">
-        <guard brief="v=0">me-&gt;leftSpeed == 0
-&amp;&amp; me-&gt;rightSpeed == 0</guard>
+        <guard brief="v&lt;=100">me-&gt;leftSpeed &lt;= 100U
+&amp;&amp; me-&gt;rightSpeed &lt;= 100U</guard>
         <choice_glyph conn="23,32,4,3,8,17">
          <action box="1,6,6,2"/>
         </choice_glyph>
@@ -88,8 +88,8 @@ QActive_armX((QActive *)me,
        </tran_glyph>
       </tran>
       <state name="accelerate">
-       <entry brief="accelerate motors">me-&gt;leftSpeed = me-&gt;leftSpeed + 10U;
-me-&gt;rightSpeed = me-&gt;rightSpeed + 10U;
+       <entry brief="accelerate motors">me-&gt;leftSpeed = me-&gt;leftSpeed + 50U;
+me-&gt;rightSpeed = me-&gt;rightSpeed + 50U;
 
 motors.setSpeeds(me-&gt;leftSpeed, me-&gt;rightSpeed);</entry>
        <state_glyph node="40,22,21,6">
@@ -98,12 +98,7 @@ motors.setSpeeds(me-&gt;leftSpeed, me-&gt;rightSpeed);</entry>
       </state>
       <state name="drive">
        <documentation>https://rechneronline.de/funktionsgraphen/</documentation>
-       <entry brief="control motors speeds">/*
-me-&gt;leftSpeed = a * pow((me-&gt;rightBarrier - d), 2) + e;
-me-&gt;rightSpeed = a * pow((me-&gt;leftBarrier - d), 2) + e;
-*/
-
-me-&gt;leftSpeed = a * me-&gt;rightBarrier + e;
+       <entry brief="control motors speeds">me-&gt;leftSpeed = a * me-&gt;rightBarrier + e;
 me-&gt;rightSpeed = a * me-&gt;leftBarrier + e;
 
 motors.setSpeeds(me-&gt;leftSpeed, me-&gt;rightSpeed);</entry>
@@ -172,7 +167,7 @@ enum {
     // Scheitelfunktionsgleichung: y = a * (x - d) ^ 2 + e
     // Steigungsdreieck m = delta y / delta x
     // Funktionsgleichung: y = a * x + e
-    a = -87,   // Steigung
+    a = -80,   // Steigung
     e = 400U,  // Scheitelpunkt y
     d = 1U,    // Scheitelpunkt x
 

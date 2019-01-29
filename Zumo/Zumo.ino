@@ -79,7 +79,7 @@ enum {
     // Scheitelfunktionsgleichung: y = a * (x - d) ^ 2 + e
     // Steigungsdreieck m = delta y / delta x
     // Funktionsgleichung: y = a * x + e
-    a = -87,   // Steigung
+    a = -80,   // Steigung
     e = 400U,  // Scheitelpunkt y
     d = 1U,    // Scheitelpunkt x
 
@@ -252,8 +252,8 @@ static QState Zumo_measure(Zumo * const me) {
                 status_ = Q_TRAN(&Zumo_drive);
             }
             /*${AOs::Zumo::SM::run::measure::DRIVE::[v=0]} */
-            else if (me->leftSpeed == 0
-                     && me->rightSpeed == 0)
+            else if (me->leftSpeed <= 100U
+                     && me->rightSpeed <= 100U)
             {
                 status_ = Q_TRAN(&Zumo_turn);
             }
@@ -275,8 +275,8 @@ static QState Zumo_accelerate(Zumo * const me) {
     switch (Q_SIG(me)) {
         /*${AOs::Zumo::SM::run::measure::accelerate} */
         case Q_ENTRY_SIG: {
-            me->leftSpeed = me->leftSpeed + 10U;
-            me->rightSpeed = me->rightSpeed + 10U;
+            me->leftSpeed = me->leftSpeed + 50U;
+            me->rightSpeed = me->rightSpeed + 50U;
 
             motors.setSpeeds(me->leftSpeed, me->rightSpeed);
             status_ = Q_HANDLED();
@@ -297,11 +297,6 @@ static QState Zumo_drive(Zumo * const me) {
     switch (Q_SIG(me)) {
         /*${AOs::Zumo::SM::run::measure::drive} */
         case Q_ENTRY_SIG: {
-            /*
-            me->leftSpeed = a * pow((me->rightBarrier - d), 2) + e;
-            me->rightSpeed = a * pow((me->leftBarrier - d), 2) + e;
-            */
-
             me->leftSpeed = a * me->rightBarrier + e;
             me->rightSpeed = a * me->leftBarrier + e;
 
