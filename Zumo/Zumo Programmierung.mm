@@ -1,7 +1,7 @@
 <map version="1.0.1">
 <!-- To view this file, download free mind mapping software FreeMind from http://freemind.sourceforge.net -->
 <node CREATED="1538675159476" ID="ID_1984811301" MODIFIED="1539524198961" TEXT="Zumo Programmierung">
-<node CREATED="1538675191977" FOLDED="true" ID="ID_187336572" MODIFIED="1541876471735" POSITION="right" TEXT="Welche Programmierumgebung benutzen?">
+<node CREATED="1538675191977" FOLDED="true" ID="ID_187336572" MODIFIED="1551028222799" POSITION="right" TEXT="Welche Programmierumgebung benutzen?">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -365,7 +365,7 @@
 </node>
 </node>
 </node>
-<node CREATED="1539194358878" FOLDED="true" ID="ID_188788871" MODIFIED="1548267735114" POSITION="right" TEXT="Fragen">
+<node CREATED="1539194358878" FOLDED="true" ID="ID_188788871" MODIFIED="1551028231737" POSITION="right" TEXT="Fragen">
 <node CREATED="1541876563589" ID="ID_668761038" MODIFIED="1544813109401" TEXT="2 Parameter &#xfc;bergeben">
 <richcontent TYPE="NOTE"><html>
   <head>
@@ -408,7 +408,7 @@
 </html></richcontent>
 </node>
 </node>
-<node CREATED="1539195597155" FOLDED="true" ID="ID_1394309608" MODIFIED="1548267748936" POSITION="right" TEXT="Infos">
+<node CREATED="1539195597155" FOLDED="true" ID="ID_1394309608" MODIFIED="1551028274432" POSITION="right" TEXT="Infos">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1539195605739" ID="ID_819545712" MODIFIED="1539196565475" TEXT="32U4 = Micro (= Leonardo)"/>
 <node CREATED="1539196101019" ID="ID_910783163" MODIFIED="1539196185602" TEXT="Motor = 410 RPM = 65 cm/s"/>
@@ -457,13 +457,13 @@
 </html></richcontent>
 </node>
 </node>
-<node CREATED="1538840348728" FOLDED="true" ID="ID_365015684" MODIFIED="1541876540249" POSITION="right" TEXT="Welches Designtool benutzen?">
+<node CREATED="1538840348728" FOLDED="true" ID="ID_365015684" MODIFIED="1551028279331" POSITION="right" TEXT="Welches Designtool benutzen?">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1541876529287" ID="ID_25110167" MODIFIED="1541876533560" TEXT="adoc"/>
 </node>
 <node CREATED="1538840427200" ID="ID_1276132013" MODIFIED="1548267531773" POSITION="left" TEXT="Was soll der Zumo machen?">
 <icon BUILTIN="button_ok"/>
-<node CREATED="1539108920688" ID="ID_475536693" MODIFIED="1548267761391" TEXT="Teilaufgaben">
+<node CREATED="1539108920688" FOLDED="true" ID="ID_475536693" MODIFIED="1551028205377" TEXT="Teilaufgaben">
 <node CREATED="1539108937358" ID="ID_137728993" MODIFIED="1548267776070" TEXT="Motoren ansteuern">
 <richcontent TYPE="NOTE"><html>
   <head>
@@ -544,26 +544,36 @@
   </body>
 </html></richcontent>
 </node>
-<node CREATED="1539527183106" ID="ID_1323765566" MODIFIED="1546970390198" TEXT="timetick generieren">
+<node CREATED="1539527183106" ID="ID_1323765566" MODIFIED="1551028199256" TEXT="timetick generieren">
 <richcontent TYPE="NOTE"><html>
   <head>
     
   </head>
   <body>
     <p>
-      Der timetick ist stabil. Ich bin mir nur noch nicht &#252;berdie korrekte Zeitdauer im Klaren.
+      Der timetick ist stabil. Ich bin mir nur noch nicht &#252;ber die korrekte Zeitdauer im Klaren.
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="help"/>
 </node>
 </node>
-<node CREATED="1546970408663" ID="ID_1980648924" MODIFIED="1548351698966" TEXT="Algorithmus">
+<node CREATED="1546970408663" ID="ID_1980648924" MODIFIED="1551032077497" TEXT="Algorithmus">
 <richcontent TYPE="NOTE"><html>
   <head>
     
   </head>
   <body>
+    <p>
+      Messe! Wenn frei, beschleunige, bzw. fahre gerade aus. Wenn sich einseitig ein Hindernis anbahnt, steuere gegen. Wenn beidseitig ein Hindernis zu nahe kommt, wende in Richtung des kleineren Hindernises, bis wieder frei ist oder das Hindernis weit genug entfernt ist.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      
+    </p>
     <p>
       Problem: Die beiden Abstandssensoren sehen zu sehr das selbe, daher ist der Unterscheidungswert zu gering (bei einem Range von 0 - 6)
     </p>
