@@ -1,8 +1,8 @@
 <map version="1.0.1">
 <!-- To view this file, download free mind mapping software FreeMind from http://freemind.sourceforge.net -->
-<node CREATED="1538675159476" ID="ID_1984811301" MODIFIED="1555253094967" TEXT="Zumo Programmierung">
+<node CREATED="1538675159476" ID="ID_1984811301" MODIFIED="1555305644174" TEXT="Zumo Programmierung">
 <font NAME="Courier New" SIZE="12"/>
-<node CREATED="1538675191977" FOLDED="true" ID="ID_187336572" MODIFIED="1555253094966" POSITION="right" TEXT="Welche Programmierumgebung benutzen?">
+<node CREATED="1538675191977" FOLDED="true" ID="ID_187336572" MODIFIED="1555305715150" POSITION="right" TEXT="Welche Programmierumgebung benutzen?">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -10,7 +10,7 @@
   <body>
     <ol>
       <li>
-        Als erstes programmiere ich mit dem Micro-PlugIn in AtmelStudio, da ich dann erst einmal funktionierende Bibliotheken nutzen kann.
+        <font face="Courier New" size="4">Als erstes programmiere ich mit dem Micro-PlugIn in AtmelStudio, da ich dann erst einmal funktionierende Bibliotheken nutzen kann.</font>
       </li>
     </ol>
   </body>
@@ -50,7 +50,7 @@
 <node CREATED="1538678173620" ID="ID_785810533" MODIFIED="1538678192340" TEXT="eingeschr&#xe4;nkter Komfort"/>
 </node>
 </node>
-<node CREATED="1538675285033" FOLDED="true" ID="ID_838973498" MODIFIED="1539523953414" TEXT="Atmel  oder Visual Studio">
+<node CREATED="1538675285033" FOLDED="true" ID="ID_838973498" MODIFIED="1555305711651" TEXT="Atmel  oder Visual Studio">
 <icon BUILTIN="prepare"/>
 <node CREATED="1538675449424" ID="ID_1000373760" MODIFIED="1538764049050" TEXT="mit Micro">
 <icon BUILTIN="button_ok"/>
@@ -370,7 +370,7 @@
 </node>
 <node CREATED="1539194358878" ID="ID_188788871" MODIFIED="1555253107773" POSITION="right" TEXT="Fragen">
 <font NAME="Courier New" SIZE="12"/>
-<node CREATED="1541876563589" ID="ID_668761038" MODIFIED="1544813109401" TEXT="2 Parameter &#xfc;bergeben">
+<node CREATED="1541876563589" ID="ID_668761038" MODIFIED="1555305562350" TEXT="2 Parameter &#xfc;bergeben">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -409,7 +409,8 @@
       Wo setze ich Q_PARAM_SIZE?
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 </node>
 <node CREATED="1539195597155" FOLDED="true" ID="ID_1394309608" MODIFIED="1555253094965" POSITION="right" TEXT="Infos">
@@ -487,11 +488,11 @@
 <icon BUILTIN="button_ok"/>
 <node CREATED="1541876529287" ID="ID_25110167" MODIFIED="1541876533560" TEXT="adoc"/>
 </node>
-<node CREATED="1538840427200" ID="ID_1276132013" MODIFIED="1555253094960" POSITION="left" TEXT="Was soll der Zumo machen?">
+<node CREATED="1538840427200" ID="ID_1276132013" MODIFIED="1555305661819" POSITION="left" TEXT="Was soll der Zumo machen?">
 <font NAME="Courier New" SIZE="12"/>
-<node CREATED="1539108920688" FOLDED="true" ID="ID_475536693" MODIFIED="1555253094958" TEXT="Teilaufgaben">
+<node CREATED="1539108920688" FOLDED="true" ID="ID_475536693" MODIFIED="1555305858347" TEXT="Teilaufgaben">
 <font NAME="Courier New" SIZE="12"/>
-<node CREATED="1539108937358" ID="ID_137728993" MODIFIED="1548267776070" TEXT="Motoren ansteuern">
+<node CREATED="1539108937358" ID="ID_137728993" MODIFIED="1555305562367" TEXT="Motoren ansteuern">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -501,9 +502,10 @@
       Speed-Wert = 0 - 400
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="button_ok"/>
-<node CREATED="1539108974217" ID="ID_46398462" MODIFIED="1541347782804" TEXT="Gleichm&#xe4;&#xdf;igkeit synchronisieren">
+<node CREATED="1539108974217" ID="ID_46398462" MODIFIED="1555305562382" TEXT="Gleichm&#xe4;&#xdf;igkeit synchronisieren">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -522,10 +524,11 @@
       int16_t getCountsAndResetRight();
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 </node>
-<node CREATED="1539109191580" ID="ID_596105360" MODIFIED="1546970262916" TEXT="Frontsensoren abtasten">
+<node CREATED="1539109191580" ID="ID_596105360" MODIFIED="1555305562391" TEXT="Frontsensoren abtasten">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -535,12 +538,17 @@
       Abstandswert = 0 - 6
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
-<node CREATED="1548267814460" ID="ID_922834610" MODIFIED="1548267844445" TEXT="Kollision abtasten"/>
-<node CREATED="1539109206683" ID="ID_396289365" MODIFIED="1539109217958" TEXT="Seitensensoren abtasten"/>
-<node CREATED="1539109250003" ID="ID_335363733" MODIFIED="1546970183926" TEXT="Start-Taste">
+<node CREATED="1548267814460" ID="ID_922834610" MODIFIED="1555305603904" TEXT="Kollision abtasten">
+<font NAME="Courier New" SIZE="12"/>
+</node>
+<node CREATED="1539109206683" ID="ID_396289365" MODIFIED="1555305608137" TEXT="Seitensensoren abtasten">
+<font NAME="Courier New" SIZE="12"/>
+</node>
+<node CREATED="1539109250003" ID="ID_335363733" MODIFIED="1555305562405" TEXT="Start-Taste">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -550,10 +558,11 @@
       Offenbar muss ich eine timeout-Schleife machen und dann immer wieder den Button abfragen &lt;- Ja
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
-<node CREATED="1539109306984" ID="ID_1990753561" MODIFIED="1539109518683" TEXT="Status LED">
+<node CREATED="1539109306984" ID="ID_1990753561" MODIFIED="1555305562415" TEXT="Status LED">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -569,9 +578,10 @@
       rot = gebe auf
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
-<node CREATED="1539527183106" ID="ID_1323765566" MODIFIED="1551028199256" TEXT="timetick generieren">
+<node CREATED="1539527183106" ID="ID_1323765566" MODIFIED="1555305562425" TEXT="timetick generieren">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -581,7 +591,8 @@
       Der timetick ist stabil. Ich bin mir nur noch nicht &#252;ber die korrekte Zeitdauer im Klaren.
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="help"/>
 </node>
 </node>
@@ -589,47 +600,56 @@
 <arrowlink DESTINATION="ID_1980648924" ENDARROW="Default" ENDINCLINATION="0;0;" ID="Arrow_ID_1184872118" STARTARROW="None" STARTINCLINATION="0;0;"/>
 <linktarget COLOR="#b0b0b0" DESTINATION="ID_1980648924" ENDARROW="Default" ENDINCLINATION="0;0;" ID="Arrow_ID_1184872118" SOURCE="ID_1980648924" STARTARROW="None" STARTINCLINATION="0;0;"/>
 <font NAME="Courier New" SIZE="12"/>
-<node CREATED="1555251101247" ID="ID_978425654" MODIFIED="1555253080692" TEXT="Abstand messen und entscheiden">
+<node CREATED="1555251101247" ID="ID_978425654" MODIFIED="1555308705747" TEXT="Abstand messen und entscheiden">
 <richcontent TYPE="NOTE"><html>
   <head>
     
   </head>
   <body>
     <p>
-      Problem: Die beiden Abstandssensoren sehen zu sehr das selbe, daher ist der Unterscheidungswert zu gering (bei einem Range von 0 - 6).
+      <font face="Courier New" size="4">Problem: Die beiden Abstandssensoren sehen zu sehr das selbe, daher ist der Unterscheidungswert zu gering (bei einem Range von 0 - 6). </font>
     </p>
     <p>
-      Die abstandsgef&#252;hrte Geschwindigkeit sollte nicht bis auf 0 runtergefahren werden, um eine Kollision festzustellen. Z.B., wenn der Zumo sich festf&#228;hrt, weil der Totbereich der Sensoren erreicht ist.
+      <font face="Courier New" size="4">Die abstandsgef&#252;hrte Geschwindigkeit sollte nicht bis auf 0 runtergefahren werden, um eine Kollision festzustellen. Z.B., wenn der Zumo sich festf&#228;hrt, weil der Totbereich der Sensoren erreicht ist. </font>
     </p>
     <p>
       
     </p>
     <p>
-      Situation erkennen und Aktion entscheiden:
+      <font face="Courier New" size="4">Situation erkennen und Aktion entscheiden: </font>
     </p>
     <ol>
       <li>
-        l &amp;&amp; r =&lt; 4 : &quot;fahre geradeaus&quot;
+        <font face="Courier New" size="4">&#160;l &amp;&amp; r =&lt; 4 : &quot;fahre geradeaus&quot; </font>
       </li>
       <li>
-        Differenz zwischen abs(l - r) &gt;= 2 : &quot;ignoriere, da Hindernis parallel verl&#228;uft&quot;
+        <font face="Courier New" size="4">&#160;Differenz zwischen abs(l - r) &gt;= 2 : &quot;ignoriere, da Hindernis parallel verl&#228;uft&quot; </font>
       </li>
       <li>
-        l = 5 &amp;&amp; r = 4 : &quot;biege rechts ab&quot; &amp;&amp; &quot;merke&quot; || l = 4 &amp;&amp; r = 5&#160;: &quot;biege links ab&quot; &amp;&amp; &quot;merke&quot;
+        <font face="Courier New" size="4">&#160;l = 5 &amp;&amp; r = 4 : &quot;biege rechts ab&quot; &amp;&amp; &quot;merke&quot; || l = 4 &amp;&amp; r = 5&#160;: &quot;biege links ab&quot; &amp;&amp; &quot;merke&quot; </font>
       </li>
       <li>
-        l || r = 6 : &quot;wende unter Ber&#252;cksichtigung des gemerkten&quot;
+        <font face="Courier New" size="4">&#160;l || r = 6 : &quot;wende unter Ber&#252;cksichtigung des gemerkten&quot; </font>
       </li>
     </ol>
     <p>
       
     </p>
     <p>
-      Aktion:
+      <font face="Courier New" size="4">Aktion: </font>
     </p>
     <ol>
       <li>
-        &quot;fahre geradeaus&quot; : beschleunigen
+        <font face="Courier New" size="4">&#160;&quot;fahre geradeaus&quot; : beschleunigen und abstandsregeln</font>
+      </li>
+      <li>
+        &#160;
+      </li>
+      <li>
+        <font face="Courier New" size="4">&#160;&quot;biege ab&quot; &amp;&amp; &quot;merke&quot; : 3. Formel f&#252;r bremsende Seite benutzen und merken</font>
+      </li>
+      <li>
+        &#160;
       </li>
     </ol>
   </body>
@@ -674,8 +694,7 @@
       }
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <font NAME="Courier New" SIZE="12"/>
 </node>
 </node>
