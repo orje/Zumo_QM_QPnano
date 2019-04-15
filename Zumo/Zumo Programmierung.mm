@@ -1,7 +1,8 @@
 <map version="1.0.1">
 <!-- To view this file, download free mind mapping software FreeMind from http://freemind.sourceforge.net -->
-<node CREATED="1538675159476" ID="ID_1984811301" MODIFIED="1539524198961" TEXT="Zumo Programmierung">
-<node CREATED="1538675191977" FOLDED="true" ID="ID_187336572" MODIFIED="1551028222799" POSITION="right" TEXT="Welche Programmierumgebung benutzen?">
+<node CREATED="1538675159476" ID="ID_1984811301" MODIFIED="1555253094967" TEXT="Zumo Programmierung">
+<font NAME="Courier New" SIZE="12"/>
+<node CREATED="1538675191977" FOLDED="true" ID="ID_187336572" MODIFIED="1555253094966" POSITION="right" TEXT="Welche Programmierumgebung benutzen?">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -13,7 +14,9 @@
       </li>
     </ol>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
+<font NAME="Courier New" SIZE="12"/>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1538675256437" FOLDED="true" ID="ID_1244246604" MODIFIED="1541876440857" TEXT="Arduino IDE">
 <icon BUILTIN="stop"/>
@@ -365,7 +368,8 @@
 </node>
 </node>
 </node>
-<node CREATED="1539194358878" FOLDED="true" ID="ID_188788871" MODIFIED="1551028231737" POSITION="right" TEXT="Fragen">
+<node CREATED="1539194358878" ID="ID_188788871" MODIFIED="1555253107773" POSITION="right" TEXT="Fragen">
+<font NAME="Courier New" SIZE="12"/>
 <node CREATED="1541876563589" ID="ID_668761038" MODIFIED="1544813109401" TEXT="2 Parameter &#xfc;bergeben">
 <richcontent TYPE="NOTE"><html>
   <head>
@@ -408,7 +412,8 @@
 </html></richcontent>
 </node>
 </node>
-<node CREATED="1539195597155" FOLDED="true" ID="ID_1394309608" MODIFIED="1551028274432" POSITION="right" TEXT="Infos">
+<node CREATED="1539195597155" FOLDED="true" ID="ID_1394309608" MODIFIED="1555253094965" POSITION="right" TEXT="Infos">
+<font NAME="Courier New" SIZE="12"/>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1539195605739" ID="ID_819545712" MODIFIED="1539196565475" TEXT="32U4 = Micro (= Leonardo)"/>
 <node CREATED="1539196101019" ID="ID_910783163" MODIFIED="1539196185602" TEXT="Motor = 410 RPM = 65 cm/s"/>
@@ -436,7 +441,27 @@
   </body>
 </html></richcontent>
 </node>
-<node CREATED="1545406625155" ID="ID_389826269" MODIFIED="1545406679615" TEXT="ProximitySensors = 0 (!!!) - 6"/>
+<node CREATED="1545406625155" ID="ID_389826269" MODIFIED="1555240070699" TEXT="ProximitySensors = 0 (!!!) - 6">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      6 ~ 30cm&#160;Abstand
+    </p>
+    <p>
+      5 ~ 55cm Abstand
+    </p>
+    <p>
+      4 ~ 77cm Abstand
+    </p>
+    <p>
+      3 ~ 118cm Abstand
+    </p>
+  </body>
+</html></richcontent>
+</node>
 <node CREATED="1545406687958" ID="ID_844648342" MODIFIED="1545406775302" TEXT="Motors = 0 - 400 (2 Byte!!!)"/>
 <node CREATED="1546369572644" ID="ID_1017890351" MODIFIED="1546439472014" TEXT="Formel f&#xfc;r Abstand und Geschwindigkeit">
 <richcontent TYPE="NOTE"><html>
@@ -457,13 +482,15 @@
 </html></richcontent>
 </node>
 </node>
-<node CREATED="1538840348728" FOLDED="true" ID="ID_365015684" MODIFIED="1551028279331" POSITION="right" TEXT="Welches Designtool benutzen?">
+<node CREATED="1538840348728" FOLDED="true" ID="ID_365015684" MODIFIED="1555253094962" POSITION="right" TEXT="Welches Designtool benutzen?">
+<font NAME="Courier New" SIZE="12"/>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1541876529287" ID="ID_25110167" MODIFIED="1541876533560" TEXT="adoc"/>
 </node>
-<node CREATED="1538840427200" ID="ID_1276132013" MODIFIED="1548267531773" POSITION="left" TEXT="Was soll der Zumo machen?">
-<icon BUILTIN="button_ok"/>
-<node CREATED="1539108920688" FOLDED="true" ID="ID_475536693" MODIFIED="1551028205377" TEXT="Teilaufgaben">
+<node CREATED="1538840427200" ID="ID_1276132013" MODIFIED="1555253094960" POSITION="left" TEXT="Was soll der Zumo machen?">
+<font NAME="Courier New" SIZE="12"/>
+<node CREATED="1539108920688" FOLDED="true" ID="ID_475536693" MODIFIED="1555253094958" TEXT="Teilaufgaben">
+<font NAME="Courier New" SIZE="12"/>
 <node CREATED="1539108937358" ID="ID_137728993" MODIFIED="1548267776070" TEXT="Motoren ansteuern">
 <richcontent TYPE="NOTE"><html>
   <head>
@@ -554,40 +581,70 @@
       Der timetick ist stabil. Ich bin mir nur noch nicht &#252;ber die korrekte Zeitdauer im Klaren.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="help"/>
 </node>
 </node>
-<node CREATED="1546970408663" ID="ID_1980648924" MODIFIED="1551032077497" TEXT="Algorithmus">
+<node CREATED="1546970408663" ID="ID_1980648924" MODIFIED="1555253094958" TEXT="Algorithmus">
+<arrowlink DESTINATION="ID_1980648924" ENDARROW="Default" ENDINCLINATION="0;0;" ID="Arrow_ID_1184872118" STARTARROW="None" STARTINCLINATION="0;0;"/>
+<linktarget COLOR="#b0b0b0" DESTINATION="ID_1980648924" ENDARROW="Default" ENDINCLINATION="0;0;" ID="Arrow_ID_1184872118" SOURCE="ID_1980648924" STARTARROW="None" STARTINCLINATION="0;0;"/>
+<font NAME="Courier New" SIZE="12"/>
+<node CREATED="1555251101247" ID="ID_978425654" MODIFIED="1555253080692" TEXT="Abstand messen und entscheiden">
 <richcontent TYPE="NOTE"><html>
   <head>
     
   </head>
   <body>
     <p>
-      Messe! Wenn frei, beschleunige, bzw. fahre gerade aus. Wenn sich einseitig ein Hindernis anbahnt, steuere gegen. Wenn beidseitig ein Hindernis zu nahe kommt, wende in Richtung des kleineren Hindernises, bis wieder frei ist oder das Hindernis weit genug entfernt ist.
+      Problem: Die beiden Abstandssensoren sehen zu sehr das selbe, daher ist der Unterscheidungswert zu gering (bei einem Range von 0 - 6).
+    </p>
+    <p>
+      Die abstandsgef&#252;hrte Geschwindigkeit sollte nicht bis auf 0 runtergefahren werden, um eine Kollision festzustellen. Z.B., wenn der Zumo sich festf&#228;hrt, weil der Totbereich der Sensoren erreicht ist.
     </p>
     <p>
       
     </p>
     <p>
+      Situation erkennen und Aktion entscheiden:
+    </p>
+    <ol>
+      <li>
+        l &amp;&amp; r =&lt; 4 : &quot;fahre geradeaus&quot;
+      </li>
+      <li>
+        Differenz zwischen abs(l - r) &gt;= 2 : &quot;ignoriere, da Hindernis parallel verl&#228;uft&quot;
+      </li>
+      <li>
+        l = 5 &amp;&amp; r = 4 : &quot;biege rechts ab&quot; &amp;&amp; &quot;merke&quot; || l = 4 &amp;&amp; r = 5&#160;: &quot;biege links ab&quot; &amp;&amp; &quot;merke&quot;
+      </li>
+      <li>
+        l || r = 6 : &quot;wende unter Ber&#252;cksichtigung des gemerkten&quot;
+      </li>
+    </ol>
+    <p>
       
     </p>
     <p>
-      Problem: Die beiden Abstandssensoren sehen zu sehr das selbe, daher ist der Unterscheidungswert zu gering (bei einem Range von 0 - 6)
+      Aktion:
     </p>
+    <ol>
+      <li>
+        &quot;fahre geradeaus&quot; : beschleunigen
+      </li>
+    </ol>
+  </body>
+</html>
+</richcontent>
+<font NAME="Courier New" SIZE="12"/>
+</node>
+<node CREATED="1555251160655" ID="ID_1200783107" MODIFIED="1555253094954" TEXT="Kontakterkennung">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
     <p>
-      
-    </p>
-    <p>
-      Die abstandsgef&#252;hrte Geschwindigkeit wird nicht bis auf 0 runtergefahren, um eine Kollision festzustellen, wenn der Zumo sich festf&#228;hrt, wenn der Totbereich der Sensoren erreicht ist.
-    </p>
-    <p>
-      
-    </p>
-    <p>
-      the program reads the x and y components of acceleration (ignoring z), and detects a&#160;contact when the magnitude of the 3-period average of the x-y vector exceeds an empirically&#160;determined XY_ACCELERATION_THRESHOLD
+      the program reads the x and y components of acceleration (ignoring z), and detets a&#160;contact when the magnitude of the 3-period average of the x-y vector exceeds an empirically&#160;determined XY_ACCELERATION_THRESHOLD
     </p>
     <p>
       
@@ -619,7 +676,8 @@
   </body>
 </html>
 </richcontent>
-<icon BUILTIN="yes"/>
+<font NAME="Courier New" SIZE="12"/>
+</node>
 </node>
 </node>
 </node>
