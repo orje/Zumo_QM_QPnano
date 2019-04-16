@@ -16,6 +16,7 @@
      </initial_glyph>
     </initial>
     <state name="run">
+     <documentation>zyklische Abfrage des Tasters bis Betätigung</documentation>
      <entry brief="check button, start time">if (buttonA.isPressed()) {
     QACTIVE_POST((QActive *)me,
     BUTTON_SIG, 0);
@@ -36,6 +37,7 @@ QActive_armX((QActive *)me,
       </tran_glyph>
      </tran>
      <state name="measure">
+      <documentation>zyklisches Messen und ergebnisabhängiges Ansteuern der Motoren</documentation>
       <entry brief="read sensors, start time">proxSensors.read();
 me-&gt;leftBarrier =
     proxSensors.countsFrontWithLeftLeds();
@@ -97,7 +99,6 @@ motors.setSpeeds(me-&gt;leftSpeed, me-&gt;rightSpeed);</entry>
        </state_glyph>
       </state>
       <state name="drive">
-       <documentation>https://rechneronline.de/funktionsgraphen/</documentation>
        <entry brief="control motors speeds">me-&gt;leftSpeed = a * me-&gt;rightBarrier + e;
 me-&gt;rightSpeed = a * me-&gt;leftBarrier + e;
 
@@ -164,14 +165,11 @@ QActiveCB const Q_ROM QF_active[] = {
 enum {
     BSP_TICKS_PER_SEC = 100, // number of system clock ticks in one second
 
-    // Scheitelfunktionsgleichung: y = a * (x - d) ^ 2 + e
-    // Steigungsdreieck m = delta y / delta x
-    // Funktionsgleichung: y = a * x + e
+    // https://rechneronline.de/funktionsgraphen/
+    // Funktionsgleichung: y = a * (x - d) + e
     a = -80,   // Steigung
-    e = 400U,  // Scheitelpunkt y
     d = 1U,    // Scheitelpunkt x
-
-    TURN_SPEED = 100U
+    e = 400U,  // Scheitelpunkt y
 };
 
 // various signals for the application...

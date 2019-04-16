@@ -1,8 +1,90 @@
 <map version="1.0.1">
 <!-- To view this file, download free mind mapping software FreeMind from http://freemind.sourceforge.net -->
-<node CREATED="1538675159476" ID="ID_1984811301" MODIFIED="1555305644174" TEXT="Zumo Programmierung">
-<font NAME="Courier New" SIZE="12"/>
-<node CREATED="1538675191977" FOLDED="true" ID="ID_187336572" MODIFIED="1555305715150" POSITION="right" TEXT="Welche Programmierumgebung benutzen?">
+<node CREATED="1538675159476" ID="ID_1984811301" MODIFIED="1555399600837" TEXT="Zumo Programmierung">
+<font NAME="Cambria" SIZE="12"/>
+<node CREATED="1539195597155" ID="ID_1394309608" MODIFIED="1555399800645" POSITION="right" TEXT="Infos">
+<font NAME="Cambria" SIZE="12"/>
+<icon BUILTIN="button_ok"/>
+<node CREATED="1539195605739" ID="ID_819545712" MODIFIED="1555399600832" TEXT="32U4 = Micro (= Leonardo)">
+<font NAME="Cambria" SIZE="14"/>
+</node>
+<node CREATED="1539196101019" ID="ID_910783163" MODIFIED="1555399600831" TEXT="Motor = 410 RPM = 65 cm/s">
+<font NAME="Cambria" SIZE="14"/>
+</node>
+<node CREATED="1539197559942" ID="ID_310958718" MODIFIED="1555399600821" TEXT="Encoderimpulse/Umdrehung = 75.81 &#xd7; 12 &#x2248; 909.7 CPR">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      To reduce the required number of interrupt pins, the Zumo 32U4 main board XORs together both channels of each encoder and connects the resulting signal to an interrupt pin, while channel B of each encoder is connected to a non-interrupt pin:
+    </p>
+    <p>
+      &#8226; Digital pin 7, or PE6, reads the right encoder XORed signal using external interrupt INT6.
+    </p>
+    <p>
+      &#8226; Digital pin 8, or PB4, reads the left encoder XORed signal using pin change interrupt PCINT4.
+    </p>
+    <p>
+      &#8226; Digital pin 23 (analog pin 5), or PF0, reads the right encoder channel B.
+    </p>
+    <p>
+      &#8226; Pin PE2 reads the left encoder channel B.
+    </p>
+  </body>
+</html>
+</richcontent>
+<font NAME="Cambria" SIZE="14"/>
+</node>
+<node CREATED="1545406625155" ID="ID_389826269" MODIFIED="1555399600817" TEXT="ProximitySensors = 0 (!!!) - 6">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      6 ~ 30cm&#160;Abstand
+    </p>
+    <p>
+      5 ~ 55cm Abstand
+    </p>
+    <p>
+      4 ~ 77cm Abstand
+    </p>
+    <p>
+      3 ~ 118cm Abstand
+    </p>
+  </body>
+</html>
+</richcontent>
+<font NAME="Cambria" SIZE="14"/>
+</node>
+<node CREATED="1545406687958" ID="ID_844648342" MODIFIED="1555399600806" TEXT="Motors = 0 - 400 (2 Byte!!!)">
+<font NAME="Cambria" SIZE="14"/>
+</node>
+<node CREATED="1546369572644" ID="ID_1017890351" MODIFIED="1555399600785" TEXT="Formel f&#xfc;r Abstand und Geschwindigkeit">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      https://rechneronline.de/funktionsgraphen/
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      http://www.nachlernmaterial.de/wie-kann-ich-aus-einem-graphen-die-funktionsgleichung-bestimmen-und-umgekehrt/
+    </p>
+  </body>
+</html>
+</richcontent>
+<font NAME="Cambria" SIZE="14"/>
+</node>
+</node>
+<node CREATED="1538675191977" FOLDED="true" ID="ID_187336572" MODIFIED="1555400004395" POSITION="right" TEXT="Welche Programmierumgebung benutzen?">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -16,9 +98,9 @@
   </body>
 </html>
 </richcontent>
-<font NAME="Courier New" SIZE="12"/>
+<font NAME="Cambria" SIZE="12"/>
 <icon BUILTIN="button_ok"/>
-<node CREATED="1538675256437" FOLDED="true" ID="ID_1244246604" MODIFIED="1541876440857" TEXT="Arduino IDE">
+<node CREATED="1538675256437" FOLDED="true" ID="ID_1244246604" MODIFIED="1555399845140" TEXT="Arduino IDE">
 <icon BUILTIN="stop"/>
 <node CREATED="1538675410226" ID="ID_1322557574" MODIFIED="1538678791967" STYLE="fork" TEXT="F&#xfc;r">
 <node CREATED="1538677713704" ID="ID_176583447" MODIFIED="1538678787630">
@@ -50,9 +132,9 @@
 <node CREATED="1538678173620" ID="ID_785810533" MODIFIED="1538678192340" TEXT="eingeschr&#xe4;nkter Komfort"/>
 </node>
 </node>
-<node CREATED="1538675285033" FOLDED="true" ID="ID_838973498" MODIFIED="1555305711651" TEXT="Atmel  oder Visual Studio">
+<node CREATED="1538675285033" FOLDED="true" ID="ID_838973498" MODIFIED="1555399866358" TEXT="Atmel  oder Visual Studio">
 <icon BUILTIN="prepare"/>
-<node CREATED="1538675449424" ID="ID_1000373760" MODIFIED="1538764049050" TEXT="mit Micro">
+<node CREATED="1538675449424" FOLDED="true" ID="ID_1000373760" MODIFIED="1555399846901" TEXT="mit Micro">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1538675422694" ID="ID_652831508" MODIFIED="1538764044396" TEXT="F&#xfc;r">
 <node CREATED="1538677859731" ID="ID_1347018295" MODIFIED="1538677885180">
@@ -143,7 +225,7 @@
 </node>
 </node>
 </node>
-<node CREATED="1538675486948" FOLDED="true" ID="ID_1103138290" MODIFIED="1538841781229" TEXT="pur C">
+<node CREATED="1538675486948" ID="ID_1103138290" MODIFIED="1555399811003" TEXT="pur C">
 <node CREATED="1538675422694" ID="ID_649874210" MODIFIED="1538764007435" TEXT="F&#xfc;r">
 <node CREATED="1538678266895" ID="ID_1264455769" MODIFIED="1538678274322">
 <richcontent TYPE="NODE"><html>
@@ -234,9 +316,9 @@
 </node>
 </node>
 </node>
-<node CREATED="1538675201015" FOLDED="true" ID="ID_198271477" MODIFIED="1539524189307" TEXT="QM/QPN">
+<node CREATED="1538675201015" FOLDED="true" ID="ID_198271477" MODIFIED="1555400002905" TEXT="QM/QPN">
 <icon BUILTIN="go"/>
-<node CREATED="1538675393608" FOLDED="true" ID="ID_1405778009" MODIFIED="1539524169366" TEXT="F&#xfc;r">
+<node CREATED="1538675393608" FOLDED="true" ID="ID_1405778009" MODIFIED="1555399944640" TEXT="F&#xfc;r">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1538678508339" ID="ID_1673405776" MODIFIED="1538678508339">
 <richcontent TYPE="NODE"><html>
@@ -275,8 +357,8 @@
 </html></richcontent>
 </node>
 </node>
-<node CREATED="1538675398387" ID="ID_229742051" MODIFIED="1539523800545" TEXT="Wider">
-<node CREATED="1539524012456" ID="ID_925637323" MODIFIED="1539524142751" TEXT="L&#xf6;sung">
+<node CREATED="1538675398387" FOLDED="true" ID="ID_229742051" MODIFIED="1555399983294" TEXT="Wider">
+<node CREATED="1539524012456" ID="ID_925637323" MODIFIED="1555399940404" TEXT="L&#xf6;sung">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -289,13 +371,17 @@
       <li>
         mit Arduino IDE builden und uploaden
       </li>
+      <li>
+        In Arduino IDE -&gt; Optionen -&gt; &quot;externer Editor&quot; einstellen
+      </li>
     </ol>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="idea"/>
 <icon BUILTIN="ksmiletris"/>
 </node>
-<node CREATED="1538678561051" FOLDED="true" ID="ID_1252283950" MODIFIED="1539524174223">
+<node CREATED="1538678561051" ID="ID_1252283950" MODIFIED="1555399952127">
 <richcontent TYPE="NODE"><html>
   <head>
     
@@ -344,7 +430,7 @@
 </html></richcontent>
 </node>
 </node>
-<node CREATED="1539274430639" FOLDED="true" ID="ID_580818972" MODIFIED="1539524178847" TEXT="&#xdc;berlegungen">
+<node CREATED="1539274430639" ID="ID_580818972" MODIFIED="1555399876025" TEXT="&#xdc;berlegungen">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -368,9 +454,9 @@
 </node>
 </node>
 </node>
-<node CREATED="1539194358878" ID="ID_188788871" MODIFIED="1555253107773" POSITION="right" TEXT="Fragen">
-<font NAME="Courier New" SIZE="12"/>
-<node CREATED="1541876563589" ID="ID_668761038" MODIFIED="1555305562350" TEXT="2 Parameter &#xfc;bergeben">
+<node CREATED="1539194358878" ID="ID_188788871" MODIFIED="1555399600835" POSITION="right" TEXT="Fragen">
+<font NAME="Cambria" SIZE="12"/>
+<node CREATED="1541876563589" ID="ID_668761038" MODIFIED="1555399600835" TEXT="2 Parameter &#xfc;bergeben">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -411,99 +497,19 @@
   </body>
 </html>
 </richcontent>
+<font NAME="Cambria" SIZE="14"/>
 </node>
 </node>
-<node CREATED="1539195597155" FOLDED="true" ID="ID_1394309608" MODIFIED="1555253094965" POSITION="right" TEXT="Infos">
-<font NAME="Courier New" SIZE="12"/>
-<icon BUILTIN="button_ok"/>
-<node CREATED="1539195605739" ID="ID_819545712" MODIFIED="1539196565475" TEXT="32U4 = Micro (= Leonardo)"/>
-<node CREATED="1539196101019" ID="ID_910783163" MODIFIED="1539196185602" TEXT="Motor = 410 RPM = 65 cm/s"/>
-<node CREATED="1539197559942" ID="ID_310958718" MODIFIED="1539199999929" TEXT="Encoderimpulse/Umdrehung = 75.81 &#xd7; 12 &#x2248; 909.7 CPR">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      To reduce the required number of interrupt pins, the Zumo 32U4 main board XORs together both channels of each encoder and connects the resulting signal to an interrupt pin, while channel B of each encoder is connected to a non-interrupt pin:
-    </p>
-    <p>
-      &#8226; Digital pin 7, or PE6, reads the right encoder XORed signal using external interrupt INT6.
-    </p>
-    <p>
-      &#8226; Digital pin 8, or PB4, reads the left encoder XORed signal using pin change interrupt PCINT4.
-    </p>
-    <p>
-      &#8226; Digital pin 23 (analog pin 5), or PF0, reads the right encoder channel B.
-    </p>
-    <p>
-      &#8226; Pin PE2 reads the left encoder channel B.
-    </p>
-  </body>
-</html></richcontent>
-</node>
-<node CREATED="1545406625155" ID="ID_389826269" MODIFIED="1555240070699" TEXT="ProximitySensors = 0 (!!!) - 6">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      6 ~ 30cm&#160;Abstand
-    </p>
-    <p>
-      5 ~ 55cm Abstand
-    </p>
-    <p>
-      4 ~ 77cm Abstand
-    </p>
-    <p>
-      3 ~ 118cm Abstand
-    </p>
-  </body>
-</html></richcontent>
-</node>
-<node CREATED="1545406687958" ID="ID_844648342" MODIFIED="1545406775302" TEXT="Motors = 0 - 400 (2 Byte!!!)"/>
-<node CREATED="1546369572644" ID="ID_1017890351" MODIFIED="1546439472014" TEXT="Formel f&#xfc;r Abstand und Geschwindigkeit">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      https://rechneronline.de/funktionsgraphen/
-    </p>
-    <p>
-      
-    </p>
-    <p>
-      http://www.nachlernmaterial.de/wie-kann-ich-aus-einem-graphen-die-funktionsgleichung-bestimmen-und-umgekehrt/
-    </p>
-  </body>
-</html></richcontent>
-</node>
-</node>
-<node CREATED="1538840348728" FOLDED="true" ID="ID_365015684" MODIFIED="1555253094962" POSITION="right" TEXT="Welches Designtool benutzen?">
-<font NAME="Courier New" SIZE="12"/>
+<node CREATED="1538840348728" FOLDED="true" ID="ID_365015684" MODIFIED="1555399600783" POSITION="right" TEXT="Welches Designtool benutzen?">
+<font NAME="Cambria" SIZE="12"/>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1541876529287" ID="ID_25110167" MODIFIED="1541876533560" TEXT="adoc"/>
 </node>
-<node CREATED="1538840427200" ID="ID_1276132013" MODIFIED="1555305661819" POSITION="left" TEXT="Was soll der Zumo machen?">
-<font NAME="Courier New" SIZE="12"/>
-<node CREATED="1539108920688" FOLDED="true" ID="ID_475536693" MODIFIED="1555305858347" TEXT="Teilaufgaben">
-<font NAME="Courier New" SIZE="12"/>
-<node CREATED="1539108937358" ID="ID_137728993" MODIFIED="1555305562367" TEXT="Motoren ansteuern">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      Speed-Wert = 0 - 400
-    </p>
-  </body>
-</html>
-</richcontent>
+<node CREATED="1538840427200" ID="ID_1276132013" MODIFIED="1555399600781" POSITION="left" TEXT="Was soll der Zumo machen?">
+<font NAME="Cambria" SIZE="12"/>
+<node CREATED="1539108920688" FOLDED="true" ID="ID_475536693" MODIFIED="1555399722771" TEXT="Teilaufgaben">
+<font NAME="Cambria" SIZE="12"/>
+<node CREATED="1539108937358" ID="ID_137728993" MODIFIED="1555399697542" TEXT="Motoren ansteuern">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1539108974217" ID="ID_46398462" MODIFIED="1555305562382" TEXT="Gleichm&#xe4;&#xdf;igkeit synchronisieren">
 <richcontent TYPE="NOTE"><html>
@@ -524,140 +530,13 @@
       int16_t getCountsAndResetRight();
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
-<node CREATED="1539109191580" ID="ID_596105360" MODIFIED="1555305562391" TEXT="Frontsensoren abtasten">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      Abstandswert = 0 - 6
-    </p>
-  </body>
-</html>
-</richcontent>
+<node CREATED="1539109191580" ID="ID_596105360" MODIFIED="1555399708182" TEXT="Frontsensoren abtasten">
 <icon BUILTIN="button_ok"/>
 </node>
-<node CREATED="1548267814460" ID="ID_922834610" MODIFIED="1555305603904" TEXT="Kollision abtasten">
-<font NAME="Courier New" SIZE="12"/>
-</node>
-<node CREATED="1539109206683" ID="ID_396289365" MODIFIED="1555305608137" TEXT="Seitensensoren abtasten">
-<font NAME="Courier New" SIZE="12"/>
-</node>
-<node CREATED="1539109250003" ID="ID_335363733" MODIFIED="1555305562405" TEXT="Start-Taste">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      Offenbar muss ich eine timeout-Schleife machen und dann immer wieder den Button abfragen &lt;- Ja
-    </p>
-  </body>
-</html>
-</richcontent>
-<icon BUILTIN="button_ok"/>
-</node>
-<node CREATED="1539109306984" ID="ID_1990753561" MODIFIED="1555305562415" TEXT="Status LED">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      gr&#252;n = okay
-    </p>
-    <p>
-      gelb = suche
-    </p>
-    <p>
-      rot = gebe auf
-    </p>
-  </body>
-</html>
-</richcontent>
-</node>
-<node CREATED="1539527183106" ID="ID_1323765566" MODIFIED="1555305562425" TEXT="timetick generieren">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      Der timetick ist stabil. Ich bin mir nur noch nicht &#252;ber die korrekte Zeitdauer im Klaren.
-    </p>
-  </body>
-</html>
-</richcontent>
-<icon BUILTIN="help"/>
-</node>
-</node>
-<node CREATED="1546970408663" ID="ID_1980648924" MODIFIED="1555253094958" TEXT="Algorithmus">
-<arrowlink DESTINATION="ID_1980648924" ENDARROW="Default" ENDINCLINATION="0;0;" ID="Arrow_ID_1184872118" STARTARROW="None" STARTINCLINATION="0;0;"/>
-<linktarget COLOR="#b0b0b0" DESTINATION="ID_1980648924" ENDARROW="Default" ENDINCLINATION="0;0;" ID="Arrow_ID_1184872118" SOURCE="ID_1980648924" STARTARROW="None" STARTINCLINATION="0;0;"/>
-<font NAME="Courier New" SIZE="12"/>
-<node CREATED="1555251101247" ID="ID_978425654" MODIFIED="1555308705747" TEXT="Abstand messen und entscheiden">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      <font face="Courier New" size="4">Problem: Die beiden Abstandssensoren sehen zu sehr das selbe, daher ist der Unterscheidungswert zu gering (bei einem Range von 0 - 6). </font>
-    </p>
-    <p>
-      <font face="Courier New" size="4">Die abstandsgef&#252;hrte Geschwindigkeit sollte nicht bis auf 0 runtergefahren werden, um eine Kollision festzustellen. Z.B., wenn der Zumo sich festf&#228;hrt, weil der Totbereich der Sensoren erreicht ist. </font>
-    </p>
-    <p>
-      
-    </p>
-    <p>
-      <font face="Courier New" size="4">Situation erkennen und Aktion entscheiden: </font>
-    </p>
-    <ol>
-      <li>
-        <font face="Courier New" size="4">&#160;l &amp;&amp; r =&lt; 4 : &quot;fahre geradeaus&quot; </font>
-      </li>
-      <li>
-        <font face="Courier New" size="4">&#160;Differenz zwischen abs(l - r) &gt;= 2 : &quot;ignoriere, da Hindernis parallel verl&#228;uft&quot; </font>
-      </li>
-      <li>
-        <font face="Courier New" size="4">&#160;l = 5 &amp;&amp; r = 4 : &quot;biege rechts ab&quot; &amp;&amp; &quot;merke&quot; || l = 4 &amp;&amp; r = 5&#160;: &quot;biege links ab&quot; &amp;&amp; &quot;merke&quot; </font>
-      </li>
-      <li>
-        <font face="Courier New" size="4">&#160;l || r = 6 : &quot;wende unter Ber&#252;cksichtigung des gemerkten&quot; </font>
-      </li>
-    </ol>
-    <p>
-      
-    </p>
-    <p>
-      <font face="Courier New" size="4">Aktion: </font>
-    </p>
-    <ol>
-      <li>
-        <font face="Courier New" size="4">&#160;&quot;fahre geradeaus&quot; : beschleunigen und abstandsregeln</font>
-      </li>
-      <li>
-        &#160;
-      </li>
-      <li>
-        <font face="Courier New" size="4">&#160;&quot;biege ab&quot; &amp;&amp; &quot;merke&quot; : 3. Formel f&#252;r bremsende Seite benutzen und merken</font>
-      </li>
-      <li>
-        &#160;
-      </li>
-    </ol>
-  </body>
-</html>
-</richcontent>
-<font NAME="Courier New" SIZE="12"/>
-</node>
-<node CREATED="1555251160655" ID="ID_1200783107" MODIFIED="1555253094954" TEXT="Kontakterkennung">
+<node CREATED="1548267814460" ID="ID_922834610" MODIFIED="1555399438409" TEXT="Kollision abtasten">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -694,8 +573,121 @@
       }
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <font NAME="Courier New" SIZE="12"/>
+</node>
+<node CREATED="1539109206683" ID="ID_396289365" MODIFIED="1555305608137" TEXT="Seitensensoren abtasten">
+<font NAME="Courier New" SIZE="12"/>
+</node>
+<node CREATED="1539109250003" ID="ID_335363733" MODIFIED="1555305562405" TEXT="Start-Taste">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Offenbar muss ich eine timeout-Schleife machen und dann immer wieder den Button abfragen &lt;- Ja
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1539109306984" ID="ID_1990753561" MODIFIED="1555305562415" TEXT="Status LED">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      gr&#252;n = okay
+    </p>
+    <p>
+      gelb = suche
+    </p>
+    <p>
+      rot = gebe auf
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1539527183106" ID="ID_1323765566" MODIFIED="1555305562425" TEXT="timetick generieren">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Der timetick ist stabil. Ich bin mir nur noch nicht &#252;ber die korrekte Zeitdauer im Klaren.
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="help"/>
+</node>
+</node>
+<node CREATED="1546970408663" ID="ID_1980648924" MODIFIED="1555399600778" TEXT="Algorithmus">
+<arrowlink DESTINATION="ID_1980648924" ENDARROW="Default" ENDINCLINATION="0;0;" ID="Arrow_ID_1184872118" STARTARROW="None" STARTINCLINATION="0;0;"/>
+<linktarget COLOR="#b0b0b0" DESTINATION="ID_1980648924" ENDARROW="Default" ENDINCLINATION="0;0;" ID="Arrow_ID_1184872118" SOURCE="ID_1980648924" STARTARROW="None" STARTINCLINATION="0;0;"/>
+<font NAME="Cambria" SIZE="12"/>
+<node CREATED="1555251101247" ID="ID_978425654" MODIFIED="1555403548344" TEXT="Abstand messen und entscheiden">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <font face="Courier New" size="4">Problem: Die beiden Abstandssensoren sehen zu sehr das selbe, daher ist der Unterscheidungswert zu gering (bei einem Range von 0 - 6). </font>
+    </p>
+    <p>
+      <font face="Courier New" size="4">Die abstandsgef&#252;hrte Geschwindigkeit sollte nicht bis auf 0 runtergefahren werden, um eine Kollision festzustellen. Z.B., wenn der Zumo sich festf&#228;hrt, weil der Totbereich der Sensoren erreicht ist. </font>
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      <font face="Courier New" size="4">Situation erkennen und Aktion entscheiden: </font>
+    </p>
+    <ol>
+      <li>
+        <font face="Courier New" size="4">&#160;l &amp;&amp; r =&lt; 4 : &quot;fahre geradeaus&quot; </font>
+      </li>
+      <li>
+        <font face="Courier New" size="4">&#160;Differenz zwischen abs(l - r) &gt;= 2 : &quot;ignoriere, da Hindernis parallel verl&#228;uft&quot; </font>
+      </li>
+      <li>
+        <font face="Courier New" size="4">&#160;l = 5 &amp;&amp; r = 4 : &quot;biege rechts ab&quot; &amp;&amp; &quot;merke rechts&quot; || l = 4 &amp;&amp; r = 5&#160;: &quot;biege links ab&quot; &amp;&amp; &quot;merke links&quot; </font>
+      </li>
+      <li>
+        <font face="Courier New" size="4">&#160;l || r = 6 : &quot;wende unter Ber&#252;cksichtigung des gemerkten (links/rechts)&quot; </font>
+      </li>
+    </ol>
+    <p>
+      
+    </p>
+    <p>
+      <font face="Courier New" size="4">Aktion: </font>
+    </p>
+    <ol>
+      <li>
+        <font face="Courier New" size="4">&#160;&quot;fahre geradeaus&quot; : beschleunigen und abstandsregeln</font>
+      </li>
+      <li>
+        &#160;
+      </li>
+      <li>
+        <font face="Courier New" size="4">&#160;&quot;biege ab&quot; &amp;&amp; &quot;merke&quot; : 3. Formel f&#252;r bremsende Seite benutzen und merken</font>
+      </li>
+      <li>
+        &#160;
+      </li>
+    </ol>
+  </body>
+</html>
+</richcontent>
+<font NAME="Cambria" SIZE="12"/>
+</node>
+<node CREATED="1555251160655" ID="ID_1200783107" MODIFIED="1555399600749" TEXT="Kontakterkennung">
+<font NAME="Cambria" SIZE="12"/>
 </node>
 </node>
 </node>
