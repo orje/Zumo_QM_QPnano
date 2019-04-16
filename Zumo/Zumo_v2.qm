@@ -54,67 +54,8 @@ QActive_armX((QActive *)me,
         <action box="0,-2,11,2"/>
        </tran_glyph>
       </tran>
-      <tran trig="DRIVE">
-       <choice>
-        <guard brief="s&lt;=d">me-&gt;leftBarrier &lt;= d
-&amp;&amp; me-&gt;rightBarrier &lt;= d</guard>
-        <choice target="../../../2">
-         <guard brief="v&lt;e">me-&gt;leftSpeed &lt; e
-&amp;&amp; me-&gt;rightSpeed &lt; e</guard>
-         <choice_glyph conn="32,24,5,3,8">
-          <action box="1,-2,6,2"/>
-         </choice_glyph>
-        </choice>
-        <choice_glyph conn="23,32,4,-1,-8,9">
-         <action box="1,-10,7,2"/>
-        </choice_glyph>
-       </choice>
-       <choice target="../../3">
-        <guard brief="s&lt;2-6">d &lt; me-&gt;leftBarrier
-&amp;&amp; me-&gt;leftBarrier &lt;= 6
-&amp;&amp; d &lt; me-&gt;rightBarrier
-&amp;&amp; me-&gt;rightBarrier &lt;= 6</guard>
-        <choice_glyph conn="23,32,5,3,17">
-         <action box="1,-2,7,2"/>
-        </choice_glyph>
-       </choice>
-       <choice target="../../4">
-        <guard brief="v&lt;=100">me-&gt;leftSpeed &lt;= 100U
-&amp;&amp; me-&gt;rightSpeed &lt;= 100U</guard>
-        <choice_glyph conn="23,32,4,3,8,17">
-         <action box="1,6,6,2"/>
-        </choice_glyph>
-       </choice>
-       <tran_glyph conn="14,32,3,-1,9">
-        <action box="0,-2,7,2"/>
-       </tran_glyph>
-      </tran>
-      <state name="accelerate">
-       <entry brief="accelerate motors">me-&gt;leftSpeed = me-&gt;leftSpeed + 50U;
-me-&gt;rightSpeed = me-&gt;rightSpeed + 50U;
-
-motors.setSpeeds(me-&gt;leftSpeed, me-&gt;rightSpeed);</entry>
-       <state_glyph node="40,22,21,6">
-        <entry box="1,2,17,2"/>
-       </state_glyph>
-      </state>
-      <state name="drive">
-       <entry brief="control motors speeds">me-&gt;leftSpeed = a * me-&gt;rightBarrier + e;
-me-&gt;rightSpeed = a * me-&gt;leftBarrier + e;
-
-motors.setSpeeds(me-&gt;leftSpeed, me-&gt;rightSpeed);</entry>
-       <state_glyph node="40,30,21,6">
-        <entry box="1,2,20,2"/>
-       </state_glyph>
-      </state>
-      <state name="turn">
-       <entry brief="turn left">motors.setSpeeds(TURN_SPEED, 0U);</entry>
-       <state_glyph node="40,38,21,6">
-        <entry box="1,2,10,2"/>
-       </state_glyph>
-      </state>
       <state_glyph node="14,14,49,36">
-       <entry box="1,2,21,2"/>
+       <entry box="1,2,20,2"/>
        <exit box="1,4,10,2"/>
       </state_glyph>
      </state>
@@ -175,6 +116,7 @@ enum {
 // various signals for the application...
 enum {
     BUTTON_SIG = Q_USER_SIG, // end of data
+    DECIDE_SIG,
     DRIVE_SIG
 };
 

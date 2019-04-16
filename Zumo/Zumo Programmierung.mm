@@ -1,8 +1,42 @@
 <map version="1.0.1">
 <!-- To view this file, download free mind mapping software FreeMind from http://freemind.sourceforge.net -->
-<node CREATED="1538675159476" ID="ID_1984811301" MODIFIED="1555399600837" TEXT="Zumo Programmierung">
+<node CREATED="1538675159476" ID="ID_1984811301" MODIFIED="1555441858659" TEXT="Zumo Programmierung">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <font size="4">messen </font>
+    </p>
+    <p>
+      <font size="4">entscheiden </font>
+    </p>
+    <ul>
+      <li>
+        <font size="4">frei = 0 = beschleunigen bis volle Fahrt</font>
+      </li>
+      <li>
+        <font size="4">aufkommendes Hindernis = 1 - 5 = Fahrgeschwindigkeit reduzieren</font>
+      </li>
+      <li>
+        <font size="4">Hindernis = 6 = wenden</font>
+      </li>
+      <li>
+        <font size="4">einseitiges Hindernis = </font><font size="4" face="Cambria">&#8710;1 = ausweichen</font>
+      </li>
+      <li>
+        <font size="4">einseitiges Hindernis = </font><font size="4" face="Cambria">&#8710;2 = ignorieren</font>
+      </li>
+    </ul>
+    <p>
+      <font size="4">ansteuern </font>
+    </p>
+  </body>
+</html>
+</richcontent>
 <font NAME="Cambria" SIZE="12"/>
-<node CREATED="1539195597155" ID="ID_1394309608" MODIFIED="1555399800645" POSITION="right" TEXT="Infos">
+<node CREATED="1539195597155" FOLDED="true" ID="ID_1394309608" MODIFIED="1555440354851" POSITION="right" TEXT="Infos">
 <font NAME="Cambria" SIZE="12"/>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1539195605739" ID="ID_819545712" MODIFIED="1555399600832" TEXT="32U4 = Micro (= Leonardo)">
@@ -33,8 +67,7 @@
       &#8226; Pin PE2 reads the left encoder channel B.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <font NAME="Cambria" SIZE="14"/>
 </node>
 <node CREATED="1545406625155" ID="ID_389826269" MODIFIED="1555399600817" TEXT="ProximitySensors = 0 (!!!) - 6">
@@ -56,8 +89,7 @@
       3 ~ 118cm Abstand
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <font NAME="Cambria" SIZE="14"/>
 </node>
 <node CREATED="1545406687958" ID="ID_844648342" MODIFIED="1555399600806" TEXT="Motors = 0 - 400 (2 Byte!!!)">
@@ -79,8 +111,7 @@
       http://www.nachlernmaterial.de/wie-kann-ich-aus-einem-graphen-die-funktionsgleichung-bestimmen-und-umgekehrt/
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <font NAME="Cambria" SIZE="14"/>
 </node>
 </node>
@@ -96,8 +127,7 @@
       </li>
     </ol>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <font NAME="Cambria" SIZE="12"/>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1538675256437" FOLDED="true" ID="ID_1244246604" MODIFIED="1555399845140" TEXT="Arduino IDE">
@@ -376,8 +406,7 @@
       </li>
     </ol>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="idea"/>
 <icon BUILTIN="ksmiletris"/>
 </node>
@@ -495,8 +524,7 @@
       Wo setze ich Q_PARAM_SIZE?
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <font NAME="Cambria" SIZE="14"/>
 </node>
 </node>
@@ -573,8 +601,7 @@
       }
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <font NAME="Courier New" SIZE="12"/>
 </node>
 <node CREATED="1539109206683" ID="ID_396289365" MODIFIED="1555305608137" TEXT="Seitensensoren abtasten">
@@ -629,7 +656,7 @@
 <arrowlink DESTINATION="ID_1980648924" ENDARROW="Default" ENDINCLINATION="0;0;" ID="Arrow_ID_1184872118" STARTARROW="None" STARTINCLINATION="0;0;"/>
 <linktarget COLOR="#b0b0b0" DESTINATION="ID_1980648924" ENDARROW="Default" ENDINCLINATION="0;0;" ID="Arrow_ID_1184872118" SOURCE="ID_1980648924" STARTARROW="None" STARTINCLINATION="0;0;"/>
 <font NAME="Cambria" SIZE="12"/>
-<node CREATED="1555251101247" ID="ID_978425654" MODIFIED="1555403548344" TEXT="Abstand messen und entscheiden">
+<node CREATED="1555251101247" ID="ID_978425654" MODIFIED="1555440788763" TEXT="Abstand messen, entscheiden, ansteuern">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -682,8 +709,7 @@
       </li>
     </ol>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <font NAME="Cambria" SIZE="12"/>
 </node>
 <node CREATED="1555251160655" ID="ID_1200783107" MODIFIED="1555399600749" TEXT="Kontakterkennung">
