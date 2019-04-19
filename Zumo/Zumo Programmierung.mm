@@ -33,8 +33,7 @@
       <font size="4">ansteuern </font>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <font NAME="Cambria" SIZE="12"/>
 <node CREATED="1539195597155" FOLDED="true" ID="ID_1394309608" MODIFIED="1555440354851" POSITION="right" TEXT="Infos">
 <font NAME="Cambria" SIZE="12"/>

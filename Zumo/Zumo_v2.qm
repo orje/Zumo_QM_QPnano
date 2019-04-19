@@ -106,9 +106,13 @@ QActiveCB const Q_ROM QF_active[] = {
 enum {
     BSP_TICKS_PER_SEC = 100, // number of system clock ticks in one second
 
+    barrierIsLeft = 1U;      // memory for actual side of barrier
+    turnSpeed = 80U;
+
     // https://rechneronline.de/funktionsgraphen/
     // Funktionsgleichung: y = a * (x - d) + e
-    a = -80,   // Steigung
+    aR = -80,  // Steigung für's Regeln
+    aA = -133, // Steigung für's Ausweichen
     d = 1U,    // Scheitelpunkt x
     e = 400U,  // Scheitelpunkt y
 };
