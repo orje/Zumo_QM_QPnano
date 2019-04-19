@@ -2,7 +2,7 @@
 <!-- To view this file, download free mind mapping software FreeMind from http://freemind.sourceforge.net -->
 <node CREATED="1555441858478" ID="ID_1136660202" MODIFIED="1555441885403" TEXT="messen, entscheiden, regeln">
 <node CREATED="1555443143286" ID="ID_1820265369" MODIFIED="1555443149532" POSITION="right" TEXT="Abstand">
-<node CREATED="1555442069002" ID="ID_330990518" MODIFIED="1555681106255" TEXT="asymetrisch">
+<node CREATED="1555442069002" ID="ID_330990518" MODIFIED="1555693248943" TEXT="asymetrisch">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -40,8 +40,7 @@
       <font size="4">? abs(leftBarrier - rightBarrier) &gt; 1</font>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1555442280253" ID="ID_608521" MODIFIED="1555678723736" TEXT="ignorieren"/>
 </node>
 <node CREATED="1555442095366" ID="ID_1075527233" MODIFIED="1555681129185" TEXT="&#x2206;1">
@@ -69,8 +68,7 @@
       <font size="4">? abs(leftBarrier - rightBarrier) == 1</font>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1555442268867" ID="ID_1058036249" MODIFIED="1555681741209" TEXT="ausweichen">
 <richcontent TYPE="NOTE"><html>
   <head>
@@ -109,13 +107,12 @@
       <font size="4">)&#160; </font>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 </node>
 </node>
-<node CREATED="1555442041869" ID="ID_1639016630" MODIFIED="1555442066564" TEXT="symetrisch">
+<node CREATED="1555442041869" ID="ID_1639016630" MODIFIED="1555693379567" TEXT="symetrisch">
 <node CREATED="1555442135814" ID="ID_477876947" MODIFIED="1555680859827" TEXT="s = 0 &amp; v &lt;= e">
 <node CREATED="1555442234138" ID="ID_1757857494" MODIFIED="1555443793388" TEXT="beschleunigen">
 <richcontent TYPE="NOTE"><html>
@@ -141,8 +138,7 @@
       <font size="4">Speed = aR * (Barrier - d) + e; </font>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1555442146122" ID="ID_285132072" MODIFIED="1555678706104" TEXT="s = 6">
@@ -182,8 +178,7 @@
       <font size="4">&#160;</font>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 </node>
