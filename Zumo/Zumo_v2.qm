@@ -3,74 +3,13 @@
  <documentation>https://rechneronline.de/funktionsgraphen/</documentation>
  <framework name="qpn"/>
  <package name="AOs" stereotype="0x02">
-  <class name="Zumo" superclass="qpn::QActive">
-   <attribute name="leftBarrier" type="uint8_t" visibility="0x02" properties="0x00"/>
-   <attribute name="rightBarrier" type="uint8_t" visibility="0x02" properties="0x00"/>
-   <attribute name="leftSpeed" type="int16_t" visibility="0x02" properties="0x00"/>
-   <attribute name="rightSpeed" type="int16_t" visibility="0x02" properties="0x00"/>
-   <statechart properties="0x01">
-    <initial target="../1">
-     <action brief="display">lcd.print(&quot;press A&quot;);</action>
-     <initial_glyph conn="4,3,5,0,2,2">
-      <action box="0,-2,8,2"/>
-     </initial_glyph>
-    </initial>
-    <state name="run">
-     <documentation>zyklische Abfrage des Tasters bis Betätigung</documentation>
-     <entry brief="check button, start time">if (buttonA.isPressed()) {
-    QACTIVE_POST((QActive *)me,
-    BUTTON_SIG, 0);
-    }
-
-QActive_armX((QActive *)me,
-    0U, BSP_TICKS_PER_SEC/10U, 0U);</entry>
-     <exit brief="end time">QActive_disarmX((QActive *)me, 0U);</exit>
-     <tran trig="BUTTON" target="../2">
-      <action brief="clear display">lcd.clear();</action>
-      <tran_glyph conn="4,16,3,3,10">
-       <action box="0,-4,12,4"/>
-      </tran_glyph>
-     </tran>
-     <tran trig="Q_TIMEOUT" target="..">
-      <tran_glyph conn="4,54,3,1,61">
-       <action box="0,-2,11,2"/>
-      </tran_glyph>
-     </tran>
-     <state name="measure">
-      <documentation>zyklisches Messen und ergebnisabhängiges Ansteuern der Motoren</documentation>
-      <entry brief="read sensors, start time">proxSensors.read();
-me-&gt;leftBarrier =
-    proxSensors.countsFrontWithLeftLeds();
-me-&gt;rightBarrier =
-    proxSensors.countsFrontWithRightLeds();
-
-QACTIVE_POST((QActive *)me, DRIVE_SIG, 0);
-
-QActive_armX((QActive *)me,
-    0U, BSP_TICKS_PER_SEC/10U, 0U);</entry>
-      <exit brief="end time">QActive_disarmX((QActive *)me, 0U);</exit>
-      <tran trig="Q_TIMEOUT" target="..">
-       <tran_glyph conn="14,48,3,1,49">
-        <action box="0,-2,11,2"/>
-       </tran_glyph>
-      </tran>
-      <state_glyph node="14,14,49,36">
-       <entry box="1,2,20,2"/>
-       <exit box="1,4,10,2"/>
-      </state_glyph>
-     </state>
-     <state_glyph node="4,5,61,51">
-      <entry box="1,2,20,2"/>
-      <exit box="1,4,10,2"/>
-     </state_glyph>
-    </state>
-    <state_diagram size="67,58"/>
-   </statechart>
-  </class>
+  <class name="ProxiSens" superclass="qpn::QActive"/>
+  <class name="Motors" superclass="qpn::QActive"/>
+  <class name="HMI" superclass="qpn::QActive"/>
  </package>
  <directory name=".">
   <file name="Zumo.ino">
-   <text>#include &quot;qpn.h&quot; // QP-nano framework
+   <text>#include &quot;qpn.h&quot;     // QP-nano framework
 #include &quot;Arduino.h&quot; // Arduino API
 
 #include &lt;Wire.h&gt;
@@ -78,35 +17,45 @@ QActive_armX((QActive *)me,
 
 //============================================================================
 // declare all AO classes...
-$declare(AOs::Zumo)
+$declare(AOs::ProxiSens)
+$declare(AOs::Motors)
+$declare(AOs::HMI)
 //...
 
 // AO instances, other objects and event queue buffers for them...
-Zumo AO_Zumo;
+ProxiSens AO_ProxiSens;
+Motors AO_Motors;
+HMI AO_HMI;
 
-// Other objects
+// Event queue storage...
+static QEvt l_proxiSensQSto[10];
+static QEvt l_motorsQSto[10];
+static QEvt l_hmiQSto[10];
+//...
+
+
+// Other objects...
 Zumo32U4LCD lcd;
 Zumo32U4ButtonA buttonA;
 Zumo32U4ProximitySensors proxSensors;
 Zumo32U4Motors motors;
 // Zumo32U4Encoders encoders;
 
-static QEvt l_zumoQSto[10]; // Event queue storage for Zumo
-//...
-
 //============================================================================
 // QF_active[] array defines all active object control blocks ----------------
 QActiveCB const Q_ROM QF_active[] = {
-        { (QActive *)0,        (QEvt *)0,  0U                },
-        { (QActive *)&amp;AO_Zumo, l_zumoQSto, Q_DIM(l_zumoQSto) }
+        { (QActive *)0,             (QEvt *)0,       0U                     },
+        { (QActive *)&amp;AO_ProxiSens, l_proxiSensQSto, Q_DIM(l_proxiSensQSto) },
+        { (QActive *)&amp;AO_Motors,    l_motorsQSto,    Q_DIM(l_motorsQSto)    },
+        { (QActive *)&amp;AO_HMI,       l_hmiQSto,       Q_DIM(l_hmiQSto)       }
 };
 
 //============================================================================
 // various constants for the application...
 enum {
-    BSP_TICKS_PER_SEC = 100, // number of system clock ticks in one second
+    BSP_TICKS_PER_SEC = 1000, // number of system clock ticks in one second
 
-    barrierIsLeft = 1U;      // memory for actual side of barrier
+    barrierIsLeft = 1U;       // memory for actual side of barrier
     turnSpeed = 80U;
 
     // https://rechneronline.de/funktionsgraphen/
@@ -130,7 +79,9 @@ void setup() {
     QF_init(Q_DIM(QF_active));
 
     // initialize all AOs...
-    QActive_ctor(&amp;AO_Zumo.super, Q_STATE_CAST(&amp;Zumo_initial));
+    QActive_ctor(&amp;AO_ProxiSens.super, Q_STATE_CAST(&amp;ProxiSens_initial));
+    QActive_ctor(&amp;AO_Motors.super, Q_STATE_CAST(&amp;Motors_initial));
+    QActive_ctor(&amp;AO_HMI.super, Q_STATE_CAST(&amp;HMI_initial));
 
     proxSensors.initFrontSensor();
 }
@@ -174,7 +125,9 @@ void Q_onAssert(char const Q_ROM * const file, int line) {
 
 //============================================================================
 // define all AO classes (state machine)...
-$define(AOs::Zumo)
+$define(AOs::ProxiSens)
+$define(AOs::Motors)
+$define(AOs::HMI)
 //...
 </text>
   </file>
