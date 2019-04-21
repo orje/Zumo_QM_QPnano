@@ -2,7 +2,7 @@
 <!-- To view this file, download free mind mapping software FreeMind from http://freemind.sourceforge.net -->
 <node CREATED="1555441858478" ID="ID_1136660202" MODIFIED="1555441885403" TEXT="messen, entscheiden, regeln">
 <node CREATED="1555443143286" ID="ID_1820265369" MODIFIED="1555443149532" POSITION="right" TEXT="Abstand">
-<node CREATED="1555442069002" ID="ID_330990518" MODIFIED="1555693248943" TEXT="asymetrisch">
+<node CREATED="1555442069002" ID="ID_330990518" MODIFIED="1555780664612" TEXT="asymetrisch">
 <richcontent TYPE="NOTE"><html>
   <head>
     
