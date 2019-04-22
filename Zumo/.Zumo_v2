@@ -9,9 +9,9 @@
   <item name="backups">0</item>
  </group>
  <group name="windows">
-  <item id=".::Zumo.ino">-328,0,541,578</item>
-  <item id="AOs::HMI::SM">0,0,640,480</item>
-  <item id="AOs::ProxiSens::SM">0,0,447,552,*</item>
+  <item id=".::Zumo.ino">0,0,541,578</item>
+  <item id="AOs::HMI::SM">541,0,640,480</item>
+  <item id="AOs::ProxiSens::SM">0,0,1760,658,*</item>
  </group>
  <group name="search">
   <item name="options">4129280</item>
@@ -20,7 +20,7 @@
  <group name="vars">
   <item id="PROJECT">Zumo</item>
   <item id="ARDUINO_HOME">C:\assemble\Arduino</item>
-  <item id="ARDUINO_SKETCHBOOK">C:\Users\jbrulow\Documents\Arduino</item>
+  <item id="ARDUINO_SKETCHBOOK">C:\Users\orje\Documents\Arduino</item>
   <item id="BOARD_MCU">atmega32u4</item>
   <item id="BOARD_VARIANT">leonardo</item>
   <item id="BOARD_F_MHZ">16</item>
