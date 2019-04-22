@@ -12,7 +12,7 @@
       <action box="0,-2,10,2"/>
      </initial_glyph>
     </initial>
-    <state name="control">
+    <state name="proxisens">
      <tran trig="START" target="../1">
       <tran_glyph conn="2,10,3,0,4,2">
        <action box="0,-2,7,2"/>
@@ -82,7 +82,23 @@ if (me-&gt;leftBarrier == 6U) {
    </statechart>
   </class>
   <class name="Motors" superclass="qpn::QActive">
-   <statechart properties="0x00">
+   <statechart properties="0x01">
+    <initial target="../1">
+     <initial_glyph conn="2,3,5,0,2,2">
+      <action box="0,-2,10,2"/>
+     </initial_glyph>
+    </initial>
+    <state name="motors">
+     <tran trig="AVOID" target="../1">
+      <tran_glyph conn="2,10,3,0,4,2">
+       <action box="0,-2,7,2"/>
+      </tran_glyph>
+     </tran>
+     <state name="avoid">
+      <state_glyph node="4,12,7,6"/>
+     </state>
+     <state_glyph node="2,5,43,39"/>
+    </state>
     <state_diagram size="54,48"/>
    </statechart>
   </class>
@@ -94,7 +110,7 @@ if (me-&gt;leftBarrier == 6U) {
       <action box="0,-2,24,2"/>
      </initial_glyph>
     </initial>
-    <state name="button">
+    <state name="hmi">
      <entry brief="cyclic button check, post start, clear display">if (buttonA.isPressed()) {
     QACTIVE_POST((QActive *)&amp;AO_ProxiSens,
         START_SIG, 0);
@@ -105,16 +121,16 @@ QActive_armX((QActive *)me,
     0U, BSP_TICKS_PER_SEC, 0U);</entry>
      <exit brief="stop timeout">QActive_disarmX((QActive *)me, 0U);</exit>
      <tran trig="Q_TIMEOUT" target="..">
-      <tran_glyph conn="2,13,3,1,34">
+      <tran_glyph conn="2,13,3,1,35">
        <action box="0,-2,11,2"/>
       </tran_glyph>
      </tran>
-     <state_glyph node="2,5,34,10">
-      <entry box="1,2,33,2"/>
+     <state_glyph node="2,5,35,10">
+      <entry box="1,2,34,2"/>
       <exit box="1,4,13,2"/>
      </state_glyph>
     </state>
-    <state_diagram size="38,17"/>
+    <state_diagram size="39,17"/>
    </statechart>
   </class>
  </package>
