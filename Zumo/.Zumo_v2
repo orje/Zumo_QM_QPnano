@@ -21,7 +21,7 @@
  <group name="vars">
   <item id="PROJECT">Zumo</item>
   <item id="ARDUINO_HOME">C:\assemble\Arduino</item>
-  <item id="ARDUINO_SKETCHBOOK">C:\Users\jbrulow\Documents\Arduino</item>
+  <item id="ARDUINO_SKETCHBOOK">C:\Users\orje\Documents\Arduino</item>
   <item id="BOARD_MCU">atmega32u4</item>
   <item id="BOARD_VARIANT">leonardo</item>
   <item id="BOARD_F_MHZ">16</item>
