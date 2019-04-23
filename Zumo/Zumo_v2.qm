@@ -12,9 +12,9 @@
       <action box="0,-2,10,2"/>
      </initial_glyph>
     </initial>
-    <state name="proxisens">
+    <state name="proxiSens">
      <tran trig="START" target="../1">
-      <tran_glyph conn="2,10,3,0,4,2">
+      <tran_glyph conn="2,9,3,0,3,2">
        <action box="0,-2,7,2"/>
       </tran_glyph>
      </tran>
@@ -31,28 +31,49 @@ if (me-&gt;leftBarrier == me-&gt;rightBarrier) {
 else {QACTIVE_POST((QActive *)me, NOT_EQUAL_SIG, 0);
     }
 </entry>
-      <tran trig="EQUAL" target="../3">
-       <tran_glyph conn="4,29,3,0,4,2">
-        <action box="0,-2,8,2"/>
-       </tran_glyph>
-      </tran>
       <tran trig="NOT_EQUAL" target="../2">
-       <tran_glyph conn="4,18,3,0,4,2">
+       <tran_glyph conn="3,19,3,0,4,2">
         <action box="0,-2,12,2"/>
        </tran_glyph>
       </tran>
+      <tran trig="EQUAL" target="../3">
+       <tran_glyph conn="3,41,3,0,4,2">
+        <action box="0,-2,8,2"/>
+       </tran_glyph>
+      </tran>
       <state name="not_equal">
-       <entry brief="check for avoid">if (me-&gt;leftBarrier &lt;= 5U
+       <entry brief="check for avoid, for turn">if (me-&gt;leftBarrier &lt;= 5U
     &amp;&amp; me-&gt;rightBarrier &lt;= 5U
     &amp;&amp; abs(me-&gt;leftBarrier - me-&gt;rightBarrier) != 0) {
-        QACTIVE_POST((QActive *)&amp;AO_Motors, AVOID_SIG, 0);
-        }</entry>
-       <state_glyph node="6,20,21,6">
-        <entry box="1,2,15,2"/>
+        QACTIVE_POST((QActive *)me, AVOID_SIG, 0);
+        }
+
+if (me-&gt;leftBarrier == 6U) {
+    QACTIVE_POST((QActive *)&amp;AO_Motors, TURN_SIG, 0);
+    }</entry>
+       <tran trig="AVOID" target="../1">
+        <tran_glyph conn="5,29,3,0,4,2">
+         <action box="0,-2,7,2"/>
+        </tran_glyph>
+       </tran>
+       <state name="avoid">
+        <entry brief="check avoid direction">if (me-&gt;leftBarrier &gt; me-&gt;rightBarrier) {
+    QACTIVE_POST((QActive *)&amp;AO_Motors, RIGHT_SIG, 0);
+    }
+
+else {
+    QACTIVE_POST((QActive *)&amp;AO_Motors, LEFT_SIG, 0);
+    }</entry>
+        <state_glyph node="7,31,20,6">
+         <entry box="1,2,19,2"/>
+        </state_glyph>
+       </state>
+       <state_glyph node="5,21,24,18">
+        <entry box="1,2,14,4"/>
        </state_glyph>
       </state>
       <state name="equal">
-       <entry brief="check for acceleration, for control, for turn">/* only work with the leftBarrier,
+       <entry brief="check for acceleration, for control">/* only work with the leftBarrier,
    because the equality check before
    says that the rightBarrier is equal */
 
@@ -63,55 +84,43 @@ if (me-&gt;leftBarrier == 0) {
 if (me-&gt;leftBarrier &gt; 0 &amp;&amp;
     me-&gt;leftBarrier &lt; 6U) {
         QACTIVE_POST((QActive *)&amp;AO_Motors, CONTROL_SIG, 0);
-        }
-
-if (me-&gt;leftBarrier == 6U) {
-        QACTIVE_POST((QActive *)&amp;AO_Motors, TURN_SIG, 0);
         }</entry>
-       <state_glyph node="6,31,21,8">
+       <state_glyph node="5,43,24,8">
         <entry box="1,2,18,4"/>
        </state_glyph>
       </state>
-      <state_glyph node="4,12,25,29">
-       <entry box="1,2,21,2"/>
+      <state_glyph node="3,11,28,42">
+       <entry box="1,2,12,4"/>
       </state_glyph>
      </state>
-     <state_glyph node="2,5,29,38"/>
+     <state_glyph node="2,5,31,50"/>
     </state>
-    <state_diagram size="33,45"/>
+    <state_diagram size="35,57"/>
    </statechart>
   </class>
   <class name="Motors" superclass="qpn::QActive">
    <statechart properties="0x01">
     <initial target="../1">
-     <initial_glyph conn="2,3,5,0,2,2">
+     <initial_glyph conn="2,3,5,0,7,2">
       <action box="0,-2,10,2"/>
      </initial_glyph>
     </initial>
     <state name="motors">
-     <tran trig="AVOID" target="../1">
-      <tran_glyph conn="2,10,3,0,4,2">
-       <action box="0,-2,7,2"/>
-      </tran_glyph>
-     </tran>
-     <state name="avoid">
-      <state_glyph node="4,12,7,6"/>
-     </state>
-     <state_glyph node="2,5,43,39"/>
+     <state_glyph node="7,5,26,39"/>
     </state>
-    <state_diagram size="54,48"/>
+    <state_diagram size="37,48"/>
    </statechart>
   </class>
   <class name="HMI" superclass="qpn::QActive">
    <statechart properties="0x01">
     <initial target="../1">
      <action brief="show quested user interaction">lcd.print(&quot;press A&quot;);</action>
-     <initial_glyph conn="2,3,5,0,2,2">
-      <action box="0,-2,24,2"/>
+     <initial_glyph conn="2,5,5,0,2,2">
+      <action box="0,-4,13,4"/>
      </initial_glyph>
     </initial>
     <state name="hmi">
-     <entry brief="cyclic button check, post start, clear display">if (buttonA.isPressed()) {
+     <entry brief="cyclic button check, clear display">if (buttonA.isPressed()) {
     QACTIVE_POST((QActive *)&amp;AO_ProxiSens,
         START_SIG, 0);
     lcd.clear();
@@ -121,16 +130,16 @@ QActive_armX((QActive *)me,
     0U, BSP_TICKS_PER_SEC, 0U);</entry>
      <exit brief="stop timeout">QActive_disarmX((QActive *)me, 0U);</exit>
      <tran trig="Q_TIMEOUT" target="..">
-      <tran_glyph conn="2,13,3,1,35">
+      <tran_glyph conn="2,17,3,1,18">
        <action box="0,-2,11,2"/>
       </tran_glyph>
      </tran>
-     <state_glyph node="2,5,35,10">
-      <entry box="1,2,34,2"/>
-      <exit box="1,4,13,2"/>
+     <state_glyph node="2,7,18,12">
+      <entry box="1,2,16,4"/>
+      <exit box="1,6,13,2"/>
      </state_glyph>
     </state>
-    <state_diagram size="39,17"/>
+    <state_diagram size="22,21"/>
    </statechart>
   </class>
  </package>
