@@ -87,7 +87,7 @@
   </body>
 </html></richcontent>
 <icon BUILTIN="button_cancel"/>
-<node CREATED="1555442268867" ID="ID_1058036249" MODIFIED="1556044071815" TEXT="ausweichen">
+<node CREATED="1555442268867" ID="ID_1058036249" MODIFIED="1556122743188" TEXT="ausweichen">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -100,39 +100,40 @@
     
 
     <p type="text/css">
-      <font size="4">? leftBarrier &gt; rightBarrier (&#160; </font>
+      <font size="4">? leftBarrier &gt; rightBarrier (</font>
     </p>
     <font size="4">barrierIsLeft = 1U; leftSpeed = aR * (rightBarrier - 1) + e; </font>
 
     <p style="margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; text-indent: 0px">
-      <font size="4">rightSpeed = aA * (leftBarrier - 1) + e; </font>
+      <font size="4">rightSpeed = aA * (leftBarrier - 1) + e;</font>
     </p>
     <p style="margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; text-indent: 0px">
       <font size="4">) </font>
     </p>
     <p style="margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; text-indent: 0px">
-      <font size="4">&#160;</font>
+      
     </p>
     <p style="margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; text-indent: 0px">
-      <font size="4">else ( </font>
+      <font size="4">else (</font>
     </p>
-    <font size="4">barrierIsLeft = 0; leftSpeed = aA * (rightBarrier - 1) + e; </font>
+    <font size="4">barrierIsLeft = 0; leftSpeed = aA * (rightBarrier - 1) + e;</font>
 
     <p style="margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; text-indent: 0px">
-      <font size="4">rightSpeed = aR * (leftBarrier - 1) + e; </font>
+      <font size="4">rightSpeed = aR * (leftBarrier - 1) + e;</font>
     </p>
     <p style="margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; text-indent: 0px">
-      <font size="4">)&#160; </font>
+      <font size="4">)</font>
     </p>
   </body>
 </html>
 </richcontent>
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 </node>
 <node CREATED="1555442146122" ID="ID_285132072" MODIFIED="1555875702817" TEXT="s = 6">
 <icon BUILTIN="button_ok"/>
-<node CREATED="1555442258170" ID="ID_1443366646" MODIFIED="1555682161288" TEXT="wenden">
+<node CREATED="1555442258170" ID="ID_1443366646" MODIFIED="1556122976659" TEXT="wenden">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -169,6 +170,7 @@
     </p>
   </body>
 </html></richcontent>
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 </node>
@@ -212,8 +214,7 @@
       <font size="4">5 : 5 </font>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1555442244772" ID="ID_1232303823" MODIFIED="1555680979479" TEXT="regeln">
 <richcontent TYPE="NOTE"><html>
