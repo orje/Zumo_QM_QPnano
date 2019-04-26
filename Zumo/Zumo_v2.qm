@@ -99,39 +99,58 @@ if (me-&gt;leftBarrier &gt; 0 &amp;&amp;
    </statechart>
   </class>
   <class name="Motors" superclass="qpn::QActive">
+   <attribute name="leftSpeed" type="uint16_t" visibility="0x02" properties="0x00"/>
+   <attribute name="rightSpeed" type="uint16_t" visibility="0x02" properties="0x00"/>
    <statechart properties="0x01">
     <initial target="../1">
-     <initial_glyph conn="2,3,5,0,5,5">
+     <initial_glyph conn="2,3,5,0,2,2">
       <action box="0,-2,10,2"/>
      </initial_glyph>
     </initial>
     <state name="motors">
-     <tran trig="RIGHT" target="../3">
-      <tran_glyph conn="5,13,3,0,4,2">
+     <tran trig="RIGHT" target="../5">
+      <tran_glyph conn="2,10,3,0,4,2">
        <action box="0,-2,7,2"/>
       </tran_glyph>
      </tran>
-     <tran trig="LEFT" target="../4">
-      <tran_glyph conn="5,24,3,0,4,2">
+     <tran trig="LEFT" target="../6">
+      <tran_glyph conn="2,21,3,0,4,2">
        <action box="0,-2,6,2"/>
       </tran_glyph>
      </tran>
-     <tran trig="TURN" target="../5">
-      <tran_glyph conn="5,35,3,0,4,2">
+     <tran trig="TURN" target="../7">
+      <tran_glyph conn="2,32,3,0,4,2">
        <action box="0,-2,7,2"/>
+      </tran_glyph>
+     </tran>
+     <tran trig="ACC">
+      <choice target="../../8">
+       <guard brief="v&lt;e">me-&gt;leftSpeed &lt; e
+&amp;&amp; me-&gt;rightSpeed &lt; e</guard>
+       <choice_glyph conn="25,10,4,0,3">
+        <action box="-5,1,6,2"/>
+       </choice_glyph>
+      </choice>
+      <tran_glyph conn="31,10,1,-1,-6">
+       <action box="-4,-2,6,2"/>
+      </tran_glyph>
+     </tran>
+     <tran trig="CONTROL" target="../9">
+      <tran_glyph conn="31,22,1,0,-6,2">
+       <action box="-8,-2,10,2"/>
       </tran_glyph>
      </tran>
      <state name="avoidLeft">
       <entry>leftSpeed = aR * (rightBarrier - 1U) + e;
 rightSpeed = aA * (leftBarrier - 1U) + e;</entry>
-      <state_glyph node="7,15,10,6">
+      <state_glyph node="4,12,10,6">
        <entry box="1,2,4,2"/>
       </state_glyph>
      </state>
      <state name="avoidRight">
       <entry>leftSpeed = aA * (rightBarrier - 1) + e;
 rightSpeed = aR * (leftBarrier - 1) + e;</entry>
-      <state_glyph node="7,26,10,6">
+      <state_glyph node="4,23,10,6">
        <entry box="1,2,4,2"/>
       </state_glyph>
      </state>
@@ -145,13 +164,31 @@ else {
     leftSpeed = 0;
     rightSpeed = turnSpeed;
     }</entry>
-      <state_glyph node="7,37,7,6">
+      <state_glyph node="4,34,10,6">
        <entry box="1,2,6,2"/>
       </state_glyph>
      </state>
-     <state_glyph node="5,8,65,66"/>
+     <state name="accelerate">
+      <entry>me-&gt;leftSpeed = me-&gt;leftSpeed + 50U;
+me-&gt;rightSpeed = me-&gt;rightSpeed + 50U;
+
+motors.setSpeeds(me-&gt;leftSpeed, me-&gt;rightSpeed);</entry>
+      <state_glyph node="16,13,11,6">
+       <entry box="1,2,4,2"/>
+      </state_glyph>
+     </state>
+     <state name="control">
+      <entry>me-&gt;leftSpeed = aR * (me-&gt;rightBarrier - d) + e;
+me-&gt;rightSpeed = aR * (me-&gt;leftBarrier - d) + e;
+
+motors.setSpeeds(me-&gt;leftSpeed, me-&gt;rightSpeed);</entry>
+      <state_glyph node="16,24,11,6">
+       <entry box="1,2,6,2"/>
+      </state_glyph>
+     </state>
+     <state_glyph node="2,5,29,37"/>
     </state>
-    <state_diagram size="72,82"/>
+    <state_diagram size="33,44"/>
    </statechart>
   </class>
   <class name="HMI" superclass="qpn::QActive">

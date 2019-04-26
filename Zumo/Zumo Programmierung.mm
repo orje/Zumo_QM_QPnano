@@ -1,6 +1,6 @@
 <map version="1.0.1">
 <!-- To view this file, download free mind mapping software FreeMind from http://freemind.sourceforge.net -->
-<node CREATED="1538675159476" ID="ID_1984811301" MODIFIED="1555441858659" TEXT="Zumo Programmierung">
+<node CREATED="1538675159476" ID="ID_1984811301" MODIFIED="1556294403007" TEXT="Zumo Programmierung">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -482,7 +482,7 @@
 </node>
 </node>
 </node>
-<node CREATED="1539194358878" ID="ID_188788871" MODIFIED="1555399600835" POSITION="right" TEXT="Fragen">
+<node CREATED="1539194358878" FOLDED="true" ID="ID_188788871" MODIFIED="1556294383195" POSITION="right" TEXT="Fragen">
 <font NAME="Cambria" SIZE="12"/>
 <node CREATED="1541876563589" ID="ID_668761038" MODIFIED="1555399600835" TEXT="2 Parameter &#xfc;bergeben">
 <richcontent TYPE="NOTE"><html>
@@ -532,7 +532,7 @@
 <icon BUILTIN="button_ok"/>
 <node CREATED="1541876529287" ID="ID_25110167" MODIFIED="1541876533560" TEXT="adoc"/>
 </node>
-<node CREATED="1538840427200" ID="ID_1276132013" MODIFIED="1555399600781" POSITION="left" TEXT="Was soll der Zumo machen?">
+<node CREATED="1538840427200" FOLDED="true" ID="ID_1276132013" MODIFIED="1556294398609" POSITION="left" TEXT="Was soll der Zumo machen?">
 <font NAME="Cambria" SIZE="12"/>
 <node CREATED="1539108920688" FOLDED="true" ID="ID_475536693" MODIFIED="1555399722771" TEXT="Teilaufgaben">
 <font NAME="Cambria" SIZE="12"/>
@@ -651,7 +651,7 @@
 <icon BUILTIN="help"/>
 </node>
 </node>
-<node CREATED="1546970408663" ID="ID_1980648924" MODIFIED="1555399600778" TEXT="Algorithmus">
+<node CREATED="1546970408663" FOLDED="true" ID="ID_1980648924" MODIFIED="1556294397648" TEXT="Algorithmus">
 <arrowlink DESTINATION="ID_1980648924" ENDARROW="Default" ENDINCLINATION="0;0;" ID="Arrow_ID_1184872118" STARTARROW="None" STARTINCLINATION="0;0;"/>
 <linktarget COLOR="#b0b0b0" DESTINATION="ID_1980648924" ENDARROW="Default" ENDINCLINATION="0;0;" ID="Arrow_ID_1184872118" SOURCE="ID_1980648924" STARTARROW="None" STARTINCLINATION="0;0;"/>
 <font NAME="Cambria" SIZE="12"/>
