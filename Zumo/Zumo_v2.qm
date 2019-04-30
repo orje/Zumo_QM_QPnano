@@ -25,6 +25,9 @@ me-&gt;leftBarrier =
 me-&gt;rightBarrier =
     proxSensors.countsFrontWithRightLeds();
 
+
+
+
 if (me-&gt;leftBarrier == me-&gt;rightBarrier) {
     QACTIVE_POST((QActive *)me, EQUAL_SIG, 0);
     }

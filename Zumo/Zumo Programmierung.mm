@@ -1,6 +1,6 @@
 <map version="1.0.1">
 <!-- To view this file, download free mind mapping software FreeMind from http://freemind.sourceforge.net -->
-<node CREATED="1538675159476" ID="ID_1984811301" MODIFIED="1556461843890" TEXT="Zumo Programmierung">
+<node CREATED="1538675159476" ID="ID_1984811301" MODIFIED="1556596569672" TEXT="Zumo Programmierung">
 <richcontent TYPE="NOTE"><html>
   <head>
     

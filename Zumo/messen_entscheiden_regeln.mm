@@ -247,7 +247,7 @@
   </body>
 </html></richcontent>
 <icon BUILTIN="button_ok"/>
-<node CREATED="1555442244772" ID="ID_1232303823" MODIFIED="1556462542426" TEXT="regeln">
+<node CREATED="1555442244772" ID="ID_1232303823" MODIFIED="1556596569865" TEXT="regeln">
 <richcontent TYPE="NOTE"><html>
   <head>
     
