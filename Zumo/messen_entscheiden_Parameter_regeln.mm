@@ -1,6 +1,17 @@
 <map version="1.0.1">
 <!-- To view this file, download free mind mapping software FreeMind from http://freemind.sourceforge.net -->
-<node CREATED="1555441858478" ID="ID_1136660202" MODIFIED="1555441885403" TEXT="messen, entscheiden, regeln">
+<node CREATED="1555441858478" ID="ID_1136660202" MODIFIED="1556469715006" TEXT="messen, entscheiden, regeln">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Parameter = leftBarrier * 10U + rightBarrier=
+    </p>
+  </body>
+</html>
+</richcontent>
 <node CREATED="1555443143286" ID="ID_1820265369" MODIFIED="1555443149532" POSITION="right" TEXT="Abstand">
 <node CREATED="1555442069002" ID="ID_330990518" MODIFIED="1555872047822" TEXT="asymetrisch">
 <richcontent TYPE="NOTE"><html>
@@ -75,7 +86,8 @@
       <font size="4">? abs(leftBarrier - rightBarrier) == 1</font>
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="button_cancel"/>
 </node>
 <node CREATED="1556461993232" ID="ID_316459498" MODIFIED="1556462152611" TEXT="l &gt; r">
@@ -88,7 +100,8 @@
       <font size="4">? leftBarrier &gt; rightBarrier</font>
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <node CREATED="1555442268867" ID="ID_1058036249" MODIFIED="1556462217677" TEXT="ausweichen">
 <richcontent TYPE="NOTE"><html>
   <head>
@@ -108,7 +121,8 @@
       <font size="4">rightSpeed = aA * (leftBarrier - 1) + e;</font>
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
@@ -122,7 +136,8 @@
       <font size="4">else</font>
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <node CREATED="1555442268867" ID="ID_1220289525" MODIFIED="1556462224714" TEXT="ausweichen">
 <richcontent TYPE="NOTE"><html>
   <head>
@@ -145,7 +160,8 @@
       
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
@@ -160,16 +176,17 @@
       else
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="button_ok"/>
-<node CREATED="1555442258170" ID="ID_1443366646" MODIFIED="1556294365076" TEXT="wenden">
+<node CREATED="1555442258170" ID="ID_1443366646" MODIFIED="1556462957871" TEXT="wenden">
 <richcontent TYPE="NOTE"><html>
   <head>
     
   </head>
   <body>
     <p>
-      <font size="4">? barrierIsLeft ( </font>
+      <font size="4">? leftBarrier == 6 { </font>
     </p>
     <p>
       <font size="4">leftSpeed = turnSpeed; </font>
@@ -178,13 +195,13 @@
       <font size="4">rightSpeed = 0; </font>
     </p>
     <p style="margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; text-indent: 0px">
-      <font size="4">) </font>
+      <font size="4">} </font>
     </p>
     <p style="margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; text-indent: 0px">
       <font size="4">&#160;</font>
     </p>
     <p style="margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; text-indent: 0px">
-      <font size="4">else ( </font>
+      <font size="4">else { </font>
     </p>
     <font size="4">leftSpeed = 0; </font>
 
@@ -192,13 +209,14 @@
       <font size="4">rightSpeed = turnSpeed; </font>
     </p>
     <p style="margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; text-indent: 0px">
-      <font size="4">)&#160; </font>
+      <font size="4">}&#160; </font>
     </p>
     <p>
       <font size="4">&#160;</font>
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
@@ -247,7 +265,7 @@
   </body>
 </html></richcontent>
 <icon BUILTIN="button_ok"/>
-<node CREATED="1555442244772" ID="ID_1232303823" MODIFIED="1556462542426" TEXT="regeln">
+<node CREATED="1555442244772" ID="ID_1232303823" MODIFIED="1556461843644" TEXT="regeln">
 <richcontent TYPE="NOTE"><html>
   <head>
     

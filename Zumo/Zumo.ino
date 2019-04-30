@@ -29,17 +29,14 @@
 typedef struct ProxiSens {
 /* protected: */
     QActive super;
-
-/* private: */
-    uint8_t leftBarrier;
-    uint8_t rightBarrier;
 } ProxiSens;
 
 /* protected: */
 static QState ProxiSens_initial(ProxiSens * const me);
-static QState ProxiSens_proxisens(ProxiSens * const me);
+static QState ProxiSens_proxiSens(ProxiSens * const me);
 static QState ProxiSens_measure(ProxiSens * const me);
-static QState ProxiSens_not_equal(ProxiSens * const me);
+static QState ProxiSens_notEqual(ProxiSens * const me);
+static QState ProxiSens_avoid(ProxiSens * const me);
 static QState ProxiSens_equal(ProxiSens * const me);
 /*$enddecl${AOs::ProxiSens} ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 /*$declare${AOs::Motors} vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv*/
@@ -47,12 +44,20 @@ static QState ProxiSens_equal(ProxiSens * const me);
 typedef struct Motors {
 /* protected: */
     QActive super;
+
+/* private: */
+    uint16_t leftSpeed;
+    uint16_t rightSpeed;
 } Motors;
 
 /* protected: */
 static QState Motors_initial(Motors * const me);
 static QState Motors_motors(Motors * const me);
-static QState Motors_avoid(Motors * const me);
+static QState Motors_avoidLeft(Motors * const me);
+static QState Motors_avoidRight(Motors * const me);
+static QState Motors_turn(Motors * const me);
+static QState Motors_accelerate(Motors * const me);
+static QState Motors_control(Motors * const me);
 /*$enddecl${AOs::Motors} ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 /*$declare${AOs::HMI} vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv*/
 /*${AOs::HMI} ..............................................................*/
@@ -66,6 +71,15 @@ static QState HMI_initial(HMI * const me);
 static QState HMI_hmi(HMI * const me);
 /*$enddecl${AOs::HMI} ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 //...
+
+/*$declare${AOs::leftBarrier} vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv*/
+extern uint8_t leftBarrier;
+/*$enddecl${AOs::leftBarrier} ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
+/*$declare${AOs::rightBarrier} vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv*/
+extern uint8_t rightBarrier;
+/*$enddecl${AOs::rightBarrier} ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
+
+
 
 // AO instances, other objects and event queue buffers for them...
 ProxiSens AO_ProxiSens;
@@ -100,20 +114,27 @@ QActiveCB const Q_ROM QF_active[] = {
 enum {
     BSP_TICKS_PER_SEC = 1000, // number of system clock ticks in one second
 
-    barrierIsLeft = 1U;       // memory for actual side of barrier
-    turnSpeed = 80U;
-
     // https://rechneronline.de/funktionsgraphen/
     // Funktionsgleichung: y = a * (x - d) + e
     aR = -80,  // Steigung für's Regeln
     aA = -133, // Steigung für's Ausweichen
     d = 1U,    // Scheitelpunkt x
     e = 400U,  // Scheitelpunkt y
+
+    turnSpeed = 80U // speed for turning around
 };
 
 // various signals for the application...
 enum {
-    START_SIG = Q_USER_SIG // end of data
+    START_SIG = Q_USER_SIG, // end of data
+    EQUAL_SIG,
+    NOT_EQUAL_SIG,
+    AVOID_SIG,
+    TURN_SIG,
+    RIGHT_SIG,
+    LEFT_SIG,
+    ACC_SIG,
+    CONTROL_SIG
 };
 
 //............................................................................
@@ -179,13 +200,13 @@ void Q_onAssert(char const Q_ROM * const file, int line) {
 /*${AOs::ProxiSens::SM} ....................................................*/
 static QState ProxiSens_initial(ProxiSens * const me) {
     /*${AOs::ProxiSens::SM::initial} */
-    return Q_TRAN(&ProxiSens_proxisens);
+    return Q_TRAN(&ProxiSens_proxiSens);
 }
-/*${AOs::ProxiSens::SM::proxisens} .........................................*/
-static QState ProxiSens_proxisens(ProxiSens * const me) {
+/*${AOs::ProxiSens::SM::proxiSens} .........................................*/
+static QState ProxiSens_proxiSens(ProxiSens * const me) {
     QState status_;
     switch (Q_SIG(me)) {
-        /*${AOs::ProxiSens::SM::proxisens::START} */
+        /*${AOs::ProxiSens::SM::proxiSens::START} */
         case START_SIG: {
             status_ = Q_TRAN(&ProxiSens_measure);
             break;
@@ -197,19 +218,19 @@ static QState ProxiSens_proxisens(ProxiSens * const me) {
     }
     return status_;
 }
-/*${AOs::ProxiSens::SM::proxisens::measure} ................................*/
+/*${AOs::ProxiSens::SM::proxiSens::measure} ................................*/
 static QState ProxiSens_measure(ProxiSens * const me) {
     QState status_;
     switch (Q_SIG(me)) {
-        /*${AOs::ProxiSens::SM::proxisens::measure} */
+        /*${AOs::ProxiSens::SM::proxiSens::measure} */
         case Q_ENTRY_SIG: {
             proxSensors.read();
-            me->leftBarrier =
+            leftBarrier =
                 proxSensors.countsFrontWithLeftLeds();
-            me->rightBarrier =
+            rightBarrier =
                 proxSensors.countsFrontWithRightLeds();
 
-            if (me->leftBarrier == me->rightBarrier) {
+            if (leftBarrier == rightBarrier) {
                 QACTIVE_POST((QActive *)me, EQUAL_SIG, 0);
                 }
             else {QACTIVE_POST((QActive *)me, NOT_EQUAL_SIG, 0);
@@ -218,35 +239,42 @@ static QState ProxiSens_measure(ProxiSens * const me) {
             status_ = Q_HANDLED();
             break;
         }
-        /*${AOs::ProxiSens::SM::proxisens::measure::EQUAL} */
+        /*${AOs::ProxiSens::SM::proxiSens::measure::NOT_EQUAL} */
+        case NOT_EQUAL_SIG: {
+            status_ = Q_TRAN(&ProxiSens_notEqual);
+            break;
+        }
+        /*${AOs::ProxiSens::SM::proxiSens::measure::EQUAL} */
         case EQUAL_SIG: {
             status_ = Q_TRAN(&ProxiSens_equal);
             break;
         }
-        /*${AOs::ProxiSens::SM::proxisens::measure::NOT_EQUAL} */
-        case NOT_EQUAL_SIG: {
-            status_ = Q_TRAN(&ProxiSens_not_equal);
-            break;
-        }
         default: {
-            status_ = Q_SUPER(&ProxiSens_proxisens);
+            status_ = Q_SUPER(&ProxiSens_proxiSens);
             break;
         }
     }
     return status_;
 }
-/*${AOs::ProxiSens::SM::proxisens::measure::not_equal} .....................*/
-static QState ProxiSens_not_equal(ProxiSens * const me) {
+/*${AOs::ProxiSens::SM::proxiSens::measure::notEqual} ......................*/
+static QState ProxiSens_notEqual(ProxiSens * const me) {
     QState status_;
     switch (Q_SIG(me)) {
-        /*${AOs::ProxiSens::SM::proxisens::measure::not_equal} */
+        /*${AOs::ProxiSens::SM::proxiSens::measure::notEqual} */
         case Q_ENTRY_SIG: {
-            if (me->leftBarrier <= 5U
-                && me->rightBarrier <= 5U
-                && abs(me->leftBarrier - me->rightBarrier) != 0) {
-                    QACTIVE_POST((QActive *)&AO_Motors, AVOID_SIG, 0);
+            if (leftBarrier <= 5U
+                && rightBarrier <= 5U) {
+                    QACTIVE_POST((QActive *)me, AVOID_SIG, 0);
                     }
+
+            else {QACTIVE_POST((QActive *)&AO_Motors, TURN_SIG, 0);
+                }
             status_ = Q_HANDLED();
+            break;
+        }
+        /*${AOs::ProxiSens::SM::proxiSens::measure::notEqual::AVOID} */
+        case AVOID_SIG: {
+            status_ = Q_TRAN(&ProxiSens_avoid);
             break;
         }
         default: {
@@ -256,27 +284,46 @@ static QState ProxiSens_not_equal(ProxiSens * const me) {
     }
     return status_;
 }
-/*${AOs::ProxiSens::SM::proxisens::measure::equal} .........................*/
+/*${AOs::ProxiSens::SM::proxiSens::measure::notEqual::avoid} ...............*/
+static QState ProxiSens_avoid(ProxiSens * const me) {
+    QState status_;
+    switch (Q_SIG(me)) {
+        /*${AOs::ProxiSens::SM::proxiSens::measure::notEqual::avoid} */
+        case Q_ENTRY_SIG: {
+            if (leftBarrier > rightBarrier) {
+                QACTIVE_POST((QActive *)&AO_Motors, RIGHT_SIG, 0);
+                }
+
+            else {
+                QACTIVE_POST((QActive *)&AO_Motors, LEFT_SIG, 0);
+                }
+            status_ = Q_HANDLED();
+            break;
+        }
+        default: {
+            status_ = Q_SUPER(&ProxiSens_notEqual);
+            break;
+        }
+    }
+    return status_;
+}
+/*${AOs::ProxiSens::SM::proxiSens::measure::equal} .........................*/
 static QState ProxiSens_equal(ProxiSens * const me) {
     QState status_;
     switch (Q_SIG(me)) {
-        /*${AOs::ProxiSens::SM::proxisens::measure::equal} */
+        /*${AOs::ProxiSens::SM::proxiSens::measure::equal} */
         case Q_ENTRY_SIG: {
             /* only work with the leftBarrier,
-               because the equality check before
-               says that the rightBarrier is equal */
+               because the equality check before says
+               that the rightBarrier has same value */
 
-            if (me->leftBarrier == 0) {
+            if (leftBarrier == 0) {
                     QACTIVE_POST((QActive *)&AO_Motors, ACC_SIG, 0);
                     }
 
-            if (me->leftBarrier > 0 &&
-                me->leftBarrier < 6U) {
+            if (leftBarrier > 0 &&
+                leftBarrier < 6U) {
                     QACTIVE_POST((QActive *)&AO_Motors, CONTROL_SIG, 0);
-                    }
-
-            if (me->leftBarrier == 6U) {
-                    QACTIVE_POST((QActive *)&AO_Motors, TURN_SIG, 0);
                     }
             status_ = Q_HANDLED();
             break;
@@ -300,9 +347,37 @@ static QState Motors_initial(Motors * const me) {
 static QState Motors_motors(Motors * const me) {
     QState status_;
     switch (Q_SIG(me)) {
-        /*${AOs::Motors::SM::motors::AVOID} */
-        case AVOID_SIG: {
-            status_ = Q_TRAN(&Motors_avoid);
+        /*${AOs::Motors::SM::motors::RIGHT} */
+        case RIGHT_SIG: {
+            status_ = Q_TRAN(&Motors_avoidLeft);
+            break;
+        }
+        /*${AOs::Motors::SM::motors::LEFT} */
+        case LEFT_SIG: {
+            status_ = Q_TRAN(&Motors_avoidRight);
+            break;
+        }
+        /*${AOs::Motors::SM::motors::TURN} */
+        case TURN_SIG: {
+            status_ = Q_TRAN(&Motors_turn);
+            break;
+        }
+        /*${AOs::Motors::SM::motors::ACC} */
+        case ACC_SIG: {
+            /*${AOs::Motors::SM::motors::ACC::[v<e]} */
+            if (me->leftSpeed < e
+                && me->rightSpeed < e)
+            {
+                status_ = Q_TRAN(&Motors_accelerate);
+            }
+            else {
+                status_ = Q_UNHANDLED();
+            }
+            break;
+        }
+        /*${AOs::Motors::SM::motors::CONTROL} */
+        case CONTROL_SIG: {
+            status_ = Q_TRAN(&Motors_control);
             break;
         }
         default: {
@@ -312,10 +387,100 @@ static QState Motors_motors(Motors * const me) {
     }
     return status_;
 }
-/*${AOs::Motors::SM::motors::avoid} ........................................*/
-static QState Motors_avoid(Motors * const me) {
+/*${AOs::Motors::SM::motors::avoidLeft} ....................................*/
+static QState Motors_avoidLeft(Motors * const me) {
     QState status_;
     switch (Q_SIG(me)) {
+        /*${AOs::Motors::SM::motors::avoidLeft} */
+        case Q_ENTRY_SIG: {
+            me->leftSpeed = aR * (rightBarrier - 1U) + e;
+            me->rightSpeed = aA * (leftBarrier - 1U) + e;
+            status_ = Q_HANDLED();
+            break;
+        }
+        default: {
+            status_ = Q_SUPER(&Motors_motors);
+            break;
+        }
+    }
+    return status_;
+}
+/*${AOs::Motors::SM::motors::avoidRight} ...................................*/
+static QState Motors_avoidRight(Motors * const me) {
+    QState status_;
+    switch (Q_SIG(me)) {
+        /*${AOs::Motors::SM::motors::avoidRight} */
+        case Q_ENTRY_SIG: {
+            me->leftSpeed = aA * (rightBarrier - 1) + e;
+            me->rightSpeed = aR * (leftBarrier - 1) + e;
+            status_ = Q_HANDLED();
+            break;
+        }
+        default: {
+            status_ = Q_SUPER(&Motors_motors);
+            break;
+        }
+    }
+    return status_;
+}
+/*${AOs::Motors::SM::motors::turn} .........................................*/
+static QState Motors_turn(Motors * const me) {
+    QState status_;
+    switch (Q_SIG(me)) {
+        /*${AOs::Motors::SM::motors::turn} */
+        case Q_ENTRY_SIG: {
+            if(leftBarrier == 6U) {
+                me->leftSpeed = turnSpeed;
+                me->rightSpeed = 0;
+                }
+
+            else {
+                me->leftSpeed = 0;
+                me->rightSpeed = turnSpeed;
+                }
+            status_ = Q_HANDLED();
+            break;
+        }
+        default: {
+            status_ = Q_SUPER(&Motors_motors);
+            break;
+        }
+    }
+    return status_;
+}
+/*${AOs::Motors::SM::motors::accelerate} ...................................*/
+static QState Motors_accelerate(Motors * const me) {
+    QState status_;
+    switch (Q_SIG(me)) {
+        /*${AOs::Motors::SM::motors::accelerate} */
+        case Q_ENTRY_SIG: {
+            me->leftSpeed = me->leftSpeed + 50U;
+            me->rightSpeed = me->rightSpeed + 50U;
+
+            motors.setSpeeds(me->leftSpeed, me->rightSpeed);
+            status_ = Q_HANDLED();
+            break;
+        }
+        default: {
+            status_ = Q_SUPER(&Motors_motors);
+            break;
+        }
+    }
+    return status_;
+}
+/*${AOs::Motors::SM::motors::control} ......................................*/
+static QState Motors_control(Motors * const me) {
+    QState status_;
+    switch (Q_SIG(me)) {
+        /*${AOs::Motors::SM::motors::control} */
+        case Q_ENTRY_SIG: {
+            me->leftSpeed = aR * (rightBarrier - d) + e;
+            me->rightSpeed = aR * (leftBarrier - d) + e;
+
+            motors.setSpeeds(me->leftSpeed, me->rightSpeed);
+            status_ = Q_HANDLED();
+            break;
+        }
         default: {
             status_ = Q_SUPER(&Motors_motors);
             break;

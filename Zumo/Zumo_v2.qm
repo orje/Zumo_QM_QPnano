@@ -4,6 +4,8 @@
  <framework name="qpn"/>
  <package name="AOs" stereotype="0x02">
   <class name="ProxiSens" superclass="qpn::QActive">
+   <attribute name="leftBarrier" type="uint8_t" visibility="0x02" properties="0x00"/>
+   <attribute name="rightBarrier" type="uint8_t" visibility="0x00" properties="0x00"/>
    <statechart properties="0x01">
     <initial target="../1">
      <initial_glyph conn="2,3,5,0,2,2">
@@ -41,13 +43,11 @@ else {QACTIVE_POST((QActive *)me, NOT_EQUAL_SIG, 0);
       </tran>
       <state name="notEqual">
        <entry brief="check for avoid, for turn">if (me-&gt;leftBarrier &lt;= 5U
-    &amp;&amp; me-&gt;rightBarrier &lt;= 5U
-    &amp;&amp; abs(me-&gt;leftBarrier - me-&gt;rightBarrier) != 0) {
+    &amp;&amp; me-&gt;rightBarrier &lt;= 5U) {
         QACTIVE_POST((QActive *)me, AVOID_SIG, 0);
         }
 
-if (me-&gt;leftBarrier == 6U) {
-    QACTIVE_POST((QActive *)&amp;AO_Motors, TURN_SIG, 0);
+else {QACTIVE_POST((QActive *)&amp;AO_Motors, TURN_SIG, 0);
     }</entry>
        <tran trig="AVOID" target="../1">
         <tran_glyph conn="5,29,3,0,4,2">
@@ -56,12 +56,10 @@ if (me-&gt;leftBarrier == 6U) {
        </tran>
        <state name="avoid">
         <entry brief="check avoid direction">if (me-&gt;leftBarrier &gt; me-&gt;rightBarrier) {
-    me-&gt;barrierIsLeft = 1;
     QACTIVE_POST((QActive *)&amp;AO_Motors, RIGHT_SIG, 0);
     }
 
 else {
-    me-&gt;barrierIsLeft = 0;
     QACTIVE_POST((QActive *)&amp;AO_Motors, LEFT_SIG, 0);
     }</entry>
         <state_glyph node="7,31,20,6">
@@ -74,8 +72,8 @@ else {
       </state>
       <state name="equal">
        <entry brief="check for acceleration, for control">/* only work with the leftBarrier,
-   because the equality check before
-   says that the rightBarrier is equal */
+   because the equality check before says
+   that the rightBarrier has same value */
 
 if (me-&gt;leftBarrier == 0) {
         QACTIVE_POST((QActive *)&amp;AO_Motors, ACC_SIG, 0);
@@ -141,28 +139,28 @@ if (me-&gt;leftBarrier &gt; 0 &amp;&amp;
       </tran_glyph>
      </tran>
      <state name="avoidLeft">
-      <entry>leftSpeed = aR * (rightBarrier - 1U) + e;
-rightSpeed = aA * (leftBarrier - 1U) + e;</entry>
+      <entry>me-&gt;leftSpeed = aR * (rightBarrier - 1U) + e;
+me-&gt;rightSpeed = aA * (leftBarrier - 1U) + e;</entry>
       <state_glyph node="4,12,10,6">
        <entry box="1,2,4,2"/>
       </state_glyph>
      </state>
      <state name="avoidRight">
-      <entry>leftSpeed = aA * (rightBarrier - 1) + e;
-rightSpeed = aR * (leftBarrier - 1) + e;</entry>
+      <entry>me-&gt;leftSpeed = aA * (rightBarrier - 1) + e;
+me-&gt;rightSpeed = aR * (leftBarrier - 1) + e;</entry>
       <state_glyph node="4,23,10,6">
        <entry box="1,2,4,2"/>
       </state_glyph>
      </state>
      <state name="turn">
-      <entry>if(barrierIsLeft) {
-    leftSpeed = turnSpeed;
-    rightSpeed = 0;
+      <entry>if(leftBarrier == 6U) {
+    me-&gt;leftSpeed = turnSpeed;
+    me-&gt;rightSpeed = 0;
     }
 
 else {
-    leftSpeed = 0;
-    rightSpeed = turnSpeed;
+    me-&gt;leftSpeed = 0;
+    me-&gt;rightSpeed = turnSpeed;
     }</entry>
       <state_glyph node="4,34,10,6">
        <entry box="1,2,6,2"/>
@@ -178,8 +176,8 @@ motors.setSpeeds(me-&gt;leftSpeed, me-&gt;rightSpeed);</entry>
       </state_glyph>
      </state>
      <state name="control">
-      <entry>me-&gt;leftSpeed = aR * (me-&gt;rightBarrier - d) + e;
-me-&gt;rightSpeed = aR * (me-&gt;leftBarrier - d) + e;
+      <entry>me-&gt;leftSpeed = aR * (rightBarrier - d) + e;
+me-&gt;rightSpeed = aR * (leftBarrier - d) + e;
 
 motors.setSpeeds(me-&gt;leftSpeed, me-&gt;rightSpeed);</entry>
       <state_glyph node="16,24,11,6">
@@ -200,7 +198,7 @@ motors.setSpeeds(me-&gt;leftSpeed, me-&gt;rightSpeed);</entry>
      </initial_glyph>
     </initial>
     <state name="hmi">
-     <entry brief="cyclic button check, clear display">if (buttonA.isPressed()) {
+     <entry brief="cyclic button check, clear display, start timeout">if (buttonA.isPressed()) {
     QACTIVE_POST((QActive *)&amp;AO_ProxiSens,
         START_SIG, 0);
     lcd.clear();
@@ -210,21 +208,18 @@ QActive_armX((QActive *)me,
     0U, BSP_TICKS_PER_SEC, 0U);</entry>
      <exit brief="stop timeout">QActive_disarmX((QActive *)me, 0U);</exit>
      <tran trig="Q_TIMEOUT" target="..">
-      <tran_glyph conn="2,17,3,1,18">
+      <tran_glyph conn="2,19,3,1,18">
        <action box="0,-2,11,2"/>
       </tran_glyph>
      </tran>
-     <state_glyph node="2,7,18,12">
-      <entry box="1,2,16,4"/>
-      <exit box="1,6,13,2"/>
+     <state_glyph node="2,7,18,14">
+      <entry box="1,2,15,6"/>
+      <exit box="1,8,13,2"/>
      </state_glyph>
     </state>
-    <state_diagram size="22,21"/>
+    <state_diagram size="22,23"/>
    </statechart>
   </class>
-  <attribute name="leftBarrier" type="uint8_t" visibility="0x00" properties="0x00"/>
-  <attribute name="rightBarrier" type="uint8_t" visibility="0x00" properties="0x00"/>
-  <attribute name="barrierIsLeft" type="uint8_t" visibility="0x00" properties="0x00"/>
  </package>
  <directory name=".">
   <file name="Zumo.ino">
@@ -274,20 +269,27 @@ QActiveCB const Q_ROM QF_active[] = {
 enum {
     BSP_TICKS_PER_SEC = 1000, // number of system clock ticks in one second
 
-    barrierIsLeft = 1U;       // memory for actual side of barrier
-    turnSpeed = 80U;
-
     // https://rechneronline.de/funktionsgraphen/
     // Funktionsgleichung: y = a * (x - d) + e
     aR = -80,  // Steigung für's Regeln
     aA = -133, // Steigung für's Ausweichen
     d = 1U,    // Scheitelpunkt x
     e = 400U,  // Scheitelpunkt y
+
+    turnSpeed = 80U // speed for turning around
 };
 
 // various signals for the application...
 enum {
-    START_SIG = Q_USER_SIG // end of data
+    START_SIG = Q_USER_SIG, // end of data
+    EQUAL_SIG,
+    NOT_EQUAL_SIG,
+    AVOID_SIG,
+    TURN_SIG,
+    RIGHT_SIG,
+    LEFT_SIG,
+    ACC_SIG,
+    CONTROL_SIG
 };
 
 //............................................................................

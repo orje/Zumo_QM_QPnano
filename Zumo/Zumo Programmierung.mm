@@ -1,6 +1,6 @@
 <map version="1.0.1">
 <!-- To view this file, download free mind mapping software FreeMind from http://freemind.sourceforge.net -->
-<node CREATED="1538675159476" ID="ID_1984811301" MODIFIED="1556294403007" TEXT="Zumo Programmierung">
+<node CREATED="1538675159476" ID="ID_1984811301" MODIFIED="1556461843890" TEXT="Zumo Programmierung">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -23,17 +23,18 @@
         <font size="4">Hindernis = 6 = wenden</font>
       </li>
       <li>
-        <font size="4">einseitiges Hindernis = </font><font size="4" face="Cambria">&#8710;1 = ausweichen</font>
+        <font size="4">einseitiges Hindernis = </font><font face="Cambria" size="4">&#8710;1 = ausweichen</font>
       </li>
       <li>
-        <font size="4">einseitiges Hindernis = </font><font size="4" face="Cambria">&#8710;2 = ignorieren</font>
+        <font size="4">einseitiges Hindernis = </font><font face="Cambria" size="4">&#8710;2 = ignorieren</font>
       </li>
     </ul>
     <p>
       <font size="4">ansteuern </font>
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <font NAME="Cambria" SIZE="12"/>
 <node CREATED="1539195597155" FOLDED="true" ID="ID_1394309608" MODIFIED="1555440354851" POSITION="right" TEXT="Infos">
 <font NAME="Cambria" SIZE="12"/>

@@ -5,18 +5,18 @@
  <group name="settings">
   <item name="tabs">1</item>
   <item name="windows">0</item>
-  <item name="grid">3</item>
+  <item name="grid">0</item>
   <item name="backups">0</item>
  </group>
  <group name="windows">
-  <item id=".::Zumo.ino">0,0,447,552</item>
-  <item id="AOs::HMI::SM">-54,552,640,480</item>
-  <item id="AOs::ProxiSens::SM">0,706,447,552</item>
-  <item id="AOs::Motors::SM">0,0,586,670,*</item>
+  <item id=".::Zumo.ino">0,0,560,1234</item>
+  <item id="AOs::HMI::SM">-80,0,640,480</item>
+  <item id="AOs::ProxiSens::SM">0,0,612,1234,*</item>
+  <item id="AOs::Motors::SM">0,60,586,670</item>
  </group>
  <group name="search">
   <item name="options">4129280</item>
-  <item name="replace">0</item>
+  <item name="replace">1</item>
  </group>
  <group name="vars">
   <item id="PROJECT">Zumo</item>
