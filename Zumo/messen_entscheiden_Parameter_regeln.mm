@@ -1,6 +1,6 @@
 <map version="1.0.1">
 <!-- To view this file, download free mind mapping software FreeMind from http://freemind.sourceforge.net -->
-<node CREATED="1555441858478" ID="ID_1136660202" MODIFIED="1556597720706" TEXT="messen, entscheiden, regeln">
+<node CREATED="1555441858478" ID="ID_1136660202" MODIFIED="1556647621312" TEXT="messen, entscheiden, regeln">
 <richcontent TYPE="NOTE"><html>
   <head>
     

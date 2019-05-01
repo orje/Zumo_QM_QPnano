@@ -5,7 +5,10 @@
  <package name="AOs" stereotype="0x02">
   <class name="ProxiSens" superclass="qpn::QActive">
    <attribute name="leftBarrier" type="uint8_t" visibility="0x02" properties="0x00"/>
-   <attribute name="rightBarrier" type="uint8_t" visibility="0x00" properties="0x00"/>
+   <attribute name="rightBarrier" type="uint8_t" visibility="0x02" properties="0x00"/>
+   <attribute name="distance" type="uint16_t" visibility="0x02" properties="0x00">
+    <documentation>Signal parameter for AO_Motors</documentation>
+   </attribute>
    <statechart properties="0x01">
     <initial target="../1">
      <initial_glyph conn="2,3,5,0,2,2">
@@ -25,7 +28,10 @@ me-&gt;leftBarrier =
 me-&gt;rightBarrier =
     proxSensors.countsFrontWithRightLeds();
 
-
+// make signal parameter for AO_Motors
+me-&gt;distance = me-&gt;leftBarrier;
+me-&gt;distance = me-&gt;distance &lt;&lt; 8;
+me-&gt;distance = me-&gt;distance | me-&gt;rightBarrier;
 
 
 if (me-&gt;leftBarrier == me-&gt;rightBarrier) {
@@ -50,7 +56,8 @@ else {QACTIVE_POST((QActive *)me, NOT_EQUAL_SIG, 0);
         QACTIVE_POST((QActive *)me, AVOID_SIG, 0);
         }
 
-else {QACTIVE_POST((QActive *)&amp;AO_Motors, TURN_SIG, 0);
+else {QACTIVE_POST((QActive *)&amp;AO_Motors, TURN_SIG,
+        me-&gt;distance);
     }</entry>
        <tran trig="AVOID" target="../1">
         <tran_glyph conn="5,29,3,0,4,2">
@@ -59,11 +66,13 @@ else {QACTIVE_POST((QActive *)&amp;AO_Motors, TURN_SIG, 0);
        </tran>
        <state name="avoid">
         <entry brief="check avoid direction">if (me-&gt;leftBarrier &gt; me-&gt;rightBarrier) {
-    QACTIVE_POST((QActive *)&amp;AO_Motors, RIGHT_SIG, 0);
+    QACTIVE_POST((QActive *)&amp;AO_Motors, RIGHT_SIG,
+        me-&gt;distance);
     }
 
 else {
-    QACTIVE_POST((QActive *)&amp;AO_Motors, LEFT_SIG, 0);
+    QACTIVE_POST((QActive *)&amp;AO_Motors, LEFT_SIG,
+        me-&gt;distance);
     }</entry>
         <state_glyph node="7,31,20,6">
          <entry box="1,2,19,2"/>
@@ -79,12 +88,14 @@ else {
    that the rightBarrier has same value */
 
 if (me-&gt;leftBarrier == 0) {
-        QACTIVE_POST((QActive *)&amp;AO_Motors, ACC_SIG, 0);
+        QACTIVE_POST((QActive *)&amp;AO_Motors, ACC_SIG,
+            me-&gt;distance);
         }
 
 if (me-&gt;leftBarrier &gt; 0 &amp;&amp;
     me-&gt;leftBarrier &lt; 6U) {
-        QACTIVE_POST((QActive *)&amp;AO_Motors, CONTROL_SIG, 0);
+        QACTIVE_POST((QActive *)&amp;AO_Motors, CONTROL_SIG,
+            me-&gt;distance);
         }</entry>
        <state_glyph node="5,43,24,8">
         <entry box="1,2,18,4"/>
@@ -101,6 +112,9 @@ if (me-&gt;leftBarrier &gt; 0 &amp;&amp;
   </class>
   <class name="Motors" superclass="qpn::QActive">
    <attribute name="leftSpeed" type="uint16_t" visibility="0x02" properties="0x00"/>
+   <attribute name="distance" type="uint16_t" visibility="0x02" properties="0x00">
+    <documentation>signal parameter from AO_ProxiSens</documentation>
+   </attribute>
    <attribute name="rightSpeed" type="uint16_t" visibility="0x02" properties="0x00"/>
    <statechart properties="0x01">
     <initial target="../1">
@@ -270,7 +284,7 @@ QActiveCB const Q_ROM QF_active[] = {
 //============================================================================
 // various constants for the application...
 enum {
-    BSP_TICKS_PER_SEC = 1000, // number of system clock ticks in one second
+    BSP_TICKS_PER_SEC = 100, // number of system clock ticks in one second
 
     // https://rechneronline.de/funktionsgraphen/
     // Funktionsgleichung: y = a * (x - d) + e
