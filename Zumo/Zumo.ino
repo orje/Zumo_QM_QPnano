@@ -57,7 +57,7 @@ static QState Motors_avoidRight(Motors * const me);
 static QState Motors_turn(Motors * const me);
 static QState Motors_accelerate(Motors * const me);
 static QState Motors_control(Motors * const me);
-static QState Motors_decomp&decide(Motors * const me);
+static QState Motors_decompUdecide(Motors * const me);
 /*$enddecl${AOs::Motors} ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 /*$declare${AOs::HMI} vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv*/
 /*${AOs::HMI} ..............................................................*/
@@ -198,8 +198,8 @@ static QState Sensors_initial(Sensors * const me) {
 static QState Sensors_Sensors(Sensors * const me) {
     QState status_;
     switch (Q_SIG(me)) {
-        /*${AOs::Sensors::SM::Sensors::START} */
-        case START_SIG: {
+        /*${AOs::Sensors::SM::Sensors::SENSORS} */
+        case SENSORS_SIG: {
             status_ = Q_TRAN(&Sensors_measureProxiSens);
             break;
         }
@@ -260,7 +260,7 @@ static QState Motors_motors(Motors * const me) {
         }
         /*${AOs::Motors::SM::motors::PROXIMITY} */
         case PROXIMITY_SIG: {
-            status_ = Q_TRAN(&Motors_decomp&decide);
+            status_ = Q_TRAN(&Motors_decompUdecide);
             break;
         }
         default: {
@@ -371,11 +371,11 @@ static QState Motors_control(Motors * const me) {
     }
     return status_;
 }
-/*${AOs::Motors::SM::motors::decomp&decide} ................................*/
-static QState Motors_decomp&decide(Motors * const me) {
+/*${AOs::Motors::SM::motors::decompUdecide} ................................*/
+static QState Motors_decompUdecide(Motors * const me) {
     QState status_;
     switch (Q_SIG(me)) {
-        /*${AOs::Motors::SM::motors::decomp&decide} */
+        /*${AOs::Motors::SM::motors::decompUdecide} */
         case Q_ENTRY_SIG: {
             me->leftProxi = (Q_PAR(me) >> 8U);
             me->rightProxi = (Q_PAR(me) & 255U);
