@@ -46,8 +46,7 @@
       rightBarrier = Parameter &amp; 255;
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1555443143286" ID="ID_1820265369" MODIFIED="1555443149532" POSITION="right" TEXT="Abstand">
 <node CREATED="1555442069002" ID="ID_330990518" MODIFIED="1555872047822" TEXT="asymetrisch">
 <richcontent TYPE="NOTE"><html>
@@ -61,7 +60,7 @@
   </body>
 </html></richcontent>
 <icon BUILTIN="button_ok"/>
-<node CREATED="1555442511432" ID="ID_1868867466" MODIFIED="1556462297424" STYLE="fork" TEXT="s &lt;= 5">
+<node CREATED="1555442511432" ID="ID_1868867466" MODIFIED="1556897316967" STYLE="fork" TEXT="s &lt;= 5">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1555442111461" ID="ID_1177655817" MODIFIED="1555871134622" TEXT="&#x2206;2">
 <richcontent TYPE="NOTE"><html>

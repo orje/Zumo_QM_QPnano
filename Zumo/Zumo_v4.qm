@@ -20,7 +20,7 @@ return a * (prox - d) + e;</code>
     <initial target="../1">
      <action brief="ask for interaction">lcd.print(&quot;press A&quot;);</action>
      <initial_glyph conn="4,3,5,0,2,2">
-      <action box="0,-2,8,2"/>
+      <action box="0,-2,16,2"/>
      </initial_glyph>
     </initial>
     <state name="hmi">
@@ -50,15 +50,22 @@ me-&gt;leftProx =
 me-&gt;rightProx =
     proxSensors.countsFrontWithRightLeds();
 
-if(me-&gt;leftBarrier &lt;&gt; me-&gt;rightBarrier) {
-        if() {
+if (me-&gt;leftBarrier &lt;&gt; me-&gt;rightBarrier) {
+        if () {
             }
         else {
             }
     }
 else {
-        
-    }
+        if (me-&gt;leftBarrier == 0) {
+            if (me-&gt;leftSpeed &lt; e
+            &amp;&amp; me-&gt;rightSpeed &lt; e) {
+                me-&gt;leftSpeed = me-&gt;leftSpeed + accSpeed;
+                me-&gt;rightSpeed = me-&gt;rightSpeed + accSpeed;
+                motors.setSpeeds
+                    (me-&gt;leftSpeed, me-&gt;rightSpeed);
+                }
+            }
 
 QACTIVE_POST((QActive *)me, _SIG, 0);
 
@@ -129,6 +136,7 @@ enum {
     d = 1U,    // Scheitelpunkt x
     e = 400U,  // Scheitelpunkt y
 
+    accSpeed = 50U,
     turnSpeed = 80U // speed for turning around
 };
 
