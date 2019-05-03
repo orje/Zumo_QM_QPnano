@@ -4,125 +4,83 @@
  <package name="AOs" stereotype="0x02">
   <class name="Zumo" superclass="qpn::QActive">
    <documentation>https://rechneronline.de/funktionsgraphen/</documentation>
-   <attribute name="leftBarrier" type="uint8_t" visibility="0x02" properties="0x00"/>
-   <attribute name="rightBarrier" type="uint8_t" visibility="0x02" properties="0x00"/>
-   <attribute name="leftSpeed" type="int16_t" visibility="0x02" properties="0x00"/>
-   <attribute name="rightSpeed" type="int16_t" visibility="0x02" properties="0x00"/>
+   <attribute name="leftProx" type="uint8_t" visibility="0x02" properties="0x00"/>
+   <attribute name="rightProx" type="uint8_t" visibility="0x02" properties="0x00"/>
+   <attribute name="leftSpeed" type="uint16_t" visibility="0x02" properties="0x00"/>
+   <attribute name="rightSpeed" type="uint16_t" visibility="0x02" properties="0x00"/>
+   <operation name="speed" type="uint16_t" visibility="0x02" properties="0x00">
+    <documentation>Funktionsgleichung: y = a * (x - d) + e
+Speed = a * (Prox - d) + e;</documentation>
+    <code>int16_t a; //aR or aA
+uint8_t prox;
+
+return a * (prox - d) + e;</code>
+   </operation>
    <statechart properties="0x01">
     <initial target="../1">
-     <action brief="display">lcd.print(&quot;press A&quot;);</action>
+     <action brief="ask for interaction">lcd.print(&quot;press A&quot;);</action>
      <initial_glyph conn="4,3,5,0,2,2">
       <action box="0,-2,8,2"/>
      </initial_glyph>
     </initial>
-    <state name="run">
-     <entry brief="check button, start time">if (buttonA.isPressed()) {
+    <state name="hmi">
+     <entry brief="check button &amp; post, clear display, start timer">if (buttonA.isPressed()) {
     QACTIVE_POST((QActive *)me,
     BUTTON_SIG, 0);
+    lcd.clear();
     }
 
 QActive_armX((QActive *)me,
-    0U, BSP_TICKS_PER_SEC/10U, 0U);</entry>
-     <exit brief="end time">QActive_disarmX((QActive *)me, 0U);</exit>
+    0U, BSP_TICKS_PER_SEC, 0U);</entry>
+     <exit brief="end timer">QActive_disarmX((QActive *)me, 0U);</exit>
      <tran trig="BUTTON" target="../2">
-      <action brief="clear display">lcd.clear();</action>
-      <tran_glyph conn="4,16,3,3,10">
-       <action box="0,-4,12,4"/>
+      <tran_glyph conn="4,13,3,3,8">
+       <action box="0,-2,8,2"/>
       </tran_glyph>
      </tran>
      <tran trig="Q_TIMEOUT" target="..">
-      <tran_glyph conn="4,54,3,1,61">
+      <tran_glyph conn="4,54,3,1,56">
        <action box="0,-2,11,2"/>
       </tran_glyph>
      </tran>
-     <state name="measure">
-      <entry brief="read sensors, start time">proxSensors.read();
-me-&gt;leftBarrier =
+     <state name="proxSens">
+      <entry brief="read sensors, decide &amp; post, start timer">proxSensors.read();
+me-&gt;leftProx =
     proxSensors.countsFrontWithLeftLeds();
-me-&gt;rightBarrier =
+me-&gt;rightProx =
     proxSensors.countsFrontWithRightLeds();
 
-QACTIVE_POST((QActive *)me, DRIVE_SIG, 0);
+if(me-&gt;leftBarrier &lt;&gt; me-&gt;rightBarrier) {
+        if() {
+            }
+        else {
+            }
+    }
+else {
+        
+    }
+
+QACTIVE_POST((QActive *)me, _SIG, 0);
 
 QActive_armX((QActive *)me,
-    0U, BSP_TICKS_PER_SEC/10U, 0U);</entry>
-      <exit brief="end time">QActive_disarmX((QActive *)me, 0U);</exit>
+    0U, BSP_TICKS_PER_SEC, 0U);</entry>
+      <exit brief="end timer">QActive_disarmX((QActive *)me, 0U);</exit>
       <tran trig="Q_TIMEOUT" target="..">
-       <tran_glyph conn="14,48,3,1,49">
+       <tran_glyph conn="12,45,3,1,46">
         <action box="0,-2,11,2"/>
        </tran_glyph>
       </tran>
-      <tran trig="DRIVE">
-       <choice>
-        <guard brief="s&lt;=d">me-&gt;leftBarrier &lt;= d
-&amp;&amp; me-&gt;rightBarrier &lt;= d</guard>
-        <choice target="../../../2">
-         <guard brief="v&lt;e">me-&gt;leftSpeed &lt; e
-&amp;&amp; me-&gt;rightSpeed &lt; e</guard>
-         <choice_glyph conn="32,24,5,3,8">
-          <action box="1,-2,6,2"/>
-         </choice_glyph>
-        </choice>
-        <choice_glyph conn="23,32,4,-1,-8,9">
-         <action box="1,-10,7,2"/>
-        </choice_glyph>
-       </choice>
-       <choice target="../../3">
-        <guard brief="s&lt;2-6">d &lt; me-&gt;leftBarrier
-&amp;&amp; me-&gt;leftBarrier &lt;= 6
-&amp;&amp; d &lt; me-&gt;rightBarrier
-&amp;&amp; me-&gt;rightBarrier &lt;= 6</guard>
-        <choice_glyph conn="23,32,5,3,17">
-         <action box="1,-2,7,2"/>
-        </choice_glyph>
-       </choice>
-       <choice target="../../4">
-        <guard brief="v&lt;=100">me-&gt;leftSpeed &lt;= 100U
-&amp;&amp; me-&gt;rightSpeed &lt;= 100U</guard>
-        <choice_glyph conn="23,32,4,3,8,17">
-         <action box="1,6,6,2"/>
-        </choice_glyph>
-       </choice>
-       <tran_glyph conn="14,32,3,-1,9">
-        <action box="0,-2,7,2"/>
-       </tran_glyph>
-      </tran>
-      <state name="accelerate">
-       <entry brief="accelerate motors">me-&gt;leftSpeed = me-&gt;leftSpeed + 50U;
-me-&gt;rightSpeed = me-&gt;rightSpeed + 50U;
-
-motors.setSpeeds(me-&gt;leftSpeed, me-&gt;rightSpeed);</entry>
-       <state_glyph node="40,22,21,6">
-        <entry box="1,2,17,2"/>
-       </state_glyph>
-      </state>
-      <state name="drive">
-       <documentation>https://rechneronline.de/funktionsgraphen/</documentation>
-       <entry brief="control motors speeds">me-&gt;leftSpeed = a * me-&gt;rightBarrier + e;
-me-&gt;rightSpeed = a * me-&gt;leftBarrier + e;
-
-motors.setSpeeds(me-&gt;leftSpeed, me-&gt;rightSpeed);</entry>
-       <state_glyph node="40,30,21,6">
-        <entry box="1,2,20,2"/>
-       </state_glyph>
-      </state>
-      <state name="turn">
-       <entry brief="turn left">motors.setSpeeds(TURN_SPEED, 0U);</entry>
-       <state_glyph node="40,38,21,6">
-        <entry box="1,2,10,2"/>
-       </state_glyph>
-      </state>
-      <state_glyph node="14,14,49,36">
-       <entry box="1,2,21,2"/>
+      <state_glyph node="12,11,46,36">
+       <entry box="1,2,31,2"/>
        <exit box="1,4,10,2"/>
       </state_glyph>
      </state>
-     <state_glyph node="4,5,61,51">
-      <entry box="1,2,20,2"/>
+     <state_glyph node="4,5,56,51">
+      <entry box="1,2,35,2"/>
       <exit box="1,4,10,2"/>
      </state_glyph>
     </state>
-    <state_diagram size="67,58"/>
+    <state_diagram size="62,58"/>
    </statechart>
   </class>
  </package>
@@ -145,7 +103,7 @@ Zumo AO_Zumo;
 // Other objects
 Zumo32U4LCD lcd;
 Zumo32U4ButtonA buttonA;
-Zumo32U4ProximitySensors proxSensors;
+Zumo32U4ProxmitySensors proxSensors;
 Zumo32U4Motors motors;
 // Zumo32U4Encoders encoders;
 
@@ -164,20 +122,19 @@ QActiveCB const Q_ROM QF_active[] = {
 enum {
     BSP_TICKS_PER_SEC = 100, // number of system clock ticks in one second
 
-    // Scheitelfunktionsgleichung: y = a * (x - d) ^ 2 + e
-    // Steigungsdreieck m = delta y / delta x
-    // Funktionsgleichung: y = a * x + e
-    a = -80,   // Steigung
-    e = 400U,  // Scheitelpunkt y
+    // https://rechneronline.de/funktionsgraphen/
+    // Funktionsgleichung: y = a * (x - d) + e
+    aR = -80,  // Steigung für's Regeln
+    aA = -133, // Steigung für's Ausweichen
     d = 1U,    // Scheitelpunkt x
+    e = 400U,  // Scheitelpunkt y
 
-    TURN_SPEED = 100U
+    turnSpeed = 80U // speed for turning around
 };
 
 // various signals for the application...
 enum {
-    BUTTON_SIG = Q_USER_SIG, // end of data
-    DRIVE_SIG
+    BUTTON_SIG = Q_USER_SIG // end of data
 };
 
 //............................................................................

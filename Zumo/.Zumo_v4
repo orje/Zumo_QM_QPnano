@@ -5,16 +5,16 @@
  <group name="settings">
   <item name="tabs">1</item>
   <item name="windows">0</item>
-  <item name="grid">0</item>
+  <item name="grid">3</item>
   <item name="backups">0</item>
  </group>
  <group name="windows">
-  <item id="AOs::Zumo::SM">0,0,526,1234,*</item>
-  <item id=".::Zumo.ino">-19,706,545,552</item>
+  <item id="AOs::Zumo::SM">0,0,545,1234,*</item>
+  <item id=".::Zumo.ino">0,0,545,1234</item>
  </group>
  <group name="search">
-  <item name="options">4129280</item>
-  <item name="replace">0</item>
+  <item name="options">4130306</item>
+  <item name="replace">1</item>
  </group>
  <group name="vars">
   <item id="PROJECT">Zumo</item>
