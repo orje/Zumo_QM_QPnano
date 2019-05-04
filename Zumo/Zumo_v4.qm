@@ -8,86 +8,98 @@
    <attribute name="rightProx" type="uint8_t" visibility="0x02" properties="0x00"/>
    <attribute name="leftSpeed" type="uint16_t" visibility="0x02" properties="0x00"/>
    <attribute name="rightSpeed" type="uint16_t" visibility="0x02" properties="0x00"/>
-   <operation name="speed" type="uint16_t" visibility="0x02" properties="0x00">
-    <documentation>Funktionsgleichung: y = a * (x - d) + e
-Speed = a * (Prox - d) + e;</documentation>
-    <code>int16_t a; //aR or aA
-uint8_t prox;
-
-return a * (prox - d) + e;</code>
-   </operation>
    <statechart properties="0x01">
     <initial target="../1">
-     <action brief="ask for interaction">lcd.print(&quot;press A&quot;);</action>
-     <initial_glyph conn="4,3,5,0,2,2">
-      <action box="0,-2,16,2"/>
+     <initial_glyph conn="2,3,5,0,2,2">
+      <action box="0,-2,4,2"/>
      </initial_glyph>
     </initial>
     <state name="hmi">
-     <entry brief="check button &amp; post, clear display, start timer">if (buttonA.isPressed()) {
+     <entry>lcd.print(&quot;press A&quot;);
+
+if (buttonA.isPressed()) {
     QACTIVE_POST((QActive *)me,
     BUTTON_SIG, 0);
-    lcd.clear();
     }
 
 QActive_armX((QActive *)me,
     0U, BSP_TICKS_PER_SEC, 0U);</entry>
-     <exit brief="end timer">QActive_disarmX((QActive *)me, 0U);</exit>
+     <exit>lcd.clear();
+
+QActive_disarmX((QActive *)me, 0U);</exit>
      <tran trig="BUTTON" target="../2">
-      <tran_glyph conn="4,13,3,3,8">
+      <tran_glyph conn="2,13,3,0,3,2">
        <action box="0,-2,8,2"/>
       </tran_glyph>
      </tran>
      <tran trig="Q_TIMEOUT" target="..">
-      <tran_glyph conn="4,54,3,1,56">
+      <tran_glyph conn="2,54,3,1,56">
        <action box="0,-2,11,2"/>
       </tran_glyph>
      </tran>
-     <state name="proxSens">
-      <entry brief="read sensors, decide &amp; post, start timer">proxSensors.read();
+     <state name="measure_decide">
+      <entry>proxSensors.read();
 me-&gt;leftProx =
     proxSensors.countsFrontWithLeftLeds();
 me-&gt;rightProx =
     proxSensors.countsFrontWithRightLeds();
 
-if (me-&gt;leftBarrier &lt;&gt; me-&gt;rightBarrier) {
-        if () {
-            }
-        else {
-            }
-    }
-else {
-        if (me-&gt;leftBarrier == 0) {
-            if (me-&gt;leftSpeed &lt; e
-            &amp;&amp; me-&gt;rightSpeed &lt; e) {
-                me-&gt;leftSpeed = me-&gt;leftSpeed + accSpeed;
-                me-&gt;rightSpeed = me-&gt;rightSpeed + accSpeed;
-                motors.setSpeeds
-                    (me-&gt;leftSpeed, me-&gt;rightSpeed);
-                }
-            }
-
-QACTIVE_POST((QActive *)me, _SIG, 0);
+QACTIVE_POST((QActive *)me, DRIVE_SIG, 0);
 
 QActive_armX((QActive *)me,
     0U, BSP_TICKS_PER_SEC, 0U);</entry>
-      <exit brief="end timer">QActive_disarmX((QActive *)me, 0U);</exit>
+      <exit>QActive_disarmX((QActive *)me, 0U);</exit>
       <tran trig="Q_TIMEOUT" target="..">
-       <tran_glyph conn="12,45,3,1,46">
+       <tran_glyph conn="3,49,3,1,46">
         <action box="0,-2,11,2"/>
        </tran_glyph>
       </tran>
-      <state_glyph node="12,11,46,36">
-       <entry box="1,2,31,2"/>
-       <exit box="1,4,10,2"/>
+      <tran trig="DRIVE">
+       <choice>
+        <guard brief="prox==0">me-&gt;leftProx == 0
+&amp;&amp; me-&gt;rightProx == 0</guard>
+        <choice target="../../../2">
+         <guard brief="v&lt;e">me-&gt;leftSpeed &lt; e
+&amp;&amp; me-&gt;rightSpeed &lt; e</guard>
+         <choice_glyph conn="20,23,5,3,6">
+          <action box="1,-2,5,2"/>
+         </choice_glyph>
+        </choice>
+        <choice_glyph conn="10,23,5,-1,10">
+         <action box="1,-2,9,2"/>
+        </choice_glyph>
+       </choice>
+       <choice>
+        <guard>me-&gt;leftProx == 0
+&amp;&amp; me-&gt;rightProx == 0</guard>
+        <choice_glyph conn="10,23,4,-1,9">
+         <action box="0,6,10,2"/>
+        </choice_glyph>
+       </choice>
+       <tran_glyph conn="3,23,3,-1,7">
+        <action box="0,-2,7,2"/>
+       </tran_glyph>
+      </tran>
+      <state name="acc">
+       <entry>me-&gt;leftSpeed = me-&gt;leftSpeed + accSpeed;
+me-&gt;rightSpeed = me-&gt;rightSpeed + accSpeed;
+
+motors.setSpeeds(me-&gt;leftSpeed, me-&gt;rightSpeed);</entry>
+       <state_glyph node="26,21,7,6">
+        <entry box="1,2,4,2"/>
+       </state_glyph>
+      </state>
+      <state_glyph node="3,15,46,36">
+       <entry box="1,2,4,2"/>
+       <exit box="1,4,4,2"/>
       </state_glyph>
      </state>
-     <state_glyph node="4,5,56,51">
-      <entry box="1,2,35,2"/>
-      <exit box="1,4,10,2"/>
+     <state_glyph node="2,5,56,77">
+      <entry box="1,2,4,2"/>
+      <exit box="1,4,4,2"/>
      </state_glyph>
     </state>
-    <state_diagram size="62,58"/>
+    <state_diagram size="60,87"/>
    </statechart>
   </class>
  </package>
@@ -142,7 +154,8 @@ enum {
 
 // various signals for the application...
 enum {
-    BUTTON_SIG = Q_USER_SIG // end of data
+    BUTTON_SIG = Q_USER_SIG, // end of data
+    DRIVE_SIG
 };
 
 //............................................................................
