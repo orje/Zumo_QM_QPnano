@@ -25,8 +25,6 @@
 //============================================================================
 // declare all AO classes...
 /*$declare${AOs::Zumo} vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv*/
-
-//rechneronline.de/funktionsgraphen/
 /*${AOs::Zumo} .............................................................*/
 typedef struct Zumo {
 /* protected: */
@@ -39,18 +37,14 @@ typedef struct Zumo {
     uint16_t rightSpeed;
 } Zumo;
 
-/* private: */
-static uint16_t Zumo_speed(Zumo * const me);
-
 /* protected: */
 static QState Zumo_initial(Zumo * const me);
 static QState Zumo_hmi(Zumo * const me);
-static QState Zumo_proxSens(Zumo * const me);
-static QState Zumo_accelerate(Zumo * const me);
-
-//rechneronline.de/funktionsgraphen/
-static QState Zumo_drive(Zumo * const me);
-static QState Zumo_turn(Zumo * const me);
+static QState Zumo_measure_decide(Zumo * const me);
+static QState Zumo_acc(Zumo * const me);
+static QState Zumo_ctrl(Zumo * const me);
+static QState Zumo_turnRight(Zumo * const me);
+static QState Zumo_turnLeft(Zumo * const me);
 /*$enddecl${AOs::Zumo} ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 //...
 
@@ -60,7 +54,7 @@ Zumo AO_Zumo;
 // Other objects
 Zumo32U4LCD lcd;
 Zumo32U4ButtonA buttonA;
-Zumo32U4ProxmitySensors proxSensors;
+Zumo32U4ProximitySensors proxSensors;
 Zumo32U4Motors motors;
 // Zumo32U4Encoders encoders;
 
@@ -86,13 +80,14 @@ enum {
     d = 1U,    // Scheitelpunkt x
     e = 400U,  // Scheitelpunkt y
 
+    accSpeed = 50U,
     turnSpeed = 80U // speed for turning around
 };
 
 // various signals for the application...
 enum {
     BUTTON_SIG = Q_USER_SIG, // end of data
-    DECIDE_SIG
+    DRIVE_SIG
 };
 
 //............................................................................
@@ -152,17 +147,7 @@ void Q_onAssert(char const Q_ROM * const file, int line) {
 #endif
 /*$endskip${QP_VERSION} ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 /*$define${AOs::Zumo} vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv*/
-
-//rechneronline.de/funktionsgraphen/
 /*${AOs::Zumo} .............................................................*/
-/*${AOs::Zumo::speed} ......................................................*/
-static uint16_t Zumo_speed(Zumo * const me) {
-    int16_t a;
-    uint8_t prox;
-
-    return a * (prox - d) + e;
-}
-
 /*${AOs::Zumo::SM} .........................................................*/
 static QState Zumo_initial(Zumo * const me) {
     /*${AOs::Zumo::SM::initial} */
@@ -178,7 +163,6 @@ static QState Zumo_hmi(Zumo * const me) {
             if (buttonA.isPressed()) {
                 QACTIVE_POST((QActive *)me,
                 BUTTON_SIG, 0);
-                lcd.clear();
                 }
 
             QActive_armX((QActive *)me,
@@ -188,13 +172,15 @@ static QState Zumo_hmi(Zumo * const me) {
         }
         /*${AOs::Zumo::SM::hmi} */
         case Q_EXIT_SIG: {
+            lcd.clear();
+
             QActive_disarmX((QActive *)me, 0U);
             status_ = Q_HANDLED();
             break;
         }
         /*${AOs::Zumo::SM::hmi::BUTTON} */
         case BUTTON_SIG: {
-            status_ = Q_TRAN(&Zumo_proxSens);
+            status_ = Q_TRAN(&Zumo_measure_decide);
             break;
         }
         /*${AOs::Zumo::SM::hmi::Q_TIMEOUT} */
@@ -209,11 +195,11 @@ static QState Zumo_hmi(Zumo * const me) {
     }
     return status_;
 }
-/*${AOs::Zumo::SM::hmi::proxSens} ..........................................*/
-static QState Zumo_proxSens(Zumo * const me) {
+/*${AOs::Zumo::SM::hmi::measure_decide} ....................................*/
+static QState Zumo_measure_decide(Zumo * const me) {
     QState status_;
     switch (Q_SIG(me)) {
-        /*${AOs::Zumo::SM::hmi::proxSens} */
+        /*${AOs::Zumo::SM::hmi::measure_decide} */
         case Q_ENTRY_SIG: {
             proxSensors.read();
             me->leftProx =
@@ -221,53 +207,60 @@ static QState Zumo_proxSens(Zumo * const me) {
             me->rightProx =
                 proxSensors.countsFrontWithRightLeds();
 
-            QACTIVE_POST((QActive *)me, DECIDE_SIG, 0);
+            QACTIVE_POST((QActive *)me, DRIVE_SIG, 0);
 
             QActive_armX((QActive *)me,
                 0U, BSP_TICKS_PER_SEC, 0U);
             status_ = Q_HANDLED();
             break;
         }
-        /*${AOs::Zumo::SM::hmi::proxSens} */
+        /*${AOs::Zumo::SM::hmi::measure_decide} */
         case Q_EXIT_SIG: {
             QActive_disarmX((QActive *)me, 0U);
             status_ = Q_HANDLED();
             break;
         }
-        /*${AOs::Zumo::SM::hmi::proxSens::Q_TIMEOUT} */
+        /*${AOs::Zumo::SM::hmi::measure_decide::Q_TIMEOUT} */
         case Q_TIMEOUT_SIG: {
-            status_ = Q_TRAN(&Zumo_proxSens);
+            status_ = Q_TRAN(&Zumo_measure_decide);
             break;
         }
-        /*${AOs::Zumo::SM::hmi::proxSens::DECIDE} */
-        case DECIDE_SIG: {
-            /*${AOs::Zumo::SM::hmi::proxSens::DECIDE::[s<=d]} */
-            if (me->leftProx <= d
-                && me->rightProx <= d)
+        /*${AOs::Zumo::SM::hmi::measure_decide::DRIVE} */
+        case DRIVE_SIG: {
+            /*${AOs::Zumo::SM::hmi::measure_decide::DRIVE::[prox==0]} */
+            if (me->leftProx == 0
+                && me->rightProx == 0)
             {
-                /*${AOs::Zumo::SM::hmi::proxSens::DECIDE::[s<=d]::[v<e]} */
+                /*${AOs::Zumo::SM::hmi::measure_decide::DRIVE::[prox==0]::[v<e]} */
                 if (me->leftSpeed < e
                     && me->rightSpeed < e)
                 {
-                    status_ = Q_TRAN(&Zumo_accelerate);
+                    status_ = Q_TRAN(&Zumo_acc);
                 }
                 else {
                     status_ = Q_UNHANDLED();
                 }
             }
-            /*${AOs::Zumo::SM::hmi::proxSens::DECIDE::[s<2-6]} */
-            else if (d < me->leftProx
-                     && me->leftProx <= 6
-                     && d < me->rightProx
-                     && me->rightProx <= 6)
+            /*${AOs::Zumo::SM::hmi::measure_decide::DRIVE::[prox>=1&&<=5]} */
+            else if (me->leftProx >= 1U
+                     && me->rightProx >= 1U
+                     && me->leftProx <= 5U
+                     && me->rightProx <= 5U)
             {
-                status_ = Q_TRAN(&Zumo_drive);
+                status_ = Q_TRAN(&Zumo_ctrl);
             }
-            /*${AOs::Zumo::SM::hmi::proxSens::DECIDE::[v<=100]} */
-            else if (me->leftSpeed <= 100U
-                     && me->rightSpeed <= 100U)
+            /*${AOs::Zumo::SM::hmi::measure_decide::DRIVE::[prox==6]} */
+            else if (me->leftProx == 6U
+                     || me->rightProx == 6U)
             {
-                status_ = Q_TRAN(&Zumo_turn);
+                /*${AOs::Zumo::SM::hmi::measure_decide::DRIVE::[prox==6]::[left==6]} */
+                if (me->leftProx == 6U) {
+                    status_ = Q_TRAN(&Zumo_turnRight);
+                }
+                /*${AOs::Zumo::SM::hmi::measure_decide::DRIVE::[prox==6]::[else]} */
+                else {
+                    status_ = Q_TRAN(&Zumo_turnLeft);
+                }
             }
             else {
                 status_ = Q_UNHANDLED();
@@ -281,60 +274,75 @@ static QState Zumo_proxSens(Zumo * const me) {
     }
     return status_;
 }
-/*${AOs::Zumo::SM::hmi::proxSens::accelerate} ..............................*/
-static QState Zumo_accelerate(Zumo * const me) {
+/*${AOs::Zumo::SM::hmi::measure_decide::acc} ...............................*/
+static QState Zumo_acc(Zumo * const me) {
     QState status_;
     switch (Q_SIG(me)) {
-        /*${AOs::Zumo::SM::hmi::proxSens::accelerate} */
+        /*${AOs::Zumo::SM::hmi::measure_decide::acc} */
         case Q_ENTRY_SIG: {
-            me->leftSpeed = me->leftSpeed + 50U;
-            me->rightSpeed = me->rightSpeed + 50U;
+            me->leftSpeed = me->leftSpeed + accSpeed;
+            me->rightSpeed = me->rightSpeed + accSpeed;
 
             motors.setSpeeds(me->leftSpeed, me->rightSpeed);
             status_ = Q_HANDLED();
             break;
         }
         default: {
-            status_ = Q_SUPER(&Zumo_proxSens);
+            status_ = Q_SUPER(&Zumo_measure_decide);
             break;
         }
     }
     return status_;
 }
-
-//rechneronline.de/funktionsgraphen/
-/*${AOs::Zumo::SM::hmi::proxSens::drive} ...................................*/
-static QState Zumo_drive(Zumo * const me) {
+/*${AOs::Zumo::SM::hmi::measure_decide::ctrl} ..............................*/
+static QState Zumo_ctrl(Zumo * const me) {
     QState status_;
     switch (Q_SIG(me)) {
-        /*${AOs::Zumo::SM::hmi::proxSens::drive} */
+        /*${AOs::Zumo::SM::hmi::measure_decide::ctrl} */
         case Q_ENTRY_SIG: {
-            me->leftSpeed = a * me->rightProx + e;
-            me->rightSpeed = a * me->leftProx + e;
+            me->leftSpeed = aR * (me->rightProx - d) + e;
+            me->rightSpeed = aR * (me->leftProx - d) + e;
 
             motors.setSpeeds(me->leftSpeed, me->rightSpeed);
             status_ = Q_HANDLED();
             break;
         }
         default: {
-            status_ = Q_SUPER(&Zumo_proxSens);
+            status_ = Q_SUPER(&Zumo_measure_decide);
             break;
         }
     }
     return status_;
 }
-/*${AOs::Zumo::SM::hmi::proxSens::turn} ....................................*/
-static QState Zumo_turn(Zumo * const me) {
+/*${AOs::Zumo::SM::hmi::measure_decide::turnRight} .........................*/
+static QState Zumo_turnRight(Zumo * const me) {
     QState status_;
     switch (Q_SIG(me)) {
-        /*${AOs::Zumo::SM::hmi::proxSens::turn} */
+        /*${AOs::Zumo::SM::hmi::measure_decide::turnRight} */
         case Q_ENTRY_SIG: {
-            motors.setSpeeds(TURN_SPEED, 0U);
+            motors.setSpeeds(turnSpeed, 0U);
             status_ = Q_HANDLED();
             break;
         }
         default: {
-            status_ = Q_SUPER(&Zumo_proxSens);
+            status_ = Q_SUPER(&Zumo_measure_decide);
+            break;
+        }
+    }
+    return status_;
+}
+/*${AOs::Zumo::SM::hmi::measure_decide::turnLeft} ..........................*/
+static QState Zumo_turnLeft(Zumo * const me) {
+    QState status_;
+    switch (Q_SIG(me)) {
+        /*${AOs::Zumo::SM::hmi::measure_decide::turnLeft} */
+        case Q_ENTRY_SIG: {
+            motors.setSpeeds(0U, turnSpeed);
+            status_ = Q_HANDLED();
+            break;
+        }
+        default: {
+            status_ = Q_SUPER(&Zumo_measure_decide);
             break;
         }
     }

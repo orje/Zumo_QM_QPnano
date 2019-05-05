@@ -92,7 +92,7 @@
   </body>
 </html></richcontent>
 <icon BUILTIN="button_ok"/>
-<node CREATED="1555442244772" ID="ID_1232303823" MODIFIED="1556597570564" TEXT="regeln">
+<node CREATED="1555442244772" ID="ID_1232303823" MODIFIED="1557073226933" TEXT="regeln">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -102,7 +102,8 @@
       <font size="4">Speed = aR * (Barrier - d) + e; </font>
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="button_ok"/>
 <icon BUILTIN="attach"/>
 <icon BUILTIN="attach"/>
@@ -119,8 +120,7 @@
       <font size="4">? leftBarrier &lt;&gt; rightBarrier</font>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1555442511432" ID="ID_1868867466" MODIFIED="1556897316967" STYLE="fork" TEXT="s &lt;= 5">
 <icon BUILTIN="button_ok"/>
@@ -134,8 +134,7 @@
       <font size="4">? leftBarrier &gt; rightBarrier</font>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1555442268867" ID="ID_1058036249" MODIFIED="1556597562064" TEXT="ausweichen">
 <richcontent TYPE="NOTE"><html>
   <head>
@@ -171,8 +170,7 @@
       <font size="4">else</font>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1555442268867" ID="ID_1220289525" MODIFIED="1556597565754" TEXT="ausweichen">
 <richcontent TYPE="NOTE"><html>
   <head>
@@ -250,8 +248,7 @@
       <font size="4">&#160;</font>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_ok"/>
 <icon BUILTIN="attach"/>
 </node>

@@ -5,12 +5,12 @@
  <group name="settings">
   <item name="tabs">1</item>
   <item name="windows">0</item>
-  <item name="grid">3</item>
+  <item name="grid">0</item>
   <item name="backups">0</item>
  </group>
  <group name="windows">
-  <item id="AOs::Zumo::SM">0,0,503,865,*</item>
-  <item id=".::Zumo.ino">29,0,545,1234</item>
+  <item id="AOs::Zumo::SM">0,0,658,1234,*</item>
+  <item id=".::Zumo.ino">0,0,545,1234</item>
  </group>
  <group name="search">
   <item name="options">4130306</item>
