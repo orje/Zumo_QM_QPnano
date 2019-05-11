@@ -71,11 +71,10 @@ QActiveCB const Q_ROM QF_active[] = {
 //============================================================================
 // various constants for the application...
 enum {
-    BSP_TICKS_PER_SEC = 100, // number of system clock ticks in one second
+    BSP_TICKS_PER_SEC = 100U, // number of system clock ticks in one second
 
     // Funktionsgleichung: y = a * (x - d) + e
-    aR = -80,  // Steigung für's Regeln
-    aA = -133, // Steigung für's Ausweichen
+    a = -100,  // Steigung für's Regeln
     d = 1U,    // Scheitelpunkt x
     e = 400U,  // Scheitelpunkt y
 
@@ -208,7 +207,7 @@ static QState Zumo_measure_decide(Zumo * const me) {
             QACTIVE_POST((QActive *)me, DRIVE_SIG, 0);
 
             QActive_armX((QActive *)me,
-                0U, BSP_TICKS_PER_SEC, 0U);
+                0U, BSP_TICKS_PER_SEC/10U, 0U);
             status_ = Q_HANDLED();
             break;
         }
@@ -283,13 +282,8 @@ static QState Zumo_acc(Zumo * const me) {
 
             motors.setSpeeds(me->leftSpeed, me->rightSpeed);
 
+            ledYellow(0);
             ledGreen(1);
-            status_ = Q_HANDLED();
-            break;
-        }
-        /*${AOs::Zumo::SM::hmi::measure_decide::acc} */
-        case Q_EXIT_SIG: {
-            ledGreen(0);
             status_ = Q_HANDLED();
             break;
         }
@@ -306,18 +300,13 @@ static QState Zumo_ctrl(Zumo * const me) {
     switch (Q_SIG(me)) {
         /*${AOs::Zumo::SM::hmi::measure_decide::ctrl} */
         case Q_ENTRY_SIG: {
-            me->leftSpeed = aR * (me->rightProx - d) + e;
-            me->rightSpeed = aR * (me->leftProx - d) + e;
+            me->leftSpeed = a * (me->rightProx - d) + e;
+            me->rightSpeed = a * (me->leftProx - d) + e;
 
             motors.setSpeeds(me->leftSpeed, me->rightSpeed);
 
+            ledYellow(0);
             ledGreen(1);
-            status_ = Q_HANDLED();
-            break;
-        }
-        /*${AOs::Zumo::SM::hmi::measure_decide::ctrl} */
-        case Q_EXIT_SIG: {
-            ledGreen(0);
             status_ = Q_HANDLED();
             break;
         }
@@ -336,13 +325,8 @@ static QState Zumo_turnRight(Zumo * const me) {
         case Q_ENTRY_SIG: {
             motors.setSpeeds(turnSpeed, 0U);
 
+            ledGreen(0);
             ledYellow(1);
-            status_ = Q_HANDLED();
-            break;
-        }
-        /*${AOs::Zumo::SM::hmi::measure_decide::turnRight} */
-        case Q_EXIT_SIG: {
-            ledYellow(0);
             status_ = Q_HANDLED();
             break;
         }
@@ -361,13 +345,8 @@ static QState Zumo_turnLeft(Zumo * const me) {
         case Q_ENTRY_SIG: {
             motors.setSpeeds(0U, turnSpeed);
 
+            ledGreen(0);
             ledYellow(1);
-            status_ = Q_HANDLED();
-            break;
-        }
-        /*${AOs::Zumo::SM::hmi::measure_decide::turnLeft} */
-        case Q_EXIT_SIG: {
-            ledYellow(0);
             status_ = Q_HANDLED();
             break;
         }

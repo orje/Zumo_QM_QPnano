@@ -7,6 +7,10 @@
    <attribute name="rightProx" type="uint8_t" visibility="0x02" properties="0x00"/>
    <attribute name="leftSpeed" type="uint16_t" visibility="0x02" properties="0x00"/>
    <attribute name="rightSpeed" type="uint16_t" visibility="0x02" properties="0x00"/>
+   <attribute name="proxMax" type="uint8_t" visibility="0x02" properties="0x00">
+    <documentation>left = 1
+right = 0</documentation>
+   </attribute>
    <statechart properties="0x01">
     <initial target="../1">
      <action brief="ask for startbutton">lcd.print(&quot;press A&quot;);</action>
@@ -44,7 +48,7 @@ me-&gt;rightProx =
 QACTIVE_POST((QActive *)me, DRIVE_SIG, 0);
 
 QActive_armX((QActive *)me,
-    0U, BSP_TICKS_PER_SEC, 0U);</entry>
+    0U, BSP_TICKS_PER_SEC/10U, 0U);</entry>
       <exit>QActive_disarmX((QActive *)me, 0U);</exit>
       <tran trig="DRIVE">
        <choice>
@@ -71,8 +75,17 @@ QActive_armX((QActive *)me,
         </choice_glyph>
        </choice>
        <choice>
-        <guard brief="prox==6">me-&gt;leftProx == 6U
-|| me-&gt;rightProx == 6U</guard>
+        <guard brief="prox==6||speed==0">me-&gt;leftProx == 6U
+|| me-&gt;rightProx == 6U
+|| me-&gt;leftSpeed == 0
+|| me-&gt;rightSpeed == 0</guard>
+        <action brief="set turn direction">if(me-&gt;leftProx == 6U
+    ||  me-&gt;rightSpeed == 0) {
+    me-&gt;proxMax = 1U;
+    }
+else {
+    me-&gt;proxMax = 0;
+    }</action>
         <choice target="../../../4">
          <guard brief="left==6">me-&gt;leftProx == 6U</guard>
          <choice_glyph conn="11,39,5,3,16">
@@ -86,7 +99,7 @@ QActive_armX((QActive *)me,
          </choice_glyph>
         </choice>
         <choice_glyph conn="11,23,4,-1,16">
-         <action box="0,12,9,2"/>
+         <action box="0,10,15,4"/>
         </choice_glyph>
        </choice>
        <tran_glyph conn="4,23,3,-1,7">
@@ -99,49 +112,46 @@ QActive_armX((QActive *)me,
        </tran_glyph>
       </tran>
       <state name="acc">
+       <documentation>only for smooth acceleration</documentation>
        <entry>me-&gt;leftSpeed = me-&gt;leftSpeed + accSpeed;
 me-&gt;rightSpeed = me-&gt;rightSpeed + accSpeed;
 
 motors.setSpeeds(me-&gt;leftSpeed, me-&gt;rightSpeed);
 
+ledYellow(0);
 ledGreen(1);</entry>
-       <exit>ledGreen(0);</exit>
        <state_glyph node="27,21,8,6">
         <entry box="1,2,4,2"/>
-        <exit box="1,4,4,2"/>
        </state_glyph>
       </state>
       <state name="ctrl">
-       <entry>me-&gt;leftSpeed = aR * (me-&gt;rightProx - d) + e;
-me-&gt;rightSpeed = aR * (me-&gt;leftProx - d) + e;
+       <entry>me-&gt;leftSpeed = a * (me-&gt;rightProx - d) + e;
+me-&gt;rightSpeed = a * (me-&gt;leftProx - d) + e;
 
 motors.setSpeeds(me-&gt;leftSpeed, me-&gt;rightSpeed);
 
+ledYellow(0);
 ledGreen(1);</entry>
-       <exit>ledGreen(0);</exit>
        <state_glyph node="27,29,8,6">
         <entry box="1,2,4,2"/>
-        <exit box="1,4,4,2"/>
        </state_glyph>
       </state>
       <state name="turnRight">
        <entry>motors.setSpeeds(turnSpeed, 0U);
 
+ledGreen(0);
 ledYellow(1);</entry>
-       <exit>ledYellow(0);</exit>
        <state_glyph node="27,37,8,6">
         <entry box="1,2,4,2"/>
-        <exit box="1,4,4,2"/>
        </state_glyph>
       </state>
       <state name="turnLeft">
        <entry>motors.setSpeeds(0U, turnSpeed);
 
+ledGreen(0);
 ledYellow(1);</entry>
-       <exit>ledYellow(0);</exit>
        <state_glyph node="27,45,8,6">
         <entry box="1,2,4,2"/>
-        <exit box="1,4,4,2"/>
        </state_glyph>
       </state>
       <state_glyph node="4,15,33,41">
@@ -194,11 +204,10 @@ QActiveCB const Q_ROM QF_active[] = {
 //============================================================================
 // various constants for the application...
 enum {
-    BSP_TICKS_PER_SEC = 100, // number of system clock ticks in one second
+    BSP_TICKS_PER_SEC = 100U, // number of system clock ticks in one second
 
     // Funktionsgleichung: y = a * (x - d) + e
-    aR = -80,  // Steigung für's Regeln
-    aA = -133, // Steigung für's Ausweichen
+    a = -100,  // Steigung für's Regeln
     d = 1U,    // Scheitelpunkt x
     e = 400U,  // Scheitelpunkt y
 
