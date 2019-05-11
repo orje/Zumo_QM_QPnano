@@ -102,30 +102,46 @@ QActive_armX((QActive *)me,
        <entry>me-&gt;leftSpeed = me-&gt;leftSpeed + accSpeed;
 me-&gt;rightSpeed = me-&gt;rightSpeed + accSpeed;
 
-motors.setSpeeds(me-&gt;leftSpeed, me-&gt;rightSpeed);</entry>
+motors.setSpeeds(me-&gt;leftSpeed, me-&gt;rightSpeed);
+
+ledGreen(1);</entry>
+       <exit>ledGreen(0);</exit>
        <state_glyph node="27,21,8,6">
         <entry box="1,2,4,2"/>
+        <exit box="1,4,4,2"/>
        </state_glyph>
       </state>
       <state name="ctrl">
        <entry>me-&gt;leftSpeed = aR * (me-&gt;rightProx - d) + e;
 me-&gt;rightSpeed = aR * (me-&gt;leftProx - d) + e;
 
-motors.setSpeeds(me-&gt;leftSpeed, me-&gt;rightSpeed);</entry>
+motors.setSpeeds(me-&gt;leftSpeed, me-&gt;rightSpeed);
+
+ledGreen(1);</entry>
+       <exit>ledGreen(0);</exit>
        <state_glyph node="27,29,8,6">
         <entry box="1,2,4,2"/>
+        <exit box="1,4,4,2"/>
        </state_glyph>
       </state>
       <state name="turnRight">
-       <entry>motors.setSpeeds(turnSpeed, 0U);</entry>
+       <entry>motors.setSpeeds(turnSpeed, 0U);
+
+ledYellow(1);</entry>
+       <exit>ledYellow(0);</exit>
        <state_glyph node="27,37,8,6">
         <entry box="1,2,4,2"/>
+        <exit box="1,4,4,2"/>
        </state_glyph>
       </state>
       <state name="turnLeft">
-       <entry>motors.setSpeeds(0U, turnSpeed);</entry>
+       <entry>motors.setSpeeds(0U, turnSpeed);
+
+ledYellow(1);</entry>
+       <exit>ledYellow(0);</exit>
        <state_glyph node="27,45,8,6">
         <entry box="1,2,4,2"/>
+        <exit box="1,4,4,2"/>
        </state_glyph>
       </state>
       <state_glyph node="4,15,33,41">
@@ -180,7 +196,6 @@ QActiveCB const Q_ROM QF_active[] = {
 enum {
     BSP_TICKS_PER_SEC = 100, // number of system clock ticks in one second
 
-    // https://rechneronline.de/funktionsgraphen/
     // Funktionsgleichung: y = a * (x - d) + e
     aR = -80,  // Steigung für's Regeln
     aA = -133, // Steigung für's Ausweichen

@@ -73,7 +73,6 @@ QActiveCB const Q_ROM QF_active[] = {
 enum {
     BSP_TICKS_PER_SEC = 100, // number of system clock ticks in one second
 
-    // https://rechneronline.de/funktionsgraphen/
     // Funktionsgleichung: y = a * (x - d) + e
     aR = -80,  // Steigung für's Regeln
     aA = -133, // Steigung für's Ausweichen
@@ -283,6 +282,14 @@ static QState Zumo_acc(Zumo * const me) {
             me->rightSpeed = me->rightSpeed + accSpeed;
 
             motors.setSpeeds(me->leftSpeed, me->rightSpeed);
+
+            ledGreen(1);
+            status_ = Q_HANDLED();
+            break;
+        }
+        /*${AOs::Zumo::SM::hmi::measure_decide::acc} */
+        case Q_EXIT_SIG: {
+            ledGreen(0);
             status_ = Q_HANDLED();
             break;
         }
@@ -303,6 +310,14 @@ static QState Zumo_ctrl(Zumo * const me) {
             me->rightSpeed = aR * (me->leftProx - d) + e;
 
             motors.setSpeeds(me->leftSpeed, me->rightSpeed);
+
+            ledGreen(1);
+            status_ = Q_HANDLED();
+            break;
+        }
+        /*${AOs::Zumo::SM::hmi::measure_decide::ctrl} */
+        case Q_EXIT_SIG: {
+            ledGreen(0);
             status_ = Q_HANDLED();
             break;
         }
@@ -320,6 +335,14 @@ static QState Zumo_turnRight(Zumo * const me) {
         /*${AOs::Zumo::SM::hmi::measure_decide::turnRight} */
         case Q_ENTRY_SIG: {
             motors.setSpeeds(turnSpeed, 0U);
+
+            ledYellow(1);
+            status_ = Q_HANDLED();
+            break;
+        }
+        /*${AOs::Zumo::SM::hmi::measure_decide::turnRight} */
+        case Q_EXIT_SIG: {
+            ledYellow(0);
             status_ = Q_HANDLED();
             break;
         }
@@ -337,6 +360,14 @@ static QState Zumo_turnLeft(Zumo * const me) {
         /*${AOs::Zumo::SM::hmi::measure_decide::turnLeft} */
         case Q_ENTRY_SIG: {
             motors.setSpeeds(0U, turnSpeed);
+
+            ledYellow(1);
+            status_ = Q_HANDLED();
+            break;
+        }
+        /*${AOs::Zumo::SM::hmi::measure_decide::turnLeft} */
+        case Q_EXIT_SIG: {
+            ledYellow(0);
             status_ = Q_HANDLED();
             break;
         }
