@@ -3,33 +3,29 @@
  <framework name="qpn"/>
  <package name="AOs" stereotype="0x02">
   <class name="Zumo" superclass="qpn::QActive">
-   <attribute name="leftProx" type="uint8_t" visibility="0x02" properties="0x00"/>
-   <attribute name="rightProx" type="uint8_t" visibility="0x02" properties="0x00"/>
-   <attribute name="leftSpeed" type="uint16_t" visibility="0x02" properties="0x00"/>
-   <attribute name="rightSpeed" type="uint16_t" visibility="0x02" properties="0x00"/>
-   <attribute name="proxMax" type="uint8_t" visibility="0x02" properties="0x00">
-    <documentation>left = 1
-right = 0</documentation>
-   </attribute>
+   <attribute name="leftProx = 0;" type="uint8_t" visibility="0x02" properties="0x00"/>
+   <attribute name="rightProx = 0;" type="uint8_t" visibility="0x02" properties="0x00"/>
+   <attribute name="leftSpeed = 0;" type="uint16_t" visibility="0x02" properties="0x00"/>
+   <attribute name="rightSpeed = 0;" type="uint16_t" visibility="0x02" properties="0x00"/>
    <statechart properties="0x01">
     <initial target="../1">
-     <action brief="ask for startbutton">lcd.print(&quot;press A&quot;);</action>
+     <action brief="ask for start">lcd.print(&quot;press A&quot;);</action>
      <initial_glyph conn="2,3,5,0,2,2">
-      <action box="0,-2,16,2"/>
+      <action box="0,-2,12,2"/>
      </initial_glyph>
     </initial>
-    <state name="hmi">
+    <state name="start">
      <entry>if (buttonA.isPressed()) {
     lcd.clear();
     QACTIVE_POST((QActive *)me,
-    BUTTON_SIG, 0);
+    BUTTON_SIG, 0U);
     }
 
 QActive_armX((QActive *)me,
-    0U, BSP_TICKS_PER_SEC, 0U);</entry>
+    0U, BSP_TICKS_PER_SEC/5U, 0U);</entry>
      <exit>QActive_disarmX((QActive *)me, 0U);</exit>
      <tran trig="Q_TIMEOUT" target="..">
-      <tran_glyph conn="2,59,3,1,37">
+      <tran_glyph conn="2,49,3,1,35">
        <action box="0,-2,11,2"/>
       </tran_glyph>
      </tran>
@@ -38,133 +34,90 @@ QActive_armX((QActive *)me,
        <action box="0,-2,9,2"/>
       </tran_glyph>
      </tran>
-     <state name="measure_decide">
+     <state name="measure_drive">
       <entry>proxSensors.read();
 me-&gt;leftProx =
     proxSensors.countsFrontWithLeftLeds();
 me-&gt;rightProx =
     proxSensors.countsFrontWithRightLeds();
 
-QACTIVE_POST((QActive *)me, DRIVE_SIG, 0);
+lcd.gotoXY(0, 0);
+lcd.print(me-&gt;leftProx);
+lcd.print(' ');
+lcd.print(me-&gt;rightProx);
+
+QACTIVE_POST((QActive *)me, DRIVE_SIG, 0U);
 
 QActive_armX((QActive *)me,
     0U, BSP_TICKS_PER_SEC/10U, 0U);</entry>
       <exit>QActive_disarmX((QActive *)me, 0U);</exit>
       <tran trig="DRIVE">
-       <choice>
-        <guard brief="prox==0">me-&gt;leftProx == 0
-&amp;&amp; me-&gt;rightProx == 0</guard>
-        <choice target="../../../2">
-         <guard brief="v&lt;e">me-&gt;leftSpeed &lt; e
-&amp;&amp; me-&gt;rightSpeed &lt; e</guard>
-         <choice_glyph conn="21,23,5,3,6">
-          <action box="1,-2,5,2"/>
-         </choice_glyph>
-        </choice>
-        <choice_glyph conn="11,23,5,-1,10">
-         <action box="1,-2,9,2"/>
+       <choice target="../../2">
+        <guard brief="prox&lt;5">me-&gt;leftProx &lt; 5U
+&amp;&amp; me-&gt;rightProx &lt; 5U</guard>
+        <action brief="ledGreen">ledYellow(0);
+ledGreen(1);</action>
+        <choice_glyph conn="12,23,5,3,13">
+         <action box="1,0,9,4"/>
         </choice_glyph>
        </choice>
        <choice target="../../3">
-        <guard brief="prox&gt;=1&amp;&amp;&lt;=5">me-&gt;leftProx &gt;= 1U
-&amp;&amp; me-&gt;rightProx &gt;= 1U
-&amp;&amp; me-&gt;leftProx &lt;= 5U
-&amp;&amp; me-&gt;rightProx &lt;= 5U</guard>
-        <choice_glyph conn="11,23,4,3,8,16">
-         <action box="0,6,13,2"/>
+        <guard brief="leftProx&gt;=5">me-&gt;leftProx &gt;= 5U</guard>
+        <action brief="ledYellow">ledGreen(0);
+ledYellow(1);</action>
+        <choice_glyph conn="12,23,4,3,8,13">
+         <action box="1,8,10,4"/>
         </choice_glyph>
        </choice>
-       <choice>
-        <guard brief="prox==6||speed==0">me-&gt;leftProx == 6U
-|| me-&gt;rightProx == 6U
-|| me-&gt;leftSpeed == 0
-|| me-&gt;rightSpeed == 0</guard>
-        <action brief="set turn direction">if(me-&gt;leftProx == 6U
-    ||  me-&gt;rightSpeed == 0) {
-    me-&gt;proxMax = 1U;
-    }
-else {
-    me-&gt;proxMax = 0;
-    }</action>
-        <choice target="../../../4">
-         <guard brief="left==6">me-&gt;leftProx == 6U</guard>
-         <choice_glyph conn="11,39,5,3,16">
-          <action box="1,-2,8,2"/>
-         </choice_glyph>
-        </choice>
-        <choice target="../../../5">
-         <guard>else</guard>
-         <choice_glyph conn="11,39,4,3,8,16">
-          <action box="0,6,6,2"/>
-         </choice_glyph>
-        </choice>
-        <choice_glyph conn="11,23,4,-1,16">
-         <action box="0,10,15,4"/>
+       <choice target="../../4">
+        <guard brief="rightProx&gt;=5">me-&gt;rightProx &gt;= 5U</guard>
+        <action brief="ledYellow">ledGreen(0);
+ledYellow(1);</action>
+        <choice_glyph conn="12,23,4,3,16,13">
+         <action box="1,16,11,4"/>
         </choice_glyph>
        </choice>
-       <tran_glyph conn="4,23,3,-1,7">
+       <tran_glyph conn="4,23,3,-1,8">
         <action box="0,-2,7,2"/>
        </tran_glyph>
       </tran>
       <tran trig="Q_TIMEOUT" target="..">
-       <tran_glyph conn="4,54,3,1,33">
+       <tran_glyph conn="4,45,3,1,31">
         <action box="0,-2,11,2"/>
        </tran_glyph>
       </tran>
-      <state name="acc">
-       <documentation>only for smooth acceleration</documentation>
-       <entry>me-&gt;leftSpeed = me-&gt;leftSpeed + accSpeed;
-me-&gt;rightSpeed = me-&gt;rightSpeed + accSpeed;
-
-motors.setSpeeds(me-&gt;leftSpeed, me-&gt;rightSpeed);
-
-ledYellow(0);
-ledGreen(1);</entry>
-       <state_glyph node="27,21,8,6">
-        <entry box="1,2,4,2"/>
-       </state_glyph>
-      </state>
       <state name="ctrl">
-       <entry>me-&gt;leftSpeed = a * (me-&gt;rightProx - d) + e;
-me-&gt;rightSpeed = a * (me-&gt;leftProx - d) + e;
+       <entry>me-&gt;leftSpeed = a * me-&gt;rightProx + e;
+me-&gt;rightSpeed = a * me-&gt;leftProx + e;
 
-motors.setSpeeds(me-&gt;leftSpeed, me-&gt;rightSpeed);
-
-ledYellow(0);
-ledGreen(1);</entry>
-       <state_glyph node="27,29,8,6">
+motors.setSpeeds(me-&gt;leftSpeed, me-&gt;rightSpeed);</entry>
+       <state_glyph node="25,21,8,6">
         <entry box="1,2,4,2"/>
        </state_glyph>
       </state>
       <state name="turnRight">
-       <entry>motors.setSpeeds(turnSpeed, 0U);
-
-ledGreen(0);
-ledYellow(1);</entry>
-       <state_glyph node="27,37,8,6">
+       <entry>motors.setSpeeds(turnSpeed, 0U);</entry>
+       <state_glyph node="25,29,8,6">
         <entry box="1,2,4,2"/>
        </state_glyph>
       </state>
       <state name="turnLeft">
-       <entry>motors.setSpeeds(0U, turnSpeed);
-
-ledGreen(0);
-ledYellow(1);</entry>
-       <state_glyph node="27,45,8,6">
+       <entry>motors.setSpeeds(0U, turnSpeed);</entry>
+       <state_glyph node="25,37,8,6">
         <entry box="1,2,4,2"/>
        </state_glyph>
       </state>
-      <state_glyph node="4,15,33,41">
+      <state_glyph node="4,15,31,32">
        <entry box="1,2,4,2"/>
        <exit box="1,4,4,2"/>
       </state_glyph>
      </state>
-     <state_glyph node="2,5,37,56">
+     <state_glyph node="2,5,35,46">
       <entry box="1,2,4,2"/>
       <exit box="1,4,4,2"/>
      </state_glyph>
     </state>
-    <state_diagram size="41,63"/>
+    <state_diagram size="39,53"/>
    </statechart>
   </class>
  </package>
@@ -206,12 +159,10 @@ QActiveCB const Q_ROM QF_active[] = {
 enum {
     BSP_TICKS_PER_SEC = 100U, // number of system clock ticks in one second
 
-    // Funktionsgleichung: y = a * (x - d) + e
-    a = -100,  // Steigung für's Regeln
-    d = 1U,    // Scheitelpunkt x
-    e = 400U,  // Scheitelpunkt y
+    // Funktionsgleichung: y = a * x + e
+    a = -50,  // Steigung für's Regeln
+    e = 300U,  // Scheitelpunkt y
 
-    accSpeed = 50U,
     turnSpeed = 80U // speed for turning around
 };
 
@@ -249,6 +200,7 @@ void QF_onStartup(void) {
 // 1/1024 prescaler, interrupt enabling...
 TCCR4B = (1U &lt;&lt; CS43) | (1U &lt;&lt; CS41) | (1U &lt;&lt; CS40); // CK/1024
 TIMSK4 = (1U &lt;&lt; OCIE4A); // Interrupt enabled
+TCNT4  = 0U;
 
 // set the output-compare register based on the desired tick frequency
 OCR4A  = (F_CPU / BSP_TICKS_PER_SEC / 1024U) - 1U;
