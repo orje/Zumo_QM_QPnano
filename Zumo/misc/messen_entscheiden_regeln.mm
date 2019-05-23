@@ -123,7 +123,7 @@
     </p>
   </body>
 </html></richcontent>
-<node CREATED="1555442268867" ID="ID_1220289525" MODIFIED="1556462224714" TEXT="ausweichen">
+<node CREATED="1555442268867" ID="ID_1220289525" MODIFIED="1558631304592" TEXT="ausweichen">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -141,11 +141,9 @@
     <p style="margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; text-indent: 0px">
       <font size="4">rightSpeed = aR * (leftBarrier - 1) + e;</font>
     </p>
-    <p style="margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; text-indent: 0px">
-      
-    </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
@@ -257,8 +255,7 @@
       <font size="4">Speed = aR * (Barrier - d) + e; </font>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
