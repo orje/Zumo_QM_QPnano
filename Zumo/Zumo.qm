@@ -7,6 +7,8 @@ around between measurement and motor control.</documentation>
  <framework name="qpn"/>
  <package name="AOs" stereotype="0x02">
   <class name="Zumo" superclass="qpn::QActive">
+   <documentation>encoders.getCountsLeft();
+encoders.getCountsRight();</documentation>
    <attribute name="leftProx = 0;" type="uint8_t" visibility="0x02" properties="0x00">
     <documentation>variable for the left proximity measure value</documentation>
    </attribute>
@@ -172,8 +174,8 @@ enum {
     BSP_TICKS_PER_SEC = 100U, // number of system clock ticks in one second
 
     // Funktionsgleichung: y = a * x + e
-    a = -50,  // Steigung für's Regeln
-    e = 300U,  // Scheitelpunkt y
+    a =  -50,       // Steigung für's Regeln
+    e = 300U,       // Scheitelpunkt y
 
     turnSpeed = 80U // speed for turning around
 };
