@@ -24,11 +24,11 @@ encoders.getCountsRight();</documentation>
    <statechart properties="0x01">
     <initial target="../1">
      <action>lcd.print(&quot;press A&quot;);</action>
-     <initial_glyph conn="1,3,5,3,2">
+     <initial_glyph conn="1,3,5,3,5">
       <action box="0,-2,4,2"/>
      </initial_glyph>
     </initial>
-    <state name="start">
+    <state name="button">
      <entry>if (buttonA.isPressed()) {
     lcd.clear();
     QACTIVE_POST((QActive *)me,
@@ -37,19 +37,25 @@ encoders.getCountsRight();</documentation>
 
 QActive_armX((QActive *)me,
     0U, BSP_TICKS_PER_SEC/5U, 0U);</entry>
-     <exit>QActive_disarmX((QActive *)me, 0U);</exit>
      <tran trig="Q_TIMEOUT" target="..">
-      <tran_glyph conn="3,35,3,1,39">
+      <tran_glyph conn="6,58,3,1,56">
        <action box="0,-2,9,2"/>
       </tran_glyph>
      </tran>
      <tran trig="BUTTON" target="../2">
-      <tran_glyph conn="3,9,3,3,8">
-       <action box="0,-2,7,2"/>
+      <tran_glyph conn="6,10,3,3,9">
+       <action box="0,-2,8,2"/>
       </tran_glyph>
      </tran>
-     <state name="measure_drive">
-      <entry>proxSensors.read();
+     <state name="detect_collosion">
+      <entry>
+
+
+
+
+
+
+proxSensors.read();
 me-&gt;leftProx =
     proxSensors.countsFrontWithLeftLeds();
 me-&gt;rightProx =
@@ -66,72 +72,74 @@ QActive_armX((QActive *)me,
     0U, BSP_TICKS_PER_SEC/10U, 0U);</entry>
       <exit>QActive_disarmX((QActive *)me, 0U);</exit>
       <tran trig="DRIVE">
-       <choice target="../../2">
+       <choice target="../../2/0">
         <guard brief="s&lt;5">me-&gt;leftProx &lt; 5U
 &amp;&amp; me-&gt;rightProx &lt; 5U</guard>
         <action>ledYellow(0);
 ledGreen(1);</action>
-        <choice_glyph conn="19,15,5,3,13">
+        <choice_glyph conn="31,21,4,3,-3,14">
          <action box="1,-2,5,2"/>
         </choice_glyph>
        </choice>
-       <choice target="../../3">
+       <choice target="../../2/1">
         <guard brief="sL&gt;=5">me-&gt;leftProx &gt;= 5U</guard>
         <action>ledGreen(0);
 ledYellow(1);</action>
-        <choice_glyph conn="19,15,4,3,6,13">
+        <choice_glyph conn="31,21,4,3,3,14">
          <action box="0,4,7,2"/>
         </choice_glyph>
        </choice>
-       <choice target="../../4">
+       <choice target="../../2/2">
         <guard brief="sR&gt;=5">me-&gt;rightProx &gt;= 5U</guard>
         <action>ledGreen(0);
 ledYellow(1);</action>
-        <choice_glyph conn="19,15,4,3,12,13">
+        <choice_glyph conn="31,21,4,3,9,14">
          <action box="0,10,7,2"/>
         </choice_glyph>
        </choice>
-       <tran_glyph conn="11,15,3,-1,8">
-        <action box="0,-2,5,2"/>
+       <tran_glyph conn="15,17,3,-1,-2,4,18">
+        <action box="0,-2,7,2"/>
        </tran_glyph>
       </tran>
       <tran trig="Q_TIMEOUT" target="..">
-       <tran_glyph conn="11,31,3,1,30">
+       <tran_glyph conn="15,52,3,1,43">
         <action box="0,-2,11,2"/>
        </tran_glyph>
       </tran>
-      <state name="ctrl">
-       <entry>me-&gt;leftSpeed = a * me-&gt;rightProx + e;
+      <state name="state1">
+       <state name="ctrl">
+        <entry>me-&gt;leftSpeed = a * me-&gt;rightProx + e;
 me-&gt;rightSpeed = a * me-&gt;leftProx + e;
 
 motors.setSpeeds(me-&gt;leftSpeed, me-&gt;rightSpeed);</entry>
-       <state_glyph node="32,13,8,5">
-        <entry box="1,2,4,2"/>
-       </state_glyph>
+        <state_glyph node="45,16,8,5">
+         <entry box="1,2,4,2"/>
+        </state_glyph>
+       </state>
+       <state name="turnRight">
+        <entry>motors.setSpeeds(turnSpeed, 0U);</entry>
+        <state_glyph node="45,22,7,5">
+         <entry box="1,2,4,2"/>
+        </state_glyph>
+       </state>
+       <state name="turnLeft">
+        <entry>motors.setSpeeds(0U, turnSpeed);</entry>
+        <state_glyph node="45,28,8,5">
+         <entry box="1,2,4,0"/>
+        </state_glyph>
+       </state>
+       <state_glyph node="24,14,33,25"/>
       </state>
-      <state name="turnRight">
-       <entry>motors.setSpeeds(turnSpeed, 0U);</entry>
-       <state_glyph node="32,19,8,5">
-        <entry box="1,2,4,2"/>
-       </state_glyph>
-      </state>
-      <state name="turnLeft">
-       <entry>motors.setSpeeds(0U, turnSpeed);</entry>
-       <state_glyph node="32,25,8,5">
-        <entry box="1,2,4,2"/>
-       </state_glyph>
-      </state>
-      <state_glyph node="11,7,30,26">
+      <state_glyph node="15,8,43,46">
        <entry box="1,2,4,2"/>
        <exit box="1,4,4,2"/>
       </state_glyph>
      </state>
-     <state_glyph node="3,1,39,36">
+     <state_glyph node="6,1,56,60">
       <entry box="1,2,4,2"/>
-      <exit box="1,4,4,2"/>
      </state_glyph>
     </state>
-    <state_diagram size="43,38"/>
+    <state_diagram size="64,64"/>
    </statechart>
   </class>
  </package>
