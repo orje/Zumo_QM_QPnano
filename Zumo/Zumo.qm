@@ -38,7 +38,7 @@ encoders.getCountsRight();</documentation>
 QActive_armX((QActive *)me,
     0U, BSP_TICKS_PER_SEC/5U, 0U);</entry>
      <tran trig="Q_TIMEOUT" target="..">
-      <tran_glyph conn="6,58,3,1,56">
+      <tran_glyph conn="6,87,3,1,-2,2,82">
        <action box="0,-2,9,2"/>
       </tran_glyph>
      </tran>
@@ -48,98 +48,111 @@ QActive_armX((QActive *)me,
       </tran_glyph>
      </tran>
      <state name="detect_collosion">
-      <entry>
+      <entry>compass.read();
+if((compass.a.x || compass.a.y) &gt; -1000){
+    QACTIVE_POST((QActive *)me, BACKWARDS_SIG, 0U);
+    }
+else {
+    QACTIVE_POST((QActive *)me, DRIVE_SIG, 0U);
+    }
 
-
-
-
-
-
-proxSensors.read();
+QActive_armX((QActive *)me,
+    0U, BSP_TICKS_PER_SEC/10U, 0U);</entry>
+      <tran trig="Q_TIMEOUT" target="..">
+       <tran_glyph conn="15,77,3,1,66">
+        <action box="0,-2,11,2"/>
+       </tran_glyph>
+      </tran>
+      <tran trig="BACKWARDS" target="../4">
+       <tran_glyph conn="15,22,3,3,12">
+        <action box="0,-2,10,2"/>
+       </tran_glyph>
+      </tran>
+      <tran trig="DRIVE" target="../3">
+       <tran_glyph conn="15,47,3,3,8">
+        <action box="0,-2,10,2"/>
+       </tran_glyph>
+      </tran>
+      <state name="drive">
+       <entry>proxSensors.read();
 me-&gt;leftProx =
     proxSensors.countsFrontWithLeftLeds();
 me-&gt;rightProx =
     proxSensors.countsFrontWithRightLeds();
 
+QACTIVE_POST((QActive *)me, DECIDE_SIG, 0U);
+
 lcd.gotoXY(0, 0);
 lcd.print(me-&gt;leftProx);
 lcd.print(' ');
-lcd.print(me-&gt;rightProx);
-
-QACTIVE_POST((QActive *)me, DRIVE_SIG, 0U);
-
-QActive_armX((QActive *)me,
-    0U, BSP_TICKS_PER_SEC/10U, 0U);</entry>
-      <exit>QActive_disarmX((QActive *)me, 0U);</exit>
-      <tran trig="DRIVE">
-       <choice target="../../2/0">
-        <guard brief="s&lt;5">me-&gt;leftProx &lt; 5U
+lcd.print(me-&gt;rightProx);</entry>
+       <tran trig="DECIDE">
+        <choice target="../../1">
+         <guard brief="s&lt;5">me-&gt;leftProx &lt; 5U
 &amp;&amp; me-&gt;rightProx &lt; 5U</guard>
-        <action>ledYellow(0);
+         <action>ledYellow(0);
 ledGreen(1);</action>
-        <choice_glyph conn="31,21,4,3,-3,14">
-         <action box="1,-2,5,2"/>
-        </choice_glyph>
-       </choice>
-       <choice target="../../2/1">
-        <guard brief="sL&gt;=5">me-&gt;leftProx &gt;= 5U</guard>
-        <action>ledGreen(0);
+         <choice_glyph conn="36,51,5,3,8">
+          <action box="1,-2,5,2"/>
+         </choice_glyph>
+        </choice>
+        <choice target="../../2">
+         <guard brief="sL&gt;=5">me-&gt;leftProx &gt;= 5U</guard>
+         <action>ledGreen(0);
 ledYellow(1);</action>
-        <choice_glyph conn="31,21,4,3,3,14">
-         <action box="0,4,7,2"/>
-        </choice_glyph>
-       </choice>
-       <choice target="../../2/2">
-        <guard brief="sR&gt;=5">me-&gt;rightProx &gt;= 5U</guard>
-        <action>ledGreen(0);
+         <choice_glyph conn="36,51,4,3,6,8">
+          <action box="0,4,7,2"/>
+         </choice_glyph>
+        </choice>
+        <choice target="../../3">
+         <guard brief="sR&gt;=5">me-&gt;rightProx &gt;= 5U</guard>
+         <action>ledGreen(0);
 ledYellow(1);</action>
-        <choice_glyph conn="31,21,4,3,9,14">
-         <action box="0,10,7,2"/>
-        </choice_glyph>
-       </choice>
-       <tran_glyph conn="15,17,3,-1,-2,4,18">
-        <action box="0,-2,7,2"/>
-       </tran_glyph>
-      </tran>
-      <tran trig="Q_TIMEOUT" target="..">
-       <tran_glyph conn="15,52,3,1,43">
-        <action box="0,-2,11,2"/>
-       </tran_glyph>
-      </tran>
-      <state name="state1">
+         <choice_glyph conn="36,51,4,3,12,8">
+          <action box="0,10,7,2"/>
+         </choice_glyph>
+        </choice>
+        <tran_glyph conn="23,51,3,-1,13">
+         <action box="0,-2,7,2"/>
+        </tran_glyph>
+       </tran>
        <state name="ctrl">
         <entry>me-&gt;leftSpeed = a * me-&gt;rightProx + e;
 me-&gt;rightSpeed = a * me-&gt;leftProx + e;
 
 motors.setSpeeds(me-&gt;leftSpeed, me-&gt;rightSpeed);</entry>
-        <state_glyph node="45,16,8,5">
+        <state_glyph node="44,49,8,5">
          <entry box="1,2,4,2"/>
         </state_glyph>
        </state>
        <state name="turnRight">
         <entry>motors.setSpeeds(turnSpeed, 0U);</entry>
-        <state_glyph node="45,22,7,5">
+        <state_glyph node="44,55,7,5">
          <entry box="1,2,4,2"/>
         </state_glyph>
        </state>
        <state name="turnLeft">
         <entry>motors.setSpeeds(0U, turnSpeed);</entry>
-        <state_glyph node="45,28,8,5">
+        <state_glyph node="44,61,8,5">
          <entry box="1,2,4,0"/>
         </state_glyph>
        </state>
-       <state_glyph node="24,14,33,25"/>
+       <state_glyph node="23,45,51,27">
+        <entry box="1,2,6,2"/>
+       </state_glyph>
       </state>
-      <state_glyph node="15,8,43,46">
+      <state name="turn_backwards">
+       <state_glyph node="27,20,40,18"/>
+      </state>
+      <state_glyph node="15,8,66,73">
        <entry box="1,2,4,2"/>
-       <exit box="1,4,4,2"/>
       </state_glyph>
      </state>
-     <state_glyph node="6,1,56,60">
+     <state_glyph node="6,1,80,95">
       <entry box="1,2,4,2"/>
      </state_glyph>
     </state>
-    <state_diagram size="64,64"/>
+    <state_diagram size="94,101"/>
    </statechart>
   </class>
  </package>
@@ -150,6 +163,7 @@ motors.setSpeeds(me-&gt;leftSpeed, me-&gt;rightSpeed);</entry>
 
 #include &lt;Wire.h&gt;
 #include &lt;Zumo32U4.h&gt;
+#include &lt;LSM303.h&gt;
 
 //============================================================================
 // declare all AO classes...
@@ -164,6 +178,7 @@ Zumo32U4LCD lcd;
 Zumo32U4ButtonA buttonA;
 Zumo32U4ProximitySensors proxSensors;
 Zumo32U4Motors motors;
+// LSM303 compass;
 // Zumo32U4Encoders encoders;
 
 static QEvt l_zumoQSto[10]; // Event queue storage for Zumo
@@ -191,7 +206,9 @@ enum {
 // various signals for the application...
 enum {
     BUTTON_SIG = Q_USER_SIG, // end of data
-    DRIVE_SIG
+    BACKWARDS_SIG,
+    DRIVE_SIG,
+    DECIDE_SIG
 };
 
 //............................................................................

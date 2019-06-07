@@ -21,6 +21,7 @@
 
 #include <Wire.h>
 #include <Zumo32U4.h>
+#include <LSM303.h>
 
 //============================================================================
 // declare all AO classes...
@@ -39,11 +40,13 @@ typedef struct Zumo {
 
 /* protected: */
 static QState Zumo_initial(Zumo * const me);
-static QState Zumo_start(Zumo * const me);
-static QState Zumo_measure_drive(Zumo * const me);
+static QState Zumo_button(Zumo * const me);
+static QState Zumo_detect_collosion(Zumo * const me);
+static QState Zumo_drive(Zumo * const me);
 static QState Zumo_ctrl(Zumo * const me);
 static QState Zumo_turnRight(Zumo * const me);
 static QState Zumo_turnLeft(Zumo * const me);
+static QState Zumo_turn_backwards(Zumo * const me);
 /*$enddecl${AOs::Zumo} ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 //...
 
@@ -55,6 +58,7 @@ Zumo32U4LCD lcd;
 Zumo32U4ButtonA buttonA;
 Zumo32U4ProximitySensors proxSensors;
 Zumo32U4Motors motors;
+// LSM303 compass;
 // Zumo32U4Encoders encoders;
 
 static QEvt l_zumoQSto[10]; // Event queue storage for Zumo
@@ -73,8 +77,8 @@ enum {
     BSP_TICKS_PER_SEC = 100U, // number of system clock ticks in one second
 
     // Funktionsgleichung: y = a * x + e
-    a = -50,  // Steigung für's Regeln
-    e = 300U,  // Scheitelpunkt y
+    a =  -50,       // Steigung für's Regeln
+    e = 300U,       // Scheitelpunkt y
 
     turnSpeed = 80U // speed for turning around
 };
@@ -82,7 +86,9 @@ enum {
 // various signals for the application...
 enum {
     BUTTON_SIG = Q_USER_SIG, // end of data
-    DRIVE_SIG
+    BACKWARDS_SIG,
+    DRIVE_SIG,
+    DECIDE_SIG
 };
 
 //............................................................................
@@ -148,13 +154,13 @@ void Q_onAssert(char const Q_ROM * const file, int line) {
 static QState Zumo_initial(Zumo * const me) {
     /*${AOs::Zumo::SM::initial} */
     lcd.print("press A");
-    return Q_TRAN(&Zumo_start);
+    return Q_TRAN(&Zumo_button);
 }
-/*${AOs::Zumo::SM::start} ..................................................*/
-static QState Zumo_start(Zumo * const me) {
+/*${AOs::Zumo::SM::button} .................................................*/
+static QState Zumo_button(Zumo * const me) {
     QState status_;
     switch (Q_SIG(me)) {
-        /*${AOs::Zumo::SM::start} */
+        /*${AOs::Zumo::SM::button} */
         case Q_ENTRY_SIG: {
             if (buttonA.isPressed()) {
                 lcd.clear();
@@ -167,20 +173,14 @@ static QState Zumo_start(Zumo * const me) {
             status_ = Q_HANDLED();
             break;
         }
-        /*${AOs::Zumo::SM::start} */
-        case Q_EXIT_SIG: {
-            QActive_disarmX((QActive *)me, 0U);
-            status_ = Q_HANDLED();
-            break;
-        }
-        /*${AOs::Zumo::SM::start::Q_TIMEOUT} */
+        /*${AOs::Zumo::SM::button::Q_TIMEOUT} */
         case Q_TIMEOUT_SIG: {
-            status_ = Q_TRAN(&Zumo_start);
+            status_ = Q_TRAN(&Zumo_button);
             break;
         }
-        /*${AOs::Zumo::SM::start::BUTTON} */
+        /*${AOs::Zumo::SM::button::BUTTON} */
         case BUTTON_SIG: {
-            status_ = Q_TRAN(&Zumo_measure_drive);
+            status_ = Q_TRAN(&Zumo_detect_collosion);
             break;
         }
         default: {
@@ -190,11 +190,52 @@ static QState Zumo_start(Zumo * const me) {
     }
     return status_;
 }
-/*${AOs::Zumo::SM::start::measure_drive} ...................................*/
-static QState Zumo_measure_drive(Zumo * const me) {
+/*${AOs::Zumo::SM::button::detect_collosion} ...............................*/
+static QState Zumo_detect_collosion(Zumo * const me) {
     QState status_;
     switch (Q_SIG(me)) {
-        /*${AOs::Zumo::SM::start::measure_drive} */
+        /*${AOs::Zumo::SM::button::detect_collosion} */
+        case Q_ENTRY_SIG: {
+            compass.read();
+            if((compass.a.x || compass.a.y) > -1000){
+                QACTIVE_POST((QActive *)me, BACKWARDS_SIG, 0U);
+                }
+            else {
+                QACTIVE_POST((QActive *)me, DRIVE_SIG, 0U);
+                }
+
+            QActive_armX((QActive *)me,
+                0U, BSP_TICKS_PER_SEC/10U, 0U);
+            status_ = Q_HANDLED();
+            break;
+        }
+        /*${AOs::Zumo::SM::button::detect_collosion::Q_TIMEOUT} */
+        case Q_TIMEOUT_SIG: {
+            status_ = Q_TRAN(&Zumo_detect_collosion);
+            break;
+        }
+        /*${AOs::Zumo::SM::button::detect_collosion::BACKWARDS} */
+        case BACKWARDS_SIG: {
+            status_ = Q_TRAN(&Zumo_turn_backwards);
+            break;
+        }
+        /*${AOs::Zumo::SM::button::detect_collosion::DRIVE} */
+        case DRIVE_SIG: {
+            status_ = Q_TRAN(&Zumo_drive);
+            break;
+        }
+        default: {
+            status_ = Q_SUPER(&Zumo_button);
+            break;
+        }
+    }
+    return status_;
+}
+/*${AOs::Zumo::SM::button::detect_collosion::drive} ........................*/
+static QState Zumo_drive(Zumo * const me) {
+    QState status_;
+    switch (Q_SIG(me)) {
+        /*${AOs::Zumo::SM::button::detect_collosion::drive} */
         case Q_ENTRY_SIG: {
             proxSensors.read();
             me->leftProx =
@@ -202,27 +243,18 @@ static QState Zumo_measure_drive(Zumo * const me) {
             me->rightProx =
                 proxSensors.countsFrontWithRightLeds();
 
+            QACTIVE_POST((QActive *)me, DECIDE_SIG, 0U);
+
             lcd.gotoXY(0, 0);
             lcd.print(me->leftProx);
             lcd.print(' ');
             lcd.print(me->rightProx);
-
-            QACTIVE_POST((QActive *)me, DRIVE_SIG, 0U);
-
-            QActive_armX((QActive *)me,
-                0U, BSP_TICKS_PER_SEC/10U, 0U);
             status_ = Q_HANDLED();
             break;
         }
-        /*${AOs::Zumo::SM::start::measure_drive} */
-        case Q_EXIT_SIG: {
-            QActive_disarmX((QActive *)me, 0U);
-            status_ = Q_HANDLED();
-            break;
-        }
-        /*${AOs::Zumo::SM::start::measure_drive::DRIVE} */
-        case DRIVE_SIG: {
-            /*${AOs::Zumo::SM::start::measure_drive::DRIVE::[prox<5]} */
+        /*${AOs::Zumo::SM::button::detect_collosion::drive::DECIDE} */
+        case DECIDE_SIG: {
+            /*${AOs::Zumo::SM::button::detect_collosion::drive::DECIDE::[s<5]} */
             if (me->leftProx < 5U
                 && me->rightProx < 5U)
             {
@@ -230,13 +262,13 @@ static QState Zumo_measure_drive(Zumo * const me) {
                 ledGreen(1);
                 status_ = Q_TRAN(&Zumo_ctrl);
             }
-            /*${AOs::Zumo::SM::start::measure_drive::DRIVE::[leftProx>=5]} */
+            /*${AOs::Zumo::SM::button::detect_collosion::drive::DECIDE::[sL>=5]} */
             else if (me->leftProx >= 5U) {
                 ledGreen(0);
                 ledYellow(1);
                 status_ = Q_TRAN(&Zumo_turnRight);
             }
-            /*${AOs::Zumo::SM::start::measure_drive::DRIVE::[rightProx>=5]} */
+            /*${AOs::Zumo::SM::button::detect_collosion::drive::DECIDE::[sR>=5]} */
             else if (me->rightProx >= 5U) {
                 ledGreen(0);
                 ledYellow(1);
@@ -247,23 +279,18 @@ static QState Zumo_measure_drive(Zumo * const me) {
             }
             break;
         }
-        /*${AOs::Zumo::SM::start::measure_drive::Q_TIMEOUT} */
-        case Q_TIMEOUT_SIG: {
-            status_ = Q_TRAN(&Zumo_measure_drive);
-            break;
-        }
         default: {
-            status_ = Q_SUPER(&Zumo_start);
+            status_ = Q_SUPER(&Zumo_detect_collosion);
             break;
         }
     }
     return status_;
 }
-/*${AOs::Zumo::SM::start::measure_drive::ctrl} .............................*/
+/*${AOs::Zumo::SM::button::detect_collosion::drive::ctrl} ..................*/
 static QState Zumo_ctrl(Zumo * const me) {
     QState status_;
     switch (Q_SIG(me)) {
-        /*${AOs::Zumo::SM::start::measure_drive::ctrl} */
+        /*${AOs::Zumo::SM::button::detect_collosion::drive::ctrl} */
         case Q_ENTRY_SIG: {
             me->leftSpeed = a * me->rightProx + e;
             me->rightSpeed = a * me->leftProx + e;
@@ -273,41 +300,52 @@ static QState Zumo_ctrl(Zumo * const me) {
             break;
         }
         default: {
-            status_ = Q_SUPER(&Zumo_measure_drive);
+            status_ = Q_SUPER(&Zumo_drive);
             break;
         }
     }
     return status_;
 }
-/*${AOs::Zumo::SM::start::measure_drive::turnRight} ........................*/
+/*${AOs::Zumo::SM::button::detect_collosion::drive::turnRight} .............*/
 static QState Zumo_turnRight(Zumo * const me) {
     QState status_;
     switch (Q_SIG(me)) {
-        /*${AOs::Zumo::SM::start::measure_drive::turnRight} */
+        /*${AOs::Zumo::SM::button::detect_collosion::drive::turnRight} */
         case Q_ENTRY_SIG: {
             motors.setSpeeds(turnSpeed, 0U);
             status_ = Q_HANDLED();
             break;
         }
         default: {
-            status_ = Q_SUPER(&Zumo_measure_drive);
+            status_ = Q_SUPER(&Zumo_drive);
             break;
         }
     }
     return status_;
 }
-/*${AOs::Zumo::SM::start::measure_drive::turnLeft} .........................*/
+/*${AOs::Zumo::SM::button::detect_collosion::drive::turnLeft} ..............*/
 static QState Zumo_turnLeft(Zumo * const me) {
     QState status_;
     switch (Q_SIG(me)) {
-        /*${AOs::Zumo::SM::start::measure_drive::turnLeft} */
+        /*${AOs::Zumo::SM::button::detect_collosion::drive::turnLeft} */
         case Q_ENTRY_SIG: {
             motors.setSpeeds(0U, turnSpeed);
             status_ = Q_HANDLED();
             break;
         }
         default: {
-            status_ = Q_SUPER(&Zumo_measure_drive);
+            status_ = Q_SUPER(&Zumo_drive);
+            break;
+        }
+    }
+    return status_;
+}
+/*${AOs::Zumo::SM::button::detect_collosion::turn_backwards} ...............*/
+static QState Zumo_turn_backwards(Zumo * const me) {
+    QState status_;
+    switch (Q_SIG(me)) {
+        default: {
+            status_ = Q_SUPER(&Zumo_detect_collosion);
             break;
         }
     }

@@ -9,10 +9,6 @@ setting is +/- 2 g, so the conversion factor is 0.61 mg/LSB
 (least-significant bit).  A raw reading of 16384 would correspond
 to 1 g.
 
-**********************************************************************
-z ist das Entscheidende. Normal scheint 18000, Stoß scheint 20000
-**********************************************************************
-
 The gyro readings can be converted to degrees per second (dps)
 using the "Mechanical characteristics" table in the L3GD20H
 datasheet.  The default sensitivity is 8.75 mdps/LSB
