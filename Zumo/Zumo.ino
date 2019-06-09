@@ -21,7 +21,6 @@
 
 #include <Wire.h>
 #include <Zumo32U4.h>
-#include <LSM303.h>
 
 //============================================================================
 // declare all AO classes...
@@ -58,7 +57,7 @@ Zumo32U4LCD lcd;
 Zumo32U4ButtonA buttonA;
 Zumo32U4ProximitySensors proxSensors;
 Zumo32U4Motors motors;
-// LSM303 compass;
+LSM303 compass;
 // Zumo32U4Encoders encoders;
 
 static QEvt l_zumoQSto[10]; // Event queue storage for Zumo
@@ -197,7 +196,7 @@ static QState Zumo_detect_collosion(Zumo * const me) {
         /*${AOs::Zumo::SM::button::detect_collosion} */
         case Q_ENTRY_SIG: {
             compass.read();
-            if((compass.a.x || compass.a.y) > -1000){
+            if((compass.a.x > -1000) || (compass.a.y > -1000)) {
                 QACTIVE_POST((QActive *)me, BACKWARDS_SIG, 0U);
                 }
             else {

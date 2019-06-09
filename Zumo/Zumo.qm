@@ -47,9 +47,9 @@ QActive_armX((QActive *)me,
        <action box="0,-2,8,2"/>
       </tran_glyph>
      </tran>
-     <state name="detect_collosion">
+     <state name="detect_collision">
       <entry>compass.read();
-if((compass.a.x || compass.a.y) &gt; -1000){
+if((compass.a.x &gt; collisionDetect) || (compass.a.y &gt; collisionDetect)) {
     QACTIVE_POST((QActive *)me, BACKWARDS_SIG, 0U);
     }
 else {
@@ -138,7 +138,7 @@ motors.setSpeeds(me-&gt;leftSpeed, me-&gt;rightSpeed);</entry>
         </state_glyph>
        </state>
        <state_glyph node="23,45,51,27">
-        <entry box="1,2,6,2"/>
+        <entry box="1,2,4,2"/>
        </state_glyph>
       </state>
       <state name="turn_backwards">
@@ -163,7 +163,6 @@ motors.setSpeeds(me-&gt;leftSpeed, me-&gt;rightSpeed);</entry>
 
 #include &lt;Wire.h&gt;
 #include &lt;Zumo32U4.h&gt;
-#include &lt;LSM303.h&gt;
 
 //============================================================================
 // declare all AO classes...
@@ -178,7 +177,7 @@ Zumo32U4LCD lcd;
 Zumo32U4ButtonA buttonA;
 Zumo32U4ProximitySensors proxSensors;
 Zumo32U4Motors motors;
-// LSM303 compass;
+LSM303 compass;
 // Zumo32U4Encoders encoders;
 
 static QEvt l_zumoQSto[10]; // Event queue storage for Zumo
@@ -195,6 +194,8 @@ QActiveCB const Q_ROM QF_active[] = {
 // various constants for the application...
 enum {
     BSP_TICKS_PER_SEC = 100U, // number of system clock ticks in one second
+
+    collisionDetect = -1000, // experimental threshold 
 
     // Funktionsgleichung: y = a * x + e
     a =  -50,       // Steigung für's Regeln
