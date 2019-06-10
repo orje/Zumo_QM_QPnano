@@ -47,7 +47,7 @@
     </p>
   </body>
 </html></richcontent>
-<node CREATED="1558632145118" ID="ID_757919703" MODIFIED="1559320899275" POSITION="right" TEXT="a &gt; -1000">
+<node CREATED="1558632145118" ID="ID_757919703" MODIFIED="1560185541638" POSITION="right" TEXT="a &gt; -1000">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -68,7 +68,22 @@
   </body>
 </html>
 </richcontent>
-<node CREATED="1559320993183" ID="ID_195238863" MODIFIED="1559320999583" TEXT="Kehrtwendung"/>
+<node CREATED="1559320993183" ID="ID_195238863" MODIFIED="1560185722390" TEXT="Kehrtwendung">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Am besten w&#228;re eine180&#176; Drehung, da ich eh' nicht weiss, wohin.
+    </p>
+    <p>
+      Kurz r&#252;ckw&#228;rts, dann 180&#176;.
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
 <node CREATED="1559321019356" ID="ID_1011383163" MODIFIED="1559321021926" TEXT="else">
 <node CREATED="1555443774071" ID="ID_1608642089" MODIFIED="1559320949089" STYLE="fork" TEXT="s &lt; 5">
 <icon BUILTIN="button_ok"/>

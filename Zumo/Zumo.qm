@@ -24,11 +24,11 @@ encoders.getCountsRight();</documentation>
    <statechart properties="0x01">
     <initial target="../1">
      <action>lcd.print(&quot;press A&quot;);</action>
-     <initial_glyph conn="1,3,5,3,5">
+     <initial_glyph conn="2,4,5,3,3">
       <action box="0,-2,4,2"/>
      </initial_glyph>
     </initial>
-    <state name="button">
+    <state name="start">
      <entry>if (buttonA.isPressed()) {
     lcd.clear();
     QACTIVE_POST((QActive *)me,
@@ -37,42 +37,70 @@ encoders.getCountsRight();</documentation>
 
 QActive_armX((QActive *)me,
     0U, BSP_TICKS_PER_SEC/5U, 0U);</entry>
-     <tran trig="Q_TIMEOUT" target="..">
-      <tran_glyph conn="6,87,3,1,-2,2,82">
-       <action box="0,-2,9,2"/>
-      </tran_glyph>
-     </tran>
      <tran trig="BUTTON" target="../2">
-      <tran_glyph conn="6,10,3,3,9">
+      <tran_glyph conn="5,8,3,3,8">
        <action box="0,-2,8,2"/>
       </tran_glyph>
      </tran>
-     <state name="detect_collision">
+     <tran trig="Q_TIMEOUT" target="..">
+      <tran_glyph conn="60,59,1,3,-55">
+       <action box="-11,-2,11,2"/>
+      </tran_glyph>
+     </tran>
+     <state name="drive_control">
       <entry>compass.read();
 if((compass.a.x &gt; collisionDetect) || (compass.a.y &gt; collisionDetect)) {
-    QACTIVE_POST((QActive *)me, BACKWARDS_SIG, 0U);
+    QACTIVE_POST((QActive *)me, COLLISION_SIG, 0U);
     }
 else {
-    QACTIVE_POST((QActive *)me, DRIVE_SIG, 0U);
+    QACTIVE_POST((QActive *)me, FREE_SIG, 0U);
     }
 
 QActive_armX((QActive *)me,
     0U, BSP_TICKS_PER_SEC/10U, 0U);</entry>
+      <tran trig="COLLISION" target="../3">
+       <tran_glyph conn="13,12,3,3,12">
+        <action box="0,-2,10,2"/>
+       </tran_glyph>
+      </tran>
+      <tran trig="FREE" target="../4">
+       <tran_glyph conn="13,28,3,3,12">
+        <action box="0,-2,6,2"/>
+       </tran_glyph>
+      </tran>
       <tran trig="Q_TIMEOUT" target="..">
-       <tran_glyph conn="15,77,3,1,66">
-        <action box="0,-2,11,2"/>
+       <tran_glyph conn="58,54,1,3,-45">
+        <action box="-11,-2,11,2"/>
        </tran_glyph>
       </tran>
-      <tran trig="BACKWARDS" target="../4">
-       <tran_glyph conn="15,22,3,3,12">
-        <action box="0,-2,10,2"/>
-       </tran_glyph>
-      </tran>
-      <tran trig="DRIVE" target="../3">
-       <tran_glyph conn="15,47,3,3,8">
-        <action box="0,-2,10,2"/>
-       </tran_glyph>
-      </tran>
+      <state name="drive_backwards">
+       <entry>motors.setSpeeds(-turnSpeed, -turnSpeed);
+
+QActive_armX((QActive *)me,
+    0U, BSP_TICKS_PER_SEC * 50U, 0U);</entry>
+       <tran trig="Q_TIMEOUT" target="../1">
+        <tran_glyph conn="25,16,3,3,18">
+         <action box="0,-2,11,2"/>
+        </tran_glyph>
+       </tran>
+       <state name="turn">
+        <entry>motors.setSpeeds(turnSpeed, -turnSpeed);
+
+QActive_armX((QActive *)me,
+    0U, BSP_TICKS_PER_SEC * 50U, 0U);</entry>
+        <tran trig="Q_TIMEOUT" target="../../..">
+         <tran_glyph conn="54,20,1,3,-41">
+          <action box="-11,-2,11,2"/>
+         </tran_glyph>
+        </tran>
+        <state_glyph node="43,14,11,8">
+         <entry box="1,2,4,2"/>
+        </state_glyph>
+       </state>
+       <state_glyph node="25,10,31,14">
+        <entry box="1,2,4,2"/>
+       </state_glyph>
+      </state>
       <state name="drive">
        <entry>proxSensors.read();
 me-&gt;leftProx =
@@ -80,19 +108,19 @@ me-&gt;leftProx =
 me-&gt;rightProx =
     proxSensors.countsFrontWithRightLeds();
 
-QACTIVE_POST((QActive *)me, DECIDE_SIG, 0U);
-
 lcd.gotoXY(0, 0);
 lcd.print(me-&gt;leftProx);
 lcd.print(' ');
-lcd.print(me-&gt;rightProx);</entry>
+lcd.print(me-&gt;rightProx);
+
+QACTIVE_POST((QActive *)me, DECIDE_SIG, 0U);</entry>
        <tran trig="DECIDE">
         <choice target="../../1">
          <guard brief="s&lt;5">me-&gt;leftProx &lt; 5U
 &amp;&amp; me-&gt;rightProx &lt; 5U</guard>
          <action>ledYellow(0);
 ledGreen(1);</action>
-         <choice_glyph conn="36,51,5,3,8">
+         <choice_glyph conn="35,32,5,3,8">
           <action box="1,-2,5,2"/>
          </choice_glyph>
         </choice>
@@ -100,20 +128,20 @@ ledGreen(1);</action>
          <guard brief="sL&gt;=5">me-&gt;leftProx &gt;= 5U</guard>
          <action>ledGreen(0);
 ledYellow(1);</action>
-         <choice_glyph conn="36,51,4,3,6,8">
-          <action box="0,4,7,2"/>
+         <choice_glyph conn="35,32,4,3,7,8">
+          <action box="0,5,7,2"/>
          </choice_glyph>
         </choice>
         <choice target="../../3">
          <guard brief="sR&gt;=5">me-&gt;rightProx &gt;= 5U</guard>
          <action>ledGreen(0);
 ledYellow(1);</action>
-         <choice_glyph conn="36,51,4,3,12,8">
-          <action box="0,10,7,2"/>
+         <choice_glyph conn="35,32,4,3,14,8">
+          <action box="0,12,7,2"/>
          </choice_glyph>
         </choice>
-        <tran_glyph conn="23,51,3,-1,13">
-         <action box="0,-2,7,2"/>
+        <tran_glyph conn="25,32,3,-1,10">
+         <action box="0,-2,8,2"/>
         </tran_glyph>
        </tran>
        <state name="ctrl">
@@ -121,38 +149,35 @@ ledYellow(1);</action>
 me-&gt;rightSpeed = a * me-&gt;leftProx + e;
 
 motors.setSpeeds(me-&gt;leftSpeed, me-&gt;rightSpeed);</entry>
-        <state_glyph node="44,49,8,5">
+        <state_glyph node="43,30,11,5">
          <entry box="1,2,4,2"/>
         </state_glyph>
        </state>
        <state name="turnRight">
         <entry>motors.setSpeeds(turnSpeed, 0U);</entry>
-        <state_glyph node="44,55,7,5">
+        <state_glyph node="43,37,11,5">
          <entry box="1,2,4,2"/>
         </state_glyph>
        </state>
        <state name="turnLeft">
         <entry>motors.setSpeeds(0U, turnSpeed);</entry>
-        <state_glyph node="44,61,8,5">
-         <entry box="1,2,4,0"/>
+        <state_glyph node="43,44,11,5">
+         <entry box="1,2,4,2"/>
         </state_glyph>
        </state>
-       <state_glyph node="23,45,51,27">
+       <state_glyph node="25,26,31,25">
         <entry box="1,2,4,2"/>
        </state_glyph>
       </state>
-      <state name="turn_backwards">
-       <state_glyph node="27,20,40,18"/>
-      </state>
-      <state_glyph node="15,8,66,73">
+      <state_glyph node="13,6,45,50">
        <entry box="1,2,4,2"/>
       </state_glyph>
      </state>
-     <state_glyph node="6,1,80,95">
+     <state_glyph node="5,2,55,59">
       <entry box="1,2,4,2"/>
      </state_glyph>
     </state>
-    <state_diagram size="94,101"/>
+    <state_diagram size="62,63"/>
    </statechart>
   </class>
  </package>
@@ -195,20 +220,20 @@ QActiveCB const Q_ROM QF_active[] = {
 enum {
     BSP_TICKS_PER_SEC = 100U, // number of system clock ticks in one second
 
-    collisionDetect = -1000, // experimental threshold 
+    collisionDetect = -1000,  // experimental threshold
 
     // Funktionsgleichung: y = a * x + e
-    a =  -50,       // Steigung für's Regeln
-    e = 300U,       // Scheitelpunkt y
+    a =  -50,                 // Steigung für's Regeln
+    e = 300U,                 // Scheitelpunkt y
 
-    turnSpeed = 80U // speed for turning around
+    turnSpeed = 80            // speed for turning around
 };
 
 // various signals for the application...
 enum {
-    BUTTON_SIG = Q_USER_SIG, // end of data
-    BACKWARDS_SIG,
-    DRIVE_SIG,
+    BUTTON_SIG = Q_USER_SIG,  // end of data
+    COLLISION_SIG,
+    FREE_SIG,
     DECIDE_SIG
 };
 
