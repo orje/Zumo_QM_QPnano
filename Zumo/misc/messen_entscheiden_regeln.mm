@@ -47,14 +47,14 @@
     </p>
   </body>
 </html></richcontent>
-<node CREATED="1558632145118" ID="ID_757919703" MODIFIED="1560185541638" POSITION="right" TEXT="a &gt; -1000">
+<node CREATED="1558632145118" ID="ID_757919703" MODIFIED="1560275834159" POSITION="right" TEXT="a &lt; -1000">
 <richcontent TYPE="NOTE"><html>
   <head>
     
   </head>
   <body>
     <p>
-      a &gt; -1000
+      a &lt; -1000
     </p>
     <p>
       
@@ -68,7 +68,7 @@
   </body>
 </html>
 </richcontent>
-<node CREATED="1559320993183" ID="ID_195238863" MODIFIED="1560185722390" TEXT="Kehrtwendung">
+<node CREATED="1559320993183" ID="ID_195238863" MODIFIED="1560275594949" TEXT="Kehrtwendung">
 <richcontent TYPE="NOTE"><html>
   <head>
     

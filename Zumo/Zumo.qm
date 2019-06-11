@@ -49,7 +49,16 @@ QActive_armX((QActive *)me,
      </tran>
      <state name="drive_control">
       <entry>compass.read();
-if((compass.a.x &gt; collisionDetect) || (compass.a.y &gt; collisionDetect)) {
+
+lcd.clear();
+lcd.gotoXY(0, 0);
+lcd.print(&quot;x &quot;);
+lcd.print(compass.a.x);
+lcd.gotoXY(0, 1);
+lcd.print(&quot;y &quot;);
+lcd.print(compass.a.y);
+
+if((compass.a.x &lt; collisionDetect) || (compass.a.y &lt; collisionDetect)) {
     QACTIVE_POST((QActive *)me, COLLISION_SIG, 0U);
     }
 else {
@@ -57,10 +66,13 @@ else {
     }
 
 QActive_armX((QActive *)me,
-    0U, BSP_TICKS_PER_SEC/10U, 0U);</entry>
+    0U, BSP_TICKS_PER_SEC / 10U, 0U);</entry>
       <tran trig="COLLISION" target="../3">
+       <action>ledRed(1);
+ledYellow(0);
+ledGreen(0);</action>
        <tran_glyph conn="13,12,3,3,12">
-        <action box="0,-2,10,2"/>
+        <action box="0,-2,11,2"/>
        </tran_glyph>
       </tran>
       <tran trig="FREE" target="../4">
@@ -108,9 +120,11 @@ me-&gt;leftProx =
 me-&gt;rightProx =
     proxSensors.countsFrontWithRightLeds();
 
+lcd.clear();
 lcd.gotoXY(0, 0);
+lcd.print(&quot;l=&quot;);
 lcd.print(me-&gt;leftProx);
-lcd.print(' ');
+lcd.print(&quot;  r=&quot;);
 lcd.print(me-&gt;rightProx);
 
 QACTIVE_POST((QActive *)me, DECIDE_SIG, 0U);</entry>
@@ -118,7 +132,8 @@ QACTIVE_POST((QActive *)me, DECIDE_SIG, 0U);</entry>
         <choice target="../../1">
          <guard brief="s&lt;5">me-&gt;leftProx &lt; 5U
 &amp;&amp; me-&gt;rightProx &lt; 5U</guard>
-         <action>ledYellow(0);
+         <action>ledRed(0);
+ledYellow(0);
 ledGreen(1);</action>
          <choice_glyph conn="35,32,5,3,8">
           <action box="1,-2,5,2"/>
@@ -126,16 +141,18 @@ ledGreen(1);</action>
         </choice>
         <choice target="../../2">
          <guard brief="sL&gt;=5">me-&gt;leftProx &gt;= 5U</guard>
-         <action>ledGreen(0);
-ledYellow(1);</action>
+         <action>ledRed(0);
+ledYellow(1);
+ledGreen(0);</action>
          <choice_glyph conn="35,32,4,3,7,8">
           <action box="0,5,7,2"/>
          </choice_glyph>
         </choice>
         <choice target="../../3">
          <guard brief="sR&gt;=5">me-&gt;rightProx &gt;= 5U</guard>
-         <action>ledGreen(0);
-ledYellow(1);</action>
+         <action>ledRed(0);
+ledYellow(1);
+ledGreen(0);</action>
          <choice_glyph conn="35,32,4,3,14,8">
           <action box="0,12,7,2"/>
          </choice_glyph>
@@ -148,19 +165,34 @@ ledYellow(1);</action>
         <entry>me-&gt;leftSpeed = a * me-&gt;rightProx + e;
 me-&gt;rightSpeed = a * me-&gt;leftProx + e;
 
-motors.setSpeeds(me-&gt;leftSpeed, me-&gt;rightSpeed);</entry>
+motors.setSpeeds(me-&gt;leftSpeed, me-&gt;rightSpeed);
+
+lcd.gotoXY(0, 1);
+//lcd.print(me-&gt;leftSpeed);
+lcd.print(' ');
+//lcd.print(me-&gt;rightSpeed);</entry>
         <state_glyph node="43,30,11,5">
          <entry box="1,2,4,2"/>
         </state_glyph>
        </state>
        <state name="turnRight">
-        <entry>motors.setSpeeds(turnSpeed, 0U);</entry>
+        <entry>motors.setSpeeds(turnSpeed, 0U);
+
+lcd.gotoXY(0, 1);
+//lcd.print(me-&gt;leftSpeed);
+lcd.print(' ');
+//lcd.print(me-&gt;rightSpeed);</entry>
         <state_glyph node="43,37,11,5">
          <entry box="1,2,4,2"/>
         </state_glyph>
        </state>
        <state name="turnLeft">
-        <entry>motors.setSpeeds(0U, turnSpeed);</entry>
+        <entry>motors.setSpeeds(0U, turnSpeed);
+
+lcd.gotoXY(0, 1);
+//lcd.print(me-&gt;leftSpeed);
+lcd.print(' ');
+//lcd.print(me-&gt;rightSpeed);</entry>
         <state_glyph node="43,44,11,5">
          <entry box="1,2,4,2"/>
         </state_glyph>
@@ -245,6 +277,12 @@ void setup() {
     // initialize all AOs...
     QActive_ctor(&amp;AO_Zumo.super, Q_STATE_CAST(&amp;Zumo_initial));
 
+    // init the compass for collision detection
+    Wire.begin();
+    compass.init();
+    compass.enableDefault();
+
+    // init the proximity sensors
     proxSensors.initFrontSensor();
 }
 
