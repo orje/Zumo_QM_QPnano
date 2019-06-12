@@ -10,7 +10,7 @@
  </group>
  <group name="windows">
   <item id="AOs::Zumo::SM">0,0,749,942,*</item>
-  <item id=".::Zumo.ino">0,0,749,942</item>
+  <item id=".::Zumo.ino">0,24,749,942</item>
  </group>
  <group name="search">
   <item name="options">4129280</item>

@@ -50,14 +50,6 @@ QActive_armX((QActive *)me,
      <state name="drive_control">
       <entry>compass.read();
 
-lcd.clear();
-lcd.gotoXY(0, 0);
-lcd.print(&quot;x &quot;);
-lcd.print(compass.a.x);
-lcd.gotoXY(0, 1);
-lcd.print(&quot;y &quot;);
-lcd.print(compass.a.y);
-
 if((compass.a.x &lt; collisionDetect) || (compass.a.y &lt; collisionDetect)) {
     QACTIVE_POST((QActive *)me, COLLISION_SIG, 0U);
     }
@@ -66,7 +58,15 @@ else {
     }
 
 QActive_armX((QActive *)me,
-    0U, BSP_TICKS_PER_SEC / 10U, 0U);</entry>
+    0U, BSP_TICKS_PER_SEC / 10U, 0U);
+
+lcd.clear();
+lcd.gotoXY(0, 0);
+lcd.print(&quot;x &quot;);
+lcd.print(compass.a.x);
+lcd.gotoXY(0, 1);
+lcd.print(&quot;y &quot;);
+lcd.print(compass.a.y);</entry>
       <tran trig="COLLISION" target="../3">
        <action>ledRed(1);
 ledYellow(0);
@@ -120,14 +120,14 @@ me-&gt;leftProx =
 me-&gt;rightProx =
     proxSensors.countsFrontWithRightLeds();
 
+QACTIVE_POST((QActive *)me, DECIDE_SIG, 0U);
+
 lcd.clear();
 lcd.gotoXY(0, 0);
 lcd.print(&quot;l=&quot;);
 lcd.print(me-&gt;leftProx);
 lcd.print(&quot;  r=&quot;);
-lcd.print(me-&gt;rightProx);
-
-QACTIVE_POST((QActive *)me, DECIDE_SIG, 0U);</entry>
+lcd.print(me-&gt;rightProx);</entry>
        <tran trig="DECIDE">
         <choice target="../../1">
          <guard brief="s&lt;5">me-&gt;leftProx &lt; 5U
@@ -165,34 +165,19 @@ ledGreen(0);</action>
         <entry>me-&gt;leftSpeed = a * me-&gt;rightProx + e;
 me-&gt;rightSpeed = a * me-&gt;leftProx + e;
 
-motors.setSpeeds(me-&gt;leftSpeed, me-&gt;rightSpeed);
-
-lcd.gotoXY(0, 1);
-//lcd.print(me-&gt;leftSpeed);
-lcd.print(' ');
-//lcd.print(me-&gt;rightSpeed);</entry>
+motors.setSpeeds(me-&gt;leftSpeed, me-&gt;rightSpeed);</entry>
         <state_glyph node="43,30,11,5">
          <entry box="1,2,4,2"/>
         </state_glyph>
        </state>
        <state name="turnRight">
-        <entry>motors.setSpeeds(turnSpeed, 0U);
-
-lcd.gotoXY(0, 1);
-//lcd.print(me-&gt;leftSpeed);
-lcd.print(' ');
-//lcd.print(me-&gt;rightSpeed);</entry>
+        <entry>motors.setSpeeds(turnSpeed, 0U);</entry>
         <state_glyph node="43,37,11,5">
          <entry box="1,2,4,2"/>
         </state_glyph>
        </state>
        <state name="turnLeft">
-        <entry>motors.setSpeeds(0U, turnSpeed);
-
-lcd.gotoXY(0, 1);
-//lcd.print(me-&gt;leftSpeed);
-lcd.print(' ');
-//lcd.print(me-&gt;rightSpeed);</entry>
+        <entry>motors.setSpeeds(0U, turnSpeed);</entry>
         <state_glyph node="43,44,11,5">
          <entry box="1,2,4,2"/>
         </state_glyph>
