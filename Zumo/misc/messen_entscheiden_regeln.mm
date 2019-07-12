@@ -47,7 +47,7 @@
     </p>
   </body>
 </html></richcontent>
-<node CREATED="1558632145118" ID="ID_757919703" MODIFIED="1560275834159" POSITION="right" TEXT="a &lt; -1000">
+<node CREATED="1558632145118" ID="ID_757919703" MODIFIED="1560700831467" POSITION="right" TEXT="a &lt; -1000">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -81,8 +81,7 @@
       Kurz r&#252;ckw&#228;rts, dann 180&#176;.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1559321019356" ID="ID_1011383163" MODIFIED="1559321021926" TEXT="else">
 <node CREATED="1555443774071" ID="ID_1608642089" MODIFIED="1559320949089" STYLE="fork" TEXT="s &lt; 5">
