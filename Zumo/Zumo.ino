@@ -300,6 +300,10 @@ static QState Zumo_turn(Zumo * const me) {
     switch (Q_SIG(me)) {
         /*${AOs::Zumo::SM::start::drive_control::drive_backwards::turn} */
         case Q_ENTRY_SIG: {
+            ledRed(0);
+            ledYellow(0);
+            ledGreen(0);
+
             motors.setSpeeds(turnSpeed, -turnSpeed);
 
             QActive_armX((QActive *)me,
