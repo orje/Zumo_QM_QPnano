@@ -50,6 +50,14 @@ QActive_armX((QActive *)me,
      <state name="drive_control">
       <entry>compass.read();
 
+lcd.clear();
+lcd.gotoXY(0, 0);
+lcd.print(&quot;x &quot;);
+lcd.print(compass.a.x);
+lcd.gotoXY(0, 1);
+lcd.print(&quot;y &quot;);
+lcd.print(compass.a.y);
+
 if((compass.a.x &lt; collisionDetect) || (compass.a.y &lt; collisionDetect)) {
     QACTIVE_POST((QActive *)me, COLLISION_SIG, 0U);
     }
@@ -58,15 +66,7 @@ else {
     }
 
 QActive_armX((QActive *)me,
-    0U, BSP_TICKS_PER_SEC / 10U, 0U);
-
-lcd.clear();
-lcd.gotoXY(0, 0);
-lcd.print(&quot;x &quot;);
-lcd.print(compass.a.x);
-lcd.gotoXY(0, 1);
-lcd.print(&quot;y &quot;);
-lcd.print(compass.a.y);</entry>
+    0U, BSP_TICKS_PER_SEC / 10U, 0U);</entry>
       <tran trig="COLLISION" target="../3">
        <action>ledRed(1);
 ledYellow(0);
