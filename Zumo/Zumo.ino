@@ -272,7 +272,7 @@ static QState Zumo_drive_backwards(Zumo * const me) {
             motors.setSpeeds(-turnSpeed, -turnSpeed);
 
             QActive_armX((QActive *)me,
-                0U, BSP_TICKS_PER_SEC * 50U, 0U);
+                0U, BSP_TICKS_PER_SEC, 0U);
             status_ = Q_HANDLED();
             break;
         }
@@ -284,6 +284,9 @@ static QState Zumo_drive_backwards(Zumo * const me) {
         }
         /*${AOs::Zumo::SM::start::drive_control::drive_backwards::Q_TIMEOUT} */
         case Q_TIMEOUT_SIG: {
+            ledRed(0);
+            ledYellow(1);
+            ledGreen(0);
             status_ = Q_TRAN(&Zumo_turn);
             break;
         }
@@ -300,14 +303,10 @@ static QState Zumo_turn(Zumo * const me) {
     switch (Q_SIG(me)) {
         /*${AOs::Zumo::SM::start::drive_control::drive_backwards::turn} */
         case Q_ENTRY_SIG: {
-            ledRed(0);
-            ledYellow(0);
-            ledGreen(0);
-
             motors.setSpeeds(turnSpeed, -turnSpeed);
 
             QActive_armX((QActive *)me,
-                0U, BSP_TICKS_PER_SEC * 50U, 0U);
+                0U, BSP_TICKS_PER_SEC, 0U);
             status_ = Q_HANDLED();
             break;
         }
@@ -319,6 +318,9 @@ static QState Zumo_turn(Zumo * const me) {
         }
         /*${AOs::Zumo::SM::start::drive_control::drive_backwards::turn::Q_TIMEOUT} */
         case Q_TIMEOUT_SIG: {
+            ledRed(0);
+            ledYellow(0);
+            ledGreen(0);
             status_ = Q_TRAN(&Zumo_drive_control);
             break;
         }
