@@ -76,7 +76,7 @@ QActiveCB const Q_ROM QF_active[] = {
 enum {
     BSP_TICKS_PER_SEC = 100U, // number of system clock ticks in one second
 
-    collisionDetect = -1000,  // experimental threshold
+    collisionDetect = -1400,  // experimental threshold
 
     // Funktionsgleichung: y = a * x + e
     a =  -50,                 // Steigung für's Regeln
@@ -181,6 +181,12 @@ static QState Zumo_start(Zumo * const me) {
             status_ = Q_HANDLED();
             break;
         }
+        /*${AOs::Zumo::SM::start} */
+        case Q_EXIT_SIG: {
+            QActive_disarmX((QActive *)me, 0U);
+            status_ = Q_HANDLED();
+            break;
+        }
         /*${AOs::Zumo::SM::start::BUTTON} */
         case BUTTON_SIG: {
             status_ = Q_TRAN(&Zumo_drive_control);
@@ -226,6 +232,12 @@ static QState Zumo_drive_control(Zumo * const me) {
             status_ = Q_HANDLED();
             break;
         }
+        /*${AOs::Zumo::SM::start::drive_control} */
+        case Q_EXIT_SIG: {
+            QActive_disarmX((QActive *)me, 0U);
+            status_ = Q_HANDLED();
+            break;
+        }
         /*${AOs::Zumo::SM::start::drive_control::COLLISION} */
         case COLLISION_SIG: {
             ledRed(1);
@@ -264,6 +276,12 @@ static QState Zumo_drive_backwards(Zumo * const me) {
             status_ = Q_HANDLED();
             break;
         }
+        /*${AOs::Zumo::SM::start::drive_control::drive_backwards} */
+        case Q_EXIT_SIG: {
+            QActive_disarmX((QActive *)me, 0U);
+            status_ = Q_HANDLED();
+            break;
+        }
         /*${AOs::Zumo::SM::start::drive_control::drive_backwards::Q_TIMEOUT} */
         case Q_TIMEOUT_SIG: {
             status_ = Q_TRAN(&Zumo_turn);
@@ -286,6 +304,12 @@ static QState Zumo_turn(Zumo * const me) {
 
             QActive_armX((QActive *)me,
                 0U, BSP_TICKS_PER_SEC * 50U, 0U);
+            status_ = Q_HANDLED();
+            break;
+        }
+        /*${AOs::Zumo::SM::start::drive_control::drive_backwards::turn} */
+        case Q_EXIT_SIG: {
+            QActive_disarmX((QActive *)me, 0U);
             status_ = Q_HANDLED();
             break;
         }
@@ -313,14 +337,20 @@ static QState Zumo_drive(Zumo * const me) {
             me->rightProx =
                 proxSensors.countsFrontWithRightLeds();
 
-            QACTIVE_POST((QActive *)me, DECIDE_SIG, 0U);
-
             lcd.clear();
             lcd.gotoXY(0, 0);
             lcd.print("l=");
             lcd.print(me->leftProx);
             lcd.print("  r=");
             lcd.print(me->rightProx);
+
+            QACTIVE_POST((QActive *)me, DECIDE_SIG, 0U);
+            status_ = Q_HANDLED();
+            break;
+        }
+        /*${AOs::Zumo::SM::start::drive_control::drive} */
+        case Q_EXIT_SIG: {
+            QActive_disarmX((QActive *)me, 0U);
             status_ = Q_HANDLED();
             break;
         }
