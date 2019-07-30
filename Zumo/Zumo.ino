@@ -177,7 +177,7 @@ static QState Zumo_start(Zumo * const me) {
                 }
 
             QActive_armX((QActive *)me,
-                0U, BSP_TICKS_PER_SEC/5U, 0U);
+                0U, BSP_TICKS_PER_SEC, 0U);
             status_ = Q_HANDLED();
             break;
         }
@@ -228,7 +228,7 @@ static QState Zumo_drive_control(Zumo * const me) {
                 }
 
             QActive_armX((QActive *)me,
-                0U, BSP_TICKS_PER_SEC / 10U, 0U);
+                0U, BSP_TICKS_PER_SEC, 0U);
             status_ = Q_HANDLED();
             break;
         }
@@ -272,7 +272,7 @@ static QState Zumo_drive_backwards(Zumo * const me) {
             motors.setSpeeds(-turnSpeed, -turnSpeed);
 
             QActive_armX((QActive *)me,
-                0U, BSP_TICKS_PER_SEC / 5U, 0U);
+                0U, BSP_TICKS_PER_SEC, 0U);
             status_ = Q_HANDLED();
             break;
         }
@@ -306,7 +306,7 @@ static QState Zumo_turn(Zumo * const me) {
             motors.setSpeeds(turnSpeed, -turnSpeed);
 
             QActive_armX((QActive *)me,
-                0U, BSP_TICKS_PER_SEC / 5U, 0U);
+                0U, BSP_TICKS_PER_SEC, 0U);
             status_ = Q_HANDLED();
             break;
         }

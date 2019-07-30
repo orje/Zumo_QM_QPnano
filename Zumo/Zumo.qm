@@ -36,7 +36,7 @@ encoders.getCountsRight();</documentation>
     }
 
 QActive_armX((QActive *)me,
-    0U, BSP_TICKS_PER_SEC/5U, 0U);</entry>
+    0U, BSP_TICKS_PER_SEC, 0U);</entry>
      <exit>QActive_disarmX((QActive *)me, 0U);</exit>
      <tran trig="BUTTON" target="../2">
       <tran_glyph conn="5,10,3,3,8">
@@ -67,7 +67,7 @@ else {
     }
 
 QActive_armX((QActive *)me,
-    0U, BSP_TICKS_PER_SEC/10U, 0U);</entry>
+    0U, BSP_TICKS_PER_SEC, 0U);</entry>
       <exit>QActive_disarmX((QActive *)me, 0U);</exit>
       <tran trig="COLLISION" target="../3">
        <action>ledRed(1);
@@ -91,7 +91,7 @@ ledGreen(0);</action>
        <entry>motors.setSpeeds(-turnSpeed, -turnSpeed);
 
 QActive_armX((QActive *)me,
-    0U, BSP_TICKS_PER_SEC/5U, 0U);</entry>
+    0U, BSP_TICKS_PER_SEC, 0U);</entry>
        <exit>QActive_disarmX((QActive *)me, 0U);</exit>
        <tran trig="Q_TIMEOUT" target="../1">
         <action>ledRed(0);
@@ -105,7 +105,7 @@ ledGreen(0);</action>
         <entry>motors.setSpeeds(turnSpeed, -turnSpeed);
 
 QActive_armX((QActive *)me,
-    0U, BSP_TICKS_PER_SEC/5U, 0U);</entry>
+    0U, BSP_TICKS_PER_SEC, 0U);</entry>
         <exit>QActive_disarmX((QActive *)me, 0U);</exit>
         <tran trig="Q_TIMEOUT" target="../../..">
          <action>ledRed(0);
@@ -197,7 +197,7 @@ motors.setSpeeds(me-&gt;leftSpeed, me-&gt;rightSpeed);</entry>
        </state>
        <state_glyph node="23,34,29,27">
         <entry box="1,2,4,2"/>
-        <exit box="1,4,6,2"/>
+        <exit box="1,4,4,2"/>
        </state_glyph>
       </state>
       <state_glyph node="13,8,41,57">

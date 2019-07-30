@@ -33,10 +33,9 @@
       <font size="4">ansteuern </font>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <font NAME="Cambria" SIZE="12"/>
-<node CREATED="1539195597155" FOLDED="true" ID="ID_1394309608" MODIFIED="1555440354851" POSITION="right" TEXT="Infos">
+<node CREATED="1539195597155" FOLDED="true" ID="ID_1394309608" MODIFIED="1564504102649" POSITION="right" TEXT="Infos">
 <font NAME="Cambria" SIZE="12"/>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1539195605739" ID="ID_819545712" MODIFIED="1555399600832" TEXT="32U4 = Micro (= Leonardo)">
@@ -115,7 +114,7 @@
 <font NAME="Cambria" SIZE="14"/>
 </node>
 </node>
-<node CREATED="1538675191977" FOLDED="true" ID="ID_187336572" MODIFIED="1555400004395" POSITION="right" TEXT="Welche Programmierumgebung benutzen?">
+<node CREATED="1538675191977" FOLDED="true" ID="ID_187336572" MODIFIED="1564504115728" POSITION="right" TEXT="Welche Programmierumgebung benutzen?">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -483,7 +482,7 @@
 </node>
 </node>
 </node>
-<node CREATED="1539194358878" FOLDED="true" ID="ID_188788871" MODIFIED="1556294383195" POSITION="right" TEXT="Fragen">
+<node CREATED="1539194358878" FOLDED="true" ID="ID_188788871" MODIFIED="1564504085230" POSITION="right" TEXT="Fragen">
 <font NAME="Cambria" SIZE="12"/>
 <node CREATED="1541876563589" ID="ID_668761038" MODIFIED="1555399600835" TEXT="2 Parameter &#xfc;bergeben">
 <richcontent TYPE="NOTE"><html>
@@ -528,12 +527,12 @@
 <font NAME="Cambria" SIZE="14"/>
 </node>
 </node>
-<node CREATED="1538840348728" FOLDED="true" ID="ID_365015684" MODIFIED="1555399600783" POSITION="right" TEXT="Welches Designtool benutzen?">
+<node CREATED="1538840348728" FOLDED="true" ID="ID_365015684" MODIFIED="1564504109636" POSITION="right" TEXT="Welches Designtool benutzen?">
 <font NAME="Cambria" SIZE="12"/>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1541876529287" ID="ID_25110167" MODIFIED="1541876533560" TEXT="adoc"/>
 </node>
-<node CREATED="1538840427200" FOLDED="true" ID="ID_1276132013" MODIFIED="1558708833666" POSITION="left" TEXT="Was soll der Zumo machen?">
+<node CREATED="1538840427200" FOLDED="true" ID="ID_1276132013" MODIFIED="1564504091779" POSITION="left" TEXT="Was soll der Zumo machen?">
 <font NAME="Cambria" SIZE="12"/>
 <node CREATED="1539108920688" FOLDED="true" ID="ID_475536693" MODIFIED="1558708831048" TEXT="Teilaufgaben">
 <font NAME="Cambria" SIZE="12"/>
@@ -715,6 +714,44 @@
 <node CREATED="1555251160655" ID="ID_1200783107" MODIFIED="1555399600749" TEXT="Kontakterkennung">
 <font NAME="Cambria" SIZE="12"/>
 </node>
+</node>
+</node>
+<node CREATED="1564504139387" ID="ID_173242604" MODIFIED="1564506034340" POSITION="right" TEXT="Probleme">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Die Zeiten von Q_TIMEOUT stimmen nicht. Das muss ich umfangreich testen:
+    </p>
+    <p>
+      - Muss ich mehr mit QF_INT_DISABLE arbeiten?
+    </p>
+    <p>
+      - Benutze ich den Timer richtig? Habe ich ihn richtig eingestellt? Soll ich mich noch einmal mit Blinky besch&#228;ftigen? Soll ich mal versuchen, den Timer alleine in einem Arduino-Sketch zu verwenden? Soll ich im Internet fragen?
+    </p>
+    <p>
+      - Funkt die Display-Benutzung dazwischen? Dann mal Display ausschalten und schauen, ob sich die Zeiten &#228;ndern. Wenn ja, QF_INT_DISABLE benutzen.
+    </p>
+  </body>
+</html>
+</richcontent>
+<node CREATED="1564504899714" ID="ID_1096243171" MODIFIED="1564506202684" TEXT="scheinbar kein R&#xfc;cksprung von turn zu drive_control">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      - l&#228;uft compass.read() nur einmalig?
+    </p>
+    <p>
+      - Wie kann ich verifizieren, dass turn nicht in drive_control zur&#252;ckspringt?
+    </p>
+  </body>
+</html>
+</richcontent>
 </node>
 </node>
 </node>
