@@ -134,12 +134,12 @@ OCR4A  = (F_CPU / BSP_TICKS_PER_SEC / 1024U) - 1U;
 }
 
 //............................................................................
-void QV_onIdle(void) {   // called with interrupts DISABLED
+void QV_onIdle(void) { // called with interrupts DISABLED
     // Put the CPU and peripherals to the low-power mode. You might
     // need to customize the clock management for your application,
     // see the datasheet for your particular AVR MCU.
     SMCR = (0 << SM0) | (1 << SE); // idle mode, adjust to your project
-    QV_CPU_SLEEP();  // atomically go to sleep and enable interrupts
+    QV_CPU_SLEEP(); // atomically go to sleep and enable interrupts
 }
 //............................................................................
 void Q_onAssert(char const Q_ROM * const file, int line) {
@@ -177,7 +177,7 @@ static QState Zumo_start(Zumo * const me) {
                 }
 
             QActive_armX((QActive *)me,
-                0U, BSP_TICKS_PER_SEC, 0U);
+                0U, BSP_TICKS_PER_SEC / 10U, 0U);
             status_ = Q_HANDLED();
             break;
         }
@@ -210,6 +210,9 @@ static QState Zumo_drive_control(Zumo * const me) {
     switch (Q_SIG(me)) {
         /*${AOs::Zumo::SM::start::drive_control} */
         case Q_ENTRY_SIG: {
+            ledGreen(1); // debug
+            lcd.clear(); // debug
+
             compass.read();
 
             lcd.clear();
@@ -228,7 +231,7 @@ static QState Zumo_drive_control(Zumo * const me) {
                 }
 
             QActive_armX((QActive *)me,
-                0U, BSP_TICKS_PER_SEC, 0U);
+                0U, BSP_TICKS_PER_SEC / 10U, 0U);
             status_ = Q_HANDLED();
             break;
         }

@@ -36,7 +36,7 @@ encoders.getCountsRight();</documentation>
     }
 
 QActive_armX((QActive *)me,
-    0U, BSP_TICKS_PER_SEC, 0U);</entry>
+    0U, BSP_TICKS_PER_SEC / 10U, 0U);</entry>
      <exit>QActive_disarmX((QActive *)me, 0U);</exit>
      <tran trig="BUTTON" target="../2">
       <tran_glyph conn="5,10,3,3,8">
@@ -49,7 +49,10 @@ QActive_armX((QActive *)me,
       </tran_glyph>
      </tran>
      <state name="drive_control">
-      <entry>compass.read();
+      <entry>ledGreen(1); // debug
+lcd.clear(); // debug
+
+compass.read();
 
 lcd.clear();
 lcd.gotoXY(0, 0);
@@ -67,7 +70,7 @@ else {
     }
 
 QActive_armX((QActive *)me,
-    0U, BSP_TICKS_PER_SEC, 0U);</entry>
+    0U, BSP_TICKS_PER_SEC / 10U, 0U);</entry>
       <exit>QActive_disarmX((QActive *)me, 0U);</exit>
       <tran trig="COLLISION" target="../3">
        <action>ledRed(1);
@@ -311,12 +314,12 @@ OCR4A  = (F_CPU / BSP_TICKS_PER_SEC / 1024U) - 1U;
 }
 
 //............................................................................
-void QV_onIdle(void) {   // called with interrupts DISABLED
+void QV_onIdle(void) { // called with interrupts DISABLED
     // Put the CPU and peripherals to the low-power mode. You might
     // need to customize the clock management for your application,
     // see the datasheet for your particular AVR MCU.
     SMCR = (0 &lt;&lt; SM0) | (1 &lt;&lt; SE); // idle mode, adjust to your project
-    QV_CPU_SLEEP();  // atomically go to sleep and enable interrupts
+    QV_CPU_SLEEP(); // atomically go to sleep and enable interrupts
 }
 //............................................................................
 void Q_onAssert(char const Q_ROM * const file, int line) {

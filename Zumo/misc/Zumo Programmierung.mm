@@ -735,19 +735,15 @@
       - Funkt die Display-Benutzung dazwischen? Dann mal Display ausschalten und schauen, ob sich die Zeiten &#228;ndern. Wenn ja, QF_INT_DISABLE benutzen.
     </p>
   </body>
-</html>
-</richcontent>
-<node CREATED="1564504899714" ID="ID_1096243171" MODIFIED="1564506202684" TEXT="scheinbar kein R&#xfc;cksprung von turn zu drive_control">
+</html></richcontent>
+<node CREATED="1564504899714" ID="ID_1096243171" MODIFIED="1564597197140" TEXT="drive_control arbeitet nach collision nicht mehr">
 <richcontent TYPE="NOTE"><html>
   <head>
     
   </head>
   <body>
     <p>
-      - l&#228;uft compass.read() nur einmalig?
-    </p>
-    <p>
-      - Wie kann ich verifizieren, dass turn nicht in drive_control zur&#252;ckspringt?
+      - Q_TIMEOUT schaltet zur&#252;ck (Beweis: yellow led geht aus), aber in drvie_control arbeitet nichts (Beweis: eingef&#252;gte debug-Zeilen: ledGreen(1) und lcd_clear haben keinen Effekt.
     </p>
   </body>
 </html>
