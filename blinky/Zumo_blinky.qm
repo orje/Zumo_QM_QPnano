@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<model version="4.3.1" links="0">
+<model version="4.5.1" links="0">
  <documentation>This is the Blinky example for the Pololu-Zumo board, which blinks the on-board LED (L) once per second. The example demonstrates:
 
 1. One active object class &quot;Blinky&quot; (inside the package &quot;AOs&quot;)
@@ -7,10 +7,10 @@
  <framework name="qpn"/>
  <package name="AOs" stereotype="0x02">
   <class name="Blinky" superclass="qpn::QActive">
-   <statechart>
+   <statechart properties="0x01">
     <initial target="../1">
      <action>QActive_armX((QActive *)me, 0U, BSP_TICKS_PER_SEC,
-    BSP_TICKS_PER_SEC/4U);
+    BSP_TICKS_PER_SEC);
 // Omly the second BSP_TICKS_PER_SEC has an effect.</action>
      <initial_glyph conn="2,3,5,1,24,4,-2">
       <action box="0,-2,6,2"/>
@@ -20,22 +20,22 @@
      <entry brief="LED off">digitalWrite(LED_L, LOW);</entry>
      <tran trig="Q_TIMEOUT" target="../../2">
       <tran_glyph conn="2,13,3,1,24,7,-2">
-       <action box="0,-2,8,2"/>
+       <action box="0,-2,11,2"/>
       </tran_glyph>
      </tran>
      <state_glyph node="2,5,22,11">
-      <entry box="1,2,17,4"/>
+      <entry box="1,2,9,2"/>
      </state_glyph>
     </state>
     <state name="on">
      <entry brief="LED on">digitalWrite(LED_L, HIGH);</entry>
      <tran trig="Q_TIMEOUT" target="../../1">
       <tran_glyph conn="2,26,3,1,26,-16,-4">
-       <action box="0,-2,8,2"/>
+       <action box="0,-2,11,2"/>
       </tran_glyph>
      </tran>
      <state_glyph node="2,18,22,10">
-      <entry box="1,2,15,4"/>
+      <entry box="1,2,10,2"/>
      </state_glyph>
     </state>
     <state_diagram size="30,30"/>
@@ -68,7 +68,7 @@ QActiveCB const Q_ROM QF_active[] = {
 // various constants for the application...
 enum {
     BSP_TICKS_PER_SEC = 100, // number of system clock ticks in one second
-    LED_L = 13               // the pin number of the on-board LED (L)
+    LED_L = LED_BUILTIN      // the pin number of the on-board LED (L)
 };
 
 //............................................................................
