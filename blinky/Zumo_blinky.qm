@@ -12,33 +12,33 @@
      <action>QActive_armX((QActive *)me, 0U, BSP_TICKS_PER_SEC,
     BSP_TICKS_PER_SEC);
 // Omly the second BSP_TICKS_PER_SEC has an effect.</action>
-     <initial_glyph conn="2,3,5,1,24,4,-2">
-      <action box="0,-2,6,2"/>
+     <initial_glyph conn="2,4,5,1,16,4,-4">
+      <action box="0,-2,4,2"/>
      </initial_glyph>
     </initial>
     <state name="off">
      <entry brief="LED off">digitalWrite(LED_L, LOW);</entry>
      <tran trig="Q_TIMEOUT" target="../../2">
-      <tran_glyph conn="2,13,3,1,24,7,-2">
+      <tran_glyph conn="2,14,3,1,14,7,-2">
        <action box="0,-2,11,2"/>
       </tran_glyph>
      </tran>
-     <state_glyph node="2,5,22,11">
-      <entry box="1,2,9,2"/>
+     <state_glyph node="2,6,12,11">
+      <entry box="1,2,10,2"/>
      </state_glyph>
     </state>
     <state name="on">
      <entry brief="LED on">digitalWrite(LED_L, HIGH);</entry>
      <tran trig="Q_TIMEOUT" target="../../1">
-      <tran_glyph conn="2,26,3,1,26,-16,-4">
+      <tran_glyph conn="2,27,3,1,16,-16,-4">
        <action box="0,-2,11,2"/>
       </tran_glyph>
      </tran>
-     <state_glyph node="2,18,22,10">
+     <state_glyph node="2,19,12,10">
       <entry box="1,2,10,2"/>
      </state_glyph>
     </state>
-    <state_diagram size="30,30"/>
+    <state_diagram size="20,31"/>
    </statechart>
   </class>
  </package>

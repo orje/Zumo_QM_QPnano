@@ -736,7 +736,7 @@
     </p>
   </body>
 </html></richcontent>
-<node CREATED="1564504899714" ID="ID_1096243171" MODIFIED="1564597197140" TEXT="drive_control arbeitet nach collision nicht mehr">
+<node CREATED="1564504899714" ID="ID_1096243171" MODIFIED="1564746716599" TEXT="drive_control arbeitet nach collision nicht mehr">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -744,6 +744,9 @@
   <body>
     <p>
       - Q_TIMEOUT schaltet zur&#252;ck (Beweis: yellow led geht aus), aber in drvie_control arbeitet nichts (Beweis: eingef&#252;gte debug-Zeilen: ledGreen(1) und lcd_clear haben keinen Effekt.
+    </p>
+    <p>
+      - mit der Benutzung von 4 levels hat es auch nichtzu tun... bei 3 funzt es auch nicht
     </p>
   </body>
 </html>
