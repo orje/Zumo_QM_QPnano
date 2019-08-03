@@ -90,7 +90,8 @@ enum {
     BUTTON_SIG = Q_USER_SIG,  // end of data
     COLLISION_SIG,
     FREE_SIG,
-    DECIDE_SIG
+    DECIDE_SIG,
+    BACK_SIG
 };
 
 //............................................................................
@@ -181,12 +182,6 @@ static QState Zumo_start(Zumo * const me) {
             status_ = Q_HANDLED();
             break;
         }
-        /*${AOs::Zumo::SM::start} */
-        case Q_EXIT_SIG: {
-            QActive_disarmX((QActive *)me, 0U);
-            status_ = Q_HANDLED();
-            break;
-        }
         /*${AOs::Zumo::SM::start::BUTTON} */
         case BUTTON_SIG: {
             status_ = Q_TRAN(&Zumo_drive_control);
@@ -235,12 +230,6 @@ static QState Zumo_drive_control(Zumo * const me) {
             status_ = Q_HANDLED();
             break;
         }
-        /*${AOs::Zumo::SM::start::drive_control} */
-        case Q_EXIT_SIG: {
-            QActive_disarmX((QActive *)me, 0U);
-            status_ = Q_HANDLED();
-            break;
-        }
         /*${AOs::Zumo::SM::start::drive_control::COLLISION} */
         case COLLISION_SIG: {
             ledRed(1);
@@ -279,12 +268,6 @@ static QState Zumo_drive_backwards(Zumo * const me) {
             status_ = Q_HANDLED();
             break;
         }
-        /*${AOs::Zumo::SM::start::drive_control::drive_backwards} */
-        case Q_EXIT_SIG: {
-            QActive_disarmX((QActive *)me, 0U);
-            status_ = Q_HANDLED();
-            break;
-        }
         /*${AOs::Zumo::SM::start::drive_control::drive_backwards::Q_TIMEOUT} */
         case Q_TIMEOUT_SIG: {
             ledRed(0);
@@ -313,17 +296,18 @@ static QState Zumo_turn(Zumo * const me) {
             status_ = Q_HANDLED();
             break;
         }
-        /*${AOs::Zumo::SM::start::drive_control::drive_backwards::turn} */
-        case Q_EXIT_SIG: {
-            QActive_disarmX((QActive *)me, 0U);
-            status_ = Q_HANDLED();
-            break;
-        }
         /*${AOs::Zumo::SM::start::drive_control::drive_backwards::turn::Q_TIMEOUT} */
         case Q_TIMEOUT_SIG: {
             ledRed(0);
             ledYellow(0);
             ledGreen(0);
+
+            QACTIVE_POST((QActive *)me, BACK_SIG, 0U);
+            status_ = Q_TRAN(&Zumo_turn);
+            break;
+        }
+        /*${AOs::Zumo::SM::start::drive_control::drive_backwards::turn::BACK} */
+        case BACK_SIG: {
             status_ = Q_TRAN(&Zumo_drive_control);
             break;
         }
@@ -354,12 +338,6 @@ static QState Zumo_drive(Zumo * const me) {
             lcd.print(me->rightProx);
 
             QACTIVE_POST((QActive *)me, DECIDE_SIG, 0U);
-            status_ = Q_HANDLED();
-            break;
-        }
-        /*${AOs::Zumo::SM::start::drive_control::drive} */
-        case Q_EXIT_SIG: {
-            QActive_disarmX((QActive *)me, 0U);
             status_ = Q_HANDLED();
             break;
         }
