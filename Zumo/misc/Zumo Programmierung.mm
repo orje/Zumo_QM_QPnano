@@ -532,11 +532,11 @@
 <icon BUILTIN="button_ok"/>
 <node CREATED="1541876529287" ID="ID_25110167" MODIFIED="1541876533560" TEXT="adoc"/>
 </node>
-<node CREATED="1538840427200" FOLDED="true" ID="ID_1276132013" MODIFIED="1564504091779" POSITION="left" TEXT="Was soll der Zumo machen?">
+<node CREATED="1538840427200" ID="ID_1276132013" MODIFIED="1564921185408" POSITION="left" TEXT="Was soll der Zumo machen?">
 <font NAME="Cambria" SIZE="12"/>
-<node CREATED="1539108920688" FOLDED="true" ID="ID_475536693" MODIFIED="1558708831048" TEXT="Teilaufgaben">
+<node CREATED="1539108920688" ID="ID_475536693" MODIFIED="1564921188229" TEXT="Teilaufgaben">
 <font NAME="Cambria" SIZE="12"/>
-<node CREATED="1539108937358" ID="ID_137728993" MODIFIED="1555399697542" TEXT="Motoren ansteuern">
+<node CREATED="1539108937358" ID="ID_137728993" MODIFIED="1564921234822" TEXT="Motoren ansteuern">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1539108974217" ID="ID_46398462" MODIFIED="1555305562382" TEXT="Gleichm&#xe4;&#xdf;igkeit synchronisieren">
 <richcontent TYPE="NOTE"><html>
@@ -563,7 +563,7 @@
 <node CREATED="1539109191580" ID="ID_596105360" MODIFIED="1555399708182" TEXT="Frontsensoren abtasten">
 <icon BUILTIN="button_ok"/>
 </node>
-<node CREATED="1548267814460" ID="ID_922834610" MODIFIED="1555399438409" TEXT="Kollision abtasten">
+<node CREATED="1548267814460" ID="ID_922834610" MODIFIED="1564922360693" TEXT="Kollision abtasten">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -599,8 +599,15 @@
     <p>
       }
     </p>
+    <p>
+      
+    </p>
+    <p>
+      - Der Schwellwert muss abh&#228;ngig von der Geschwindigkeit sein, damit bei langsamen Geschwindigkeiten und kleinen Einschl&#228;gen reagiert werden kann. Bei hohen Geschwindigketien kann der Wert robuster sein.
+    </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <font NAME="Courier New" SIZE="12"/>
 </node>
 <node CREATED="1539109206683" ID="ID_396289365" MODIFIED="1555305608137" TEXT="Seitensensoren abtasten">
@@ -716,7 +723,8 @@
 </node>
 </node>
 </node>
-<node CREATED="1564504139387" ID="ID_173242604" MODIFIED="1564842548407" POSITION="right" TEXT="Probleme">
+<node CREATED="1564504139387" ID="ID_173242604" MODIFIED="1564921175266" POSITION="right" TEXT="Probleme">
+<node CREATED="1564921154497" ID="ID_1787234215" MODIFIED="1564921182847" TEXT="timer4">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -737,6 +745,7 @@
   </body>
 </html>
 </richcontent>
+</node>
 </node>
 </node>
 </map>
