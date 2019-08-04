@@ -1,4 +1,4 @@
-/* Timer 2 für UNO */
+﻿/* Timer 2 für UNO */
 
 //============================================================================
 // interrupts...
@@ -49,7 +49,7 @@ x gibt in diesem Fall den Teiler/Multiplikator für Ein und Aus an.
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 - Hat QM/QPnano ein Problem? <- checken <- Nö, ist beim UNO genauso.
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-- Issue: Der timer arbeitet halb so schnell, als beim UNO. Auch Nagarkars Empfehlungen halfen nicht. Läuft beim UNO nur eine Halbwelle und beim Zumo eine ganze? <- Am nächsten Tag war alles i.O. !?!
+- Issue: Der timer arbeitet halb so schnell, wie beim UNO. Auch Nagarkars Empfehlungen halfen nicht. Läuft beim UNO nur eine Halbwelle und beim Zumo eine ganze? <- Am nächsten Tag war alles i.O. !?!
 
 
 /* Lösung von Nagarkar */

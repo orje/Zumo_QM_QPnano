@@ -47,30 +47,44 @@
     </p>
   </body>
 </html></richcontent>
-<node CREATED="1555443143286" ID="ID_1820265369" MODIFIED="1555443149532" POSITION="right" TEXT="Abstand">
-<node CREATED="1555443774071" ID="ID_1608642089" MODIFIED="1558632089061" STYLE="fork" TEXT="s &lt; 5">
+<node CREATED="1558632145118" ID="ID_757919703" MODIFIED="1564834443599" POSITION="right" TEXT="a &lt; -1000">
 <richcontent TYPE="NOTE"><html>
   <head>
     
   </head>
   <body>
     <p>
-      <font size="4">1 : 1 </font>
+      a &lt; -1000
     </p>
     <p>
-      <font size="4">2 : 2 </font>
+      
     </p>
     <p>
-      <font size="4">3 : 3 </font>
+      -vierstellig(x || y)&#160;= crash
     </p>
     <p>
-      <font size="4">4 : 4 </font>
+      Ein negativer vierstelliger Wert von X oder Y bedeutet crash
+    </p>
+  </body>
+</html>
+</richcontent>
+<node CREATED="1559320993183" ID="ID_195238863" MODIFIED="1560275594949" TEXT="Kehrtwendung">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Am besten w&#228;re eine180&#176; Drehung, da ich eh' nicht weiss, wohin.
     </p>
     <p>
-      <font size="4">5 : 5 </font>
+      Kurz r&#252;ckw&#228;rts, dann 180&#176;.
     </p>
   </body>
 </html></richcontent>
+</node>
+<node CREATED="1559321019356" ID="ID_1011383163" MODIFIED="1559321021926" TEXT="else">
+<node CREATED="1555443774071" ID="ID_1608642089" MODIFIED="1559320949089" STYLE="fork" TEXT="s &lt; 5">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1555442244772" ID="ID_1232303823" MODIFIED="1557073226933" TEXT="regeln">
 <richcontent TYPE="NOTE"><html>
@@ -88,17 +102,7 @@
 <icon BUILTIN="attach"/>
 </node>
 </node>
-<node CREATED="1555442146122" ID="ID_285132072" MODIFIED="1558632106717" TEXT="s &gt;= 5">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      else
-    </p>
-  </body>
-</html></richcontent>
+<node CREATED="1555442146122" ID="ID_285132072" MODIFIED="1559320957872" TEXT="s &gt;= 5">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1555442258170" ID="ID_1443366646" MODIFIED="1556991395665" TEXT="wenden">
 <richcontent TYPE="NOTE"><html>
@@ -142,22 +146,6 @@
 </node>
 </node>
 </node>
-<node CREATED="1555443150071" ID="ID_1404727423" MODIFIED="1558717842478" POSITION="right" TEXT="Kollision">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      -vierstellig(x || y)&#160;= crash
-    </p>
-    <p>
-      Ein negativer vierstelliger Wert von X oder Y bedeutet crash.
-    </p>
-  </body>
-</html>
-</richcontent>
-<node CREATED="1558632145118" ID="ID_757919703" MODIFIED="1558712361476" TEXT="a &gt; -1000"/>
 </node>
 </node>
 </map>
