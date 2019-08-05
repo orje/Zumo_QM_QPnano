@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <model version="4.5.1" links="0">
- <documentation>A simple version to let the Zumo drive freely and try to avoid barriers. The
-Zumo is started with a button. Only the proximity sensors are used to detect barriers and then the motors are controlled according to the measure values.
+ <documentation>A simple version to let the Zumo drive freely and try to avoid barriers.
+The Zumo is started with a button.
+The proximity sensors are used to detect barriers.
+The motors are controlled according to the measure values.
+If the acceleration sensor detects a collision, the zumo drives backwards and turn.
 The program goes cyclic around between measurement and motor control.</documentation>
  <framework name="qpn"/>
  <package name="AOs" stereotype="0x02">
@@ -48,10 +51,7 @@ QActive_armX((QActive *)me,
       </tran_glyph>
      </tran>
      <state name="drive_control">
-      <entry>ledGreen(1); // debug
-lcd.clear(); // debug
-
-compass.read();
+      <entry>compass.read();
 
 lcd.clear();
 lcd.gotoXY(0, 0);
@@ -237,7 +237,7 @@ Zumo32U4ButtonA buttonA;
 Zumo32U4ProximitySensors proxSensors;
 Zumo32U4Motors motors;
 LSM303 compass;
-// Zumo32U4Encoders encoders;
+// Zumo32U4Encoders encoders; // for future tasks
 
 static QEvt l_zumoQSto[10]; // Event queue storage for Zumo
 //...
