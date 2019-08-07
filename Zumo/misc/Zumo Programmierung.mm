@@ -563,7 +563,7 @@
 <node CREATED="1539109191580" ID="ID_596105360" MODIFIED="1555399708182" TEXT="Frontsensoren abtasten">
 <icon BUILTIN="button_ok"/>
 </node>
-<node CREATED="1548267814460" ID="ID_922834610" MODIFIED="1564922360693" TEXT="Kollision abtasten">
+<node CREATED="1548267814460" ID="ID_922834610" MODIFIED="1565200622004" TEXT="Kollision abtasten">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -604,6 +604,27 @@
     </p>
     <p>
       - Der Schwellwert muss abh&#228;ngig von der Geschwindigkeit sein, damit bei langsamen Geschwindigkeiten und kleinen Einschl&#228;gen reagiert werden kann. Bei hohen Geschwindigketien kann der Wert robuster sein.
+    </p>
+    <p>
+      - Der Vektor (Quantit&#228;t und Polarit&#228;t) des x- und y-Wert ist abh&#228;ngig von der Himmelsrichtung
+    </p>
+    <p>
+      Stillstand:
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;x&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;y
+    </p>
+    <p>
+      N:&#160;&#160;-270,&#160;&#160;-160 = -430
+    </p>
+    <p>
+      O:&#160;&#160;&#160;&#160;-20,&#160;&#160;-150 = -170
+    </p>
+    <p>
+      S:&#160;&#160;&#160;&#160;-70,&#160;&#160;&#160;110 =&#160;&#160;&#160;&#160;&#160;40
+    </p>
+    <p>
+      W: -310,&#160;&#160;&#160;&#160;&#160;80 = -220
     </p>
   </body>
 </html>
@@ -743,8 +764,7 @@
       - Funkt die Display-Benutzung dazwischen? Dann mal Display ausschalten und schauen, ob sich die Zeiten &#228;ndern. Wenn ja, QF_INT_DISABLE benutzen.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 </node>
