@@ -31,10 +31,10 @@ typedef struct Zumo {
     QActive super;
 
 /* private: */
-    uint8_t leftProx = 0;;
-    uint8_t rightProx = 0;;
     uint16_t leftSpeed = 0;;
     uint16_t rightSpeed = 0;;
+    int32_t collisionDetect = 0;
+    uint8_t prox = 0;
 } Zumo;
 
 /* protected: */
@@ -52,10 +52,10 @@ Zumo AO_Zumo;
 // Other objects
 Zumo32U4LCD lcd;
 Zumo32U4ButtonA buttonA;
-Zumo32U4ProximitySensors proxSensors;
+Zumo32U4ButtonA buttonB;
+Zumo32U4ButtonA buttonC;
 Zumo32U4Motors motors;
 LSM303 compass;
-// Zumo32U4Encoders encoders; // for future tasks
 
 static QEvt l_zumoQSto[10]; // Event queue storage for Zumo
 //...
@@ -72,21 +72,19 @@ QActiveCB const Q_ROM QF_active[] = {
 enum {
     BSP_TICKS_PER_SEC = 100U, // number of system clock ticks in one second
 
-    collisionDetect = -1400,  // experimental threshold
 
     // Funktionsgleichung: y = a * x + e
     a =  -50,                 // Steigung für's Regeln
     e = 300U,                 // Scheitelpunkt y
-
-    turnSpeed = 80            // speed for turning around
 };
 
 // various signals for the application...
 enum {
-    BUTTON_SIG = Q_USER_SIG,  // end of data
+    BUTTONA_SIG = Q_USER_SIG,  // end of data
+    BUTTONB_SIG,
+    BUTTONC_SIG,
     COLLISION_SIG,
     FREE_SIG,
-    DECIDE_SIG,
     BACK_SIG
 };
 
@@ -102,9 +100,6 @@ void setup() {
     Wire.begin();
     compass.init();
     compass.enableDefault();
-
-    // init the proximity sensors
-    proxSensors.initFrontSensor();
 }
 
 //............................................................................
@@ -158,8 +153,8 @@ void Q_onAssert(char const Q_ROM * const file, int line) {
 /*${AOs::Zumo::SM} .........................................................*/
 static QState Zumo_initial(Zumo * const me) {
     /*${AOs::Zumo::SM::initial} */
-    collisionDetect = 0; // zukünftig positiv
-    turnSpeed = 0; // in Wirklichkeit ist Abstand gemeint (0 - 6)
+    lcd.clear();
+    lcd.print("C, B, A");
     return Q_TRAN(&Zumo_start);
 }
 /*${AOs::Zumo::SM::start} ..................................................*/
@@ -171,23 +166,19 @@ static QState Zumo_start(Zumo * const me) {
             if (buttonA.isPressed()) {
                 lcd.clear();
                 QACTIVE_POST((QActive *)me,
-                BUTTON_SIG, 0U);
+                BUTTONA_SIG, 0U);
                 }
 
-            if (buttonC.isPressed()) {
-                turnSpeed++;
+            else if (buttonC.isPressed()) {
                 lcd.clear();
-                lcd.gotoXY(0, 0);
-                lcd.print("s ");
-                lcd.print(turnSpeed);
+                QACTIVE_POST((QActive *)me,
+                BUTTONC_SIG, 0U);
                 }
 
-            if (buttonB.isPressed()) {
-                collisionDetect = collisionDetect + 100U;
+            else if (buttonB.isPressed()) {
                 lcd.clear();
-                lcd.gotoXY(0, 0);
-                lcd.print("cd ");
-                lcd.print(collisionDetect);
+                QACTIVE_POST((QActive *)me,
+                BUTTONB_SIG, 0U);
                 }
 
             QActive_armX((QActive *)me,
@@ -197,13 +188,28 @@ static QState Zumo_start(Zumo * const me) {
         }
         /*${AOs::Zumo::SM::start} */
         case Q_EXIT_SIG: {
-            QActive_disarmX((QActive *)me,
-                0U, BSP_TICKS_PER_SEC / 10U, 0U);
+            QActive_disarmX((QActive *)me, 0U);
             status_ = Q_HANDLED();
             break;
         }
-        /*${AOs::Zumo::SM::start::BUTTON} */
-        case BUTTON_SIG: {
+        /*${AOs::Zumo::SM::start::BUTTONC} */
+        case BUTTONC_SIG: {
+            me->prox++;
+            lcd.print("s ");
+            lcd.print(me->prox);
+            status_ = Q_HANDLED();
+            break;
+        }
+        /*${AOs::Zumo::SM::start::BUTTONB} */
+        case BUTTONB_SIG: {
+            me->collisionDetect = me->collisionDetect + 100;
+            lcd.print("cd ");
+            lcd.print(me->collisionDetect);
+            status_ = Q_HANDLED();
+            break;
+        }
+        /*${AOs::Zumo::SM::start::BUTTONA} */
+        case BUTTONA_SIG: {
             status_ = Q_TRAN(&Zumo_drive_control);
             break;
         }
@@ -227,14 +233,13 @@ static QState Zumo_drive_control(Zumo * const me) {
         case Q_ENTRY_SIG: {
             compass.read();
 
-            uint32_t result = sprt(sq(compass.a.x) + sq(compass.a.y));
+            uint32_t result = sqrt(sq(compass.a.x) + sq(compass.a.y));
 
             lcd.clear();
-            lcd.gotoXY(0, 0);
             lcd.print("r ");
             lcd.print(result);
 
-            if(result > collisionDetect) {
+            if(result > me->collisionDetect) {
                 QACTIVE_POST((QActive *)me, COLLISION_SIG, 0U);
                 }
             else {
@@ -248,16 +253,12 @@ static QState Zumo_drive_control(Zumo * const me) {
         }
         /*${AOs::Zumo::SM::start::drive_control} */
         case Q_EXIT_SIG: {
-            QActive_disarmX((QActive *)me,
-                0U, BSP_TICKS_PER_SEC / 10U, 0U);
+            QActive_disarmX((QActive *)me, 0U);
             status_ = Q_HANDLED();
             break;
         }
         /*${AOs::Zumo::SM::start::drive_control::COLLISION} */
         case COLLISION_SIG: {
-            ledRed(1);
-            ledYellow(0);
-            ledGreen(0);
             status_ = Q_TRAN(&Zumo_stopp);
             break;
         }
@@ -289,7 +290,7 @@ static QState Zumo_stopp(Zumo * const me) {
         case Q_ENTRY_SIG: {
             motors.setSpeeds(0, 0);
 
-            QACTIVE_POST((QActive *)me, BACK_SIG, 0U;
+            QACTIVE_POST((QActive *)me, BACK_SIG, 0U);
             status_ = Q_HANDLED();
             break;
         }
@@ -311,7 +312,7 @@ static QState Zumo_drive(Zumo * const me) {
     switch (Q_SIG(me)) {
         /*${AOs::Zumo::SM::start::drive_control::drive} */
         case Q_ENTRY_SIG: {
-            motors.setSpeeds((a * turnSpeed + e), (a * turnSpeed + e));
+            motors.setSpeeds((a * me->prox + e), (a * me->prox + e));
             status_ = Q_HANDLED();
             break;
         }
