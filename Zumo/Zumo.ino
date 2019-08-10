@@ -41,13 +41,8 @@ typedef struct Zumo {
 static QState Zumo_initial(Zumo * const me);
 static QState Zumo_start(Zumo * const me);
 static QState Zumo_drive_control(Zumo * const me);
-static QState Zumo_drive_backwards(Zumo * const me);
-static QState Zumo_turn(Zumo * const me);
+static QState Zumo_stopp(Zumo * const me);
 static QState Zumo_drive(Zumo * const me);
-static QState Zumo_ctrl(Zumo * const me);
-static QState Zumo_turnRight(Zumo * const me);
-static QState Zumo_turnLeft(Zumo * const me);
-static QState Zumo_ctrl(Zumo * const me);
 /*$enddecl${AOs::Zumo} ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 //...
 
@@ -60,7 +55,7 @@ Zumo32U4ButtonA buttonA;
 Zumo32U4ProximitySensors proxSensors;
 Zumo32U4Motors motors;
 LSM303 compass;
-// Zumo32U4Encoders encoders;
+// Zumo32U4Encoders encoders; // for future tasks
 
 static QEvt l_zumoQSto[10]; // Event queue storage for Zumo
 //...
@@ -80,7 +75,7 @@ enum {
     collisionDetect = -1400,  // experimental threshold
 
     // Funktionsgleichung: y = a * x + e
-    a =  -50,                 // Steigung fï¿½r's Regeln
+    a =  -50,                 // Steigung für's Regeln
     e = 300U,                 // Scheitelpunkt y
 
     turnSpeed = 80            // speed for turning around
@@ -163,7 +158,8 @@ void Q_onAssert(char const Q_ROM * const file, int line) {
 /*${AOs::Zumo::SM} .........................................................*/
 static QState Zumo_initial(Zumo * const me) {
     /*${AOs::Zumo::SM::initial} */
-    lcd.print("press A");
+    collisionDetect = 0; // zukünftig positiv
+    turnSpeed = 0; // in Wirklichkeit ist Abstand gemeint (0 - 6)
     return Q_TRAN(&Zumo_start);
 }
 /*${AOs::Zumo::SM::start} ..................................................*/
@@ -178,7 +174,30 @@ static QState Zumo_start(Zumo * const me) {
                 BUTTON_SIG, 0U);
                 }
 
+            if (buttonC.isPressed()) {
+                turnSpeed++;
+                lcd.clear();
+                lcd.gotoXY(0, 0);
+                lcd.print("s ");
+                lcd.print(turnSpeed);
+                }
+
+            if (buttonB.isPressed()) {
+                collisionDetect = collisionDetect + 100U;
+                lcd.clear();
+                lcd.gotoXY(0, 0);
+                lcd.print("cd ");
+                lcd.print(collisionDetect);
+                }
+
             QActive_armX((QActive *)me,
+                0U, BSP_TICKS_PER_SEC / 10U, 0U);
+            status_ = Q_HANDLED();
+            break;
+        }
+        /*${AOs::Zumo::SM::start} */
+        case Q_EXIT_SIG: {
+            QActive_disarmX((QActive *)me,
                 0U, BSP_TICKS_PER_SEC / 10U, 0U);
             status_ = Q_HANDLED();
             break;
@@ -206,20 +225,16 @@ static QState Zumo_drive_control(Zumo * const me) {
     switch (Q_SIG(me)) {
         /*${AOs::Zumo::SM::start::drive_control} */
         case Q_ENTRY_SIG: {
-            ledGreen(1); // debug
-            lcd.clear(); // debug
-
             compass.read();
+
+            uint32_t result = sprt(sq(compass.a.x) + sq(compass.a.y));
 
             lcd.clear();
             lcd.gotoXY(0, 0);
-            lcd.print("x ");
-            lcd.print(compass.a.x);
-            lcd.gotoXY(0, 1);
-            lcd.print("y ");
-            lcd.print(compass.a.y);
+            lcd.print("r ");
+            lcd.print(result);
 
-            if((compass.a.x < collisionDetect) || (compass.a.y < collisionDetect)) {
+            if(result > collisionDetect) {
                 QACTIVE_POST((QActive *)me, COLLISION_SIG, 0U);
                 }
             else {
@@ -231,16 +246,26 @@ static QState Zumo_drive_control(Zumo * const me) {
             status_ = Q_HANDLED();
             break;
         }
+        /*${AOs::Zumo::SM::start::drive_control} */
+        case Q_EXIT_SIG: {
+            QActive_disarmX((QActive *)me,
+                0U, BSP_TICKS_PER_SEC / 10U, 0U);
+            status_ = Q_HANDLED();
+            break;
+        }
         /*${AOs::Zumo::SM::start::drive_control::COLLISION} */
         case COLLISION_SIG: {
             ledRed(1);
             ledYellow(0);
             ledGreen(0);
-            status_ = Q_TRAN(&Zumo_drive_backwards);
+            status_ = Q_TRAN(&Zumo_stopp);
             break;
         }
         /*${AOs::Zumo::SM::start::drive_control::FREE} */
         case FREE_SIG: {
+            ledRed(0);
+            ledYellow(0);
+            ledGreen(1);
             status_ = Q_TRAN(&Zumo_drive);
             break;
         }
@@ -256,64 +281,25 @@ static QState Zumo_drive_control(Zumo * const me) {
     }
     return status_;
 }
-/*${AOs::Zumo::SM::start::drive_control::drive_backwards} ..................*/
-static QState Zumo_drive_backwards(Zumo * const me) {
+/*${AOs::Zumo::SM::start::drive_control::stopp} ............................*/
+static QState Zumo_stopp(Zumo * const me) {
     QState status_;
     switch (Q_SIG(me)) {
-        /*${AOs::Zumo::SM::start::drive_control::drive_backwards} */
+        /*${AOs::Zumo::SM::start::drive_control::stopp} */
         case Q_ENTRY_SIG: {
-            motors.setSpeeds(-turnSpeed, -turnSpeed);
+            motors.setSpeeds(0, 0);
 
-            QActive_armX((QActive *)me,
-                0U, BSP_TICKS_PER_SEC, 0U);
+            QACTIVE_POST((QActive *)me, BACK_SIG, 0U;
             status_ = Q_HANDLED();
             break;
         }
-        /*${AOs::Zumo::SM::start::drive_control::drive_backwards::Q_TIMEOUT} */
-        case Q_TIMEOUT_SIG: {
-            ledRed(0);
-            ledYellow(1);
-            ledGreen(0);
-            status_ = Q_TRAN(&Zumo_turn);
+        /*${AOs::Zumo::SM::start::drive_control::stopp::BACK} */
+        case BACK_SIG: {
+            status_ = Q_TRAN(&Zumo_start);
             break;
         }
         default: {
             status_ = Q_SUPER(&Zumo_drive_control);
-            break;
-        }
-    }
-    return status_;
-}
-/*${AOs::Zumo::SM::start::drive_control::drive_backwards::turn} ............*/
-static QState Zumo_turn(Zumo * const me) {
-    QState status_;
-    switch (Q_SIG(me)) {
-        /*${AOs::Zumo::SM::start::drive_control::drive_backwards::turn} */
-        case Q_ENTRY_SIG: {
-            motors.setSpeeds(turnSpeed, -turnSpeed);
-
-            QActive_armX((QActive *)me,
-                0U, BSP_TICKS_PER_SEC, 0U);
-            status_ = Q_HANDLED();
-            break;
-        }
-        /*${AOs::Zumo::SM::start::drive_control::drive_backwards::turn::Q_TIMEOUT} */
-        case Q_TIMEOUT_SIG: {
-            ledRed(0);
-            ledYellow(0);
-            ledGreen(0);
-
-            QACTIVE_POST((QActive *)me, BACK_SIG, 0U);
-            status_ = Q_TRAN(&Zumo_turn);
-            break;
-        }
-        /*${AOs::Zumo::SM::start::drive_control::drive_backwards::turn::BACK} */
-        case BACK_SIG: {
-            status_ = Q_TRAN(&Zumo_drive_control);
-            break;
-        }
-        default: {
-            status_ = Q_SUPER(&Zumo_drive_backwards);
             break;
         }
     }
@@ -325,109 +311,12 @@ static QState Zumo_drive(Zumo * const me) {
     switch (Q_SIG(me)) {
         /*${AOs::Zumo::SM::start::drive_control::drive} */
         case Q_ENTRY_SIG: {
-            proxSensors.read();
-            me->leftProx =
-                proxSensors.countsFrontWithLeftLeds();
-            me->rightProx =
-                proxSensors.countsFrontWithRightLeds();
-
-            lcd.clear();
-            lcd.gotoXY(0, 0);
-            lcd.print("l=");
-            lcd.print(me->leftProx);
-            lcd.print("  r=");
-            lcd.print(me->rightProx);
-
-            QACTIVE_POST((QActive *)me, DECIDE_SIG, 0U);
+            motors.setSpeeds((a * turnSpeed + e), (a * turnSpeed + e));
             status_ = Q_HANDLED();
-            break;
-        }
-        /*${AOs::Zumo::SM::start::drive_control::drive::DECIDE} */
-        case DECIDE_SIG: {
-            /*${AOs::Zumo::SM::start::drive_control::drive::DECIDE::[s<5]} */
-            if (me->leftProx < 5U
-                && me->rightProx < 5U)
-            {
-                ledRed(0);
-                ledYellow(0);
-                ledGreen(1);
-                status_ = Q_TRAN(&Zumo_ctrl);
-            }
-            /*${AOs::Zumo::SM::start::drive_control::drive::DECIDE::[sL>=5]} */
-            else if (me->leftProx >= 5U) {
-                ledRed(0);
-                ledYellow(1);
-                ledGreen(0);
-                status_ = Q_TRAN(&Zumo_turnRight);
-            }
-            /*${AOs::Zumo::SM::start::drive_control::drive::DECIDE::[sR>=5]} */
-            else if (me->rightProx >= 5U) {
-                ledRed(0);
-                ledYellow(1);
-                ledGreen(0);
-                status_ = Q_TRAN(&Zumo_turnLeft);
-            }
-            else {
-                status_ = Q_UNHANDLED();
-            }
             break;
         }
         default: {
             status_ = Q_SUPER(&Zumo_drive_control);
-            break;
-        }
-    }
-    return status_;
-}
-/*${AOs::Zumo::SM::start::drive_control::drive::ctrl} ......................*/
-static QState Zumo_ctrl(Zumo * const me) {
-    QState status_;
-    switch (Q_SIG(me)) {
-        /*${AOs::Zumo::SM::start::drive_control::drive::ctrl} */
-        case Q_ENTRY_SIG: {
-            motors.setSpeeds(turnSpeed, 0U);
-            status_ = Q_HANDLED();
-            break;
-        }
-        default: {
-            status_ = Q_SUPER(&Zumo_drive);
-            break;
-        }
-    }
-    return status_;
-}
-/*${AOs::Zumo::SM::start::drive_control::drive::turnRight} .................*/
-static QState Zumo_turnRight(Zumo * const me) {
-    QState status_;
-    switch (Q_SIG(me)) {
-        /*${AOs::Zumo::SM::start::drive_control::drive::turnRight} */
-        case Q_ENTRY_SIG: {
-            motors.setSpeeds(0U, turnSpeed);
-            status_ = Q_HANDLED();
-            break;
-        }
-        default: {
-            status_ = Q_SUPER(&Zumo_drive);
-            break;
-        }
-    }
-    return status_;
-}
-/*${AOs::Zumo::SM::start::drive_control::drive::turnLeft} ..................*/
-static QState Zumo_turnLeft(Zumo * const me) {
-    QState status_;
-    switch (Q_SIG(me)) {
-        /*${AOs::Zumo::SM::start::drive_control::drive::turnLeft} */
-        case Q_ENTRY_SIG: {
-            me->leftSpeed = a * me->rightProx + e;
-            me->rightSpeed = a * me->leftProx + e;
-
-            motors.setSpeeds(me->leftSpeed, me->rightSpeed);
-            status_ = Q_HANDLED();
-            break;
-        }
-        default: {
-            status_ = Q_SUPER(&Zumo_drive);
             break;
         }
     }
