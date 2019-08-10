@@ -26,7 +26,8 @@ encoders.getCountsRight();</documentation>
    </attribute>
    <statechart properties="0x01">
     <initial target="../1">
-     <action>lcd.print(&quot;press A&quot;);</action>
+     <action>collisionDetect = 0;
+turnSpeed = 0; // in Wirklichkeit ist Abstand gemeint (0 - 6)</action>
      <initial_glyph conn="2,4,5,3,2">
       <action box="0,-2,4,2"/>
      </initial_glyph>
@@ -36,6 +37,22 @@ encoders.getCountsRight();</documentation>
     lcd.clear();
     QACTIVE_POST((QActive *)me,
     BUTTON_SIG, 0U);
+    }
+
+if (buttonC.isPressed()) {
+    turnSpeed++;
+    lcd.clear();
+    lcd.gotoXY(0, 0);
+    lcd.print(&quot;s &quot;);
+    lcd.print(turnSpeed);
+    }
+
+if (buttonB.isPressed()) {
+    collisionDetect = collisionDetect - 100;
+    lcd.clear();
+    lcd.gotoXY(0, 0);
+    lcd.print(&quot;cd &quot;);
+    lcd.print(collisionDetect);
     }
 
 QActive_armX((QActive *)me,
