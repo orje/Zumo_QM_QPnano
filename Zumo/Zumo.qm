@@ -90,6 +90,7 @@ lcd.print(me-&gt;collisionDetect);</action>
      <state name="drive_control">
       <entry>compass.read();
 
+/*
 uint32_t result = sqrt(sq(compass.a.x) + sq(compass.a.y));
 
 static uint32_t lastResult;
@@ -100,6 +101,15 @@ if (result &gt; lastResult) {
 lcd.clear();
 lcd.print(&quot;r &quot;);
 lcd.print(lastResult);
+*/
+
+lcd.clear();
+lcd.gotoXY(0, 0);
+lcd.print(&quot;x &quot;);
+lcd.print(compass.a.x);
+lcd.gotoXY(0, 1);
+lcd.print(&quot;y &quot;);
+lcd.print(compass.a.y);
 
 if(result &gt; me-&gt;collisionDetect) {
     QACTIVE_POST((QActive *)me, COLLISION_SIG, 0U);
