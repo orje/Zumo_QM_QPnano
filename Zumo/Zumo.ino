@@ -239,6 +239,7 @@ static QState Zumo_drive_control(Zumo * const me) {
         case Q_ENTRY_SIG: {
             compass.read();
 
+            /*
             uint32_t result = sqrt(sq(compass.a.x) + sq(compass.a.y));
 
             static uint32_t lastResult;
@@ -253,7 +254,30 @@ static QState Zumo_drive_control(Zumo * const me) {
             if(result > me->collisionDetect) {
                 QACTIVE_POST((QActive *)me, COLLISION_SIG, 0U);
             }
+            */
 
+            static int32_t lastX;
+            if (abs(compass.a.x) > lastX) {
+                lastX = abs(compass.a.x);
+            }
+
+
+            static int32_t lastY;
+            if (abs(compass.a.y) > lastY) {
+                lastY = abs(compass.a.y);
+            }
+
+            lcd.clear();
+            lcd.gotoXY(0, 0);
+            lcd.print("x ");
+            lcd.print(lastX);
+            lcd.gotoXY(0, 1);
+            lcd.print("y ");
+            lcd.print(lastY);
+
+            if((abs(compass.a.x) < me->collisionDetect) || (abs(compass.a.y) < me->collisionDetect)) {
+                QACTIVE_POST((QActive *)me, COLLISION_SIG, 0U);
+                }
             else {
                 QACTIVE_POST((QActive *)me, FREE_SIG, 0U);
             }

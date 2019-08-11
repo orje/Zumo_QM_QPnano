@@ -101,20 +101,34 @@ if (result &gt; lastResult) {
 lcd.clear();
 lcd.print(&quot;r &quot;);
 lcd.print(lastResult);
-*/
-
-lcd.clear();
-lcd.gotoXY(0, 0);
-lcd.print(&quot;x &quot;);
-lcd.print(compass.a.x);
-lcd.gotoXY(0, 1);
-lcd.print(&quot;y &quot;);
-lcd.print(compass.a.y);
 
 if(result &gt; me-&gt;collisionDetect) {
     QACTIVE_POST((QActive *)me, COLLISION_SIG, 0U);
 }
+*/
 
+static int32_t lastX;
+if (abs(compass.a.x) &gt; lastX) {
+    lastX = abs(compass.a.x);
+}
+
+
+static int32_t lastY;
+if (abs(compass.a.y) &gt; lastY) {
+    lastY = abs(compass.a.y);
+}
+
+lcd.clear();
+lcd.gotoXY(0, 0);
+lcd.print(&quot;x &quot;);
+lcd.print(lastX);
+lcd.gotoXY(0, 1);
+lcd.print(&quot;y &quot;);
+lcd.print(lastY);
+
+if((abs(compass.a.x) &lt; me-&gt;collisionDetect) || (abs(compass.a.y) &lt; me-&gt;collisionDetect)) {
+    QACTIVE_POST((QActive *)me, COLLISION_SIG, 0U);
+    }
 else {
     QACTIVE_POST((QActive *)me, FREE_SIG, 0U);
 }
