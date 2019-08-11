@@ -52,8 +52,8 @@ Zumo AO_Zumo;
 // Other objects
 Zumo32U4LCD lcd;
 Zumo32U4ButtonA buttonA;
-Zumo32U4ButtonA buttonB;
-Zumo32U4ButtonA buttonC;
+Zumo32U4ButtonB buttonB;
+Zumo32U4ButtonC buttonC;
 Zumo32U4Motors motors;
 LSM303 compass;
 
@@ -154,7 +154,9 @@ void Q_onAssert(char const Q_ROM * const file, int line) {
 static QState Zumo_initial(Zumo * const me) {
     /*${AOs::Zumo::SM::initial} */
     lcd.clear();
-    lcd.print("C, B, A");
+    lcd.print("set C&B");
+    lcd.gotoXY(0, 1);
+    lcd.print("press A");
     return Q_TRAN(&Zumo_start);
 }
 /*${AOs::Zumo::SM::start} ..................................................*/
@@ -163,23 +165,23 @@ static QState Zumo_start(Zumo * const me) {
     switch (Q_SIG(me)) {
         /*${AOs::Zumo::SM::start} */
         case Q_ENTRY_SIG: {
-            if (buttonA.isPressed()) {
+            if (buttonA.getSingleDebouncedPress()) {
                 lcd.clear();
                 QACTIVE_POST((QActive *)me,
                 BUTTONA_SIG, 0U);
-                }
+            }
 
-            else if(buttonC.isPressed()) {
+            else if (buttonC.getSingleDebouncedPress()) {
                 lcd.clear();
                 QACTIVE_POST((QActive *)me,
                 BUTTONC_SIG, 0U);
-                }
+            }
 
-            else if(buttonB.isPressed()) {
+            else if (buttonB.getSingleDebouncedPress()) {
                 lcd.clear();
                 QACTIVE_POST((QActive *)me,
                 BUTTONB_SIG, 0U);
-                }
+            }
 
             QActive_armX((QActive *)me,
                 0U, BSP_TICKS_PER_SEC / 10U, 0U);
@@ -188,7 +190,11 @@ static QState Zumo_start(Zumo * const me) {
         }
         /*${AOs::Zumo::SM::start::BUTTONC} */
         case BUTTONC_SIG: {
-            me->prox++;
+            if (me->prox < 6U) {
+                me->prox++;
+            }
+            else me->prox = 0;
+
             lcd.print("s ");
             lcd.print(me->prox);
             status_ = Q_TRAN(&Zumo_start);
@@ -196,7 +202,12 @@ static QState Zumo_start(Zumo * const me) {
         }
         /*${AOs::Zumo::SM::start::BUTTONB} */
         case BUTTONB_SIG: {
-            me->collisionDetect = me->collisionDetect + 100;
+            /*
+            if (me->collisionDetect <= xyz) {
+            */
+                me->collisionDetect = me->collisionDetect + 100;
+            // }
+
             lcd.print("cd ");
             lcd.print(me->collisionDetect);
             status_ = Q_TRAN(&Zumo_start);
@@ -204,6 +215,7 @@ static QState Zumo_start(Zumo * const me) {
         }
         /*${AOs::Zumo::SM::start::BUTTONA} */
         case BUTTONA_SIG: {
+            lcd.clear();
             status_ = Q_TRAN(&Zumo_drive_control);
             break;
         }
@@ -229,30 +241,33 @@ static QState Zumo_drive_control(Zumo * const me) {
 
             uint32_t result = sqrt(sq(compass.a.x) + sq(compass.a.y));
 
+            static uint32_t lastResult;
+            if (result > lastResult) {
+                lastResult = result;
+            }
+
             lcd.clear();
             lcd.print("r ");
-            lcd.print(result);
+            lcd.print(lastResult);
 
             if(result > me->collisionDetect) {
                 QACTIVE_POST((QActive *)me, COLLISION_SIG, 0U);
-                }
+            }
+
             else {
                 QACTIVE_POST((QActive *)me, FREE_SIG, 0U);
-                }
+            }
 
             QActive_armX((QActive *)me,
                 0U, BSP_TICKS_PER_SEC / 10U, 0U);
             status_ = Q_HANDLED();
             break;
         }
-        /*${AOs::Zumo::SM::start::drive_control} */
-        case Q_EXIT_SIG: {
-            QActive_disarmX((QActive *)me, 0U);
-            status_ = Q_HANDLED();
-            break;
-        }
         /*${AOs::Zumo::SM::start::drive_control::COLLISION} */
         case COLLISION_SIG: {
+            ledRed(1);
+            ledYellow(0);
+            ledGreen(0);
             status_ = Q_TRAN(&Zumo_stopp);
             break;
         }

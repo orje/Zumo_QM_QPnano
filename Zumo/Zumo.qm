@@ -23,56 +23,68 @@ ledGreen(0);</documentation>
    <statechart properties="0x01">
     <initial target="../1">
      <action>lcd.clear();
-lcd.print(&quot;C, B, A&quot;);</action>
-     <initial_glyph conn="2,4,5,3,2">
+lcd.print(&quot;set C&amp;B&quot;);
+lcd.gotoXY(0, 1);
+lcd.print(&quot;press A&quot;);</action>
+     <initial_glyph conn="2,4,5,3,3">
       <action box="0,-2,4,2"/>
      </initial_glyph>
     </initial>
     <state name="start">
-     <entry>if (buttonA.isPressed()) {
+     <entry>if (buttonA.getSingleDebouncedPress()) {
     lcd.clear();
     QACTIVE_POST((QActive *)me,
     BUTTONA_SIG, 0U);
-    }
+}
 
-else if(buttonC.isPressed()) {
+else if (buttonC.getSingleDebouncedPress()) {
     lcd.clear();
     QACTIVE_POST((QActive *)me,
     BUTTONC_SIG, 0U);
-    }
+}
 
-else if(buttonB.isPressed()) {
+else if (buttonB.getSingleDebouncedPress()) {
     lcd.clear();
     QACTIVE_POST((QActive *)me,
     BUTTONB_SIG, 0U);
-    }
+}
 
 QActive_armX((QActive *)me,
     0U, BSP_TICKS_PER_SEC / 10U, 0U);</entry>
      <tran trig="BUTTONC" target="..">
-      <action>me-&gt;prox++;
+      <action>if (me-&gt;prox &lt; 6U) {
+    me-&gt;prox++;
+}
+else me-&gt;prox = 0;
+
 lcd.print(&quot;s &quot;);
 lcd.print(me-&gt;prox);</action>
-      <tran_glyph conn="4,10,3,1,36">
+      <tran_glyph conn="5,9,3,1,36">
        <action box="0,-2,10,2"/>
       </tran_glyph>
      </tran>
      <tran trig="BUTTONB" target="..">
-      <action>me-&gt;collisionDetect = me-&gt;collisionDetect + 100;
+      <action>/*
+if (me-&gt;collisionDetect &lt;= xyz) {
+*/
+    me-&gt;collisionDetect = me-&gt;collisionDetect + 100;
+// }
+
 lcd.print(&quot;cd &quot;);
 lcd.print(me-&gt;collisionDetect);</action>
-      <tran_glyph conn="4,15,3,1,36">
+      <tran_glyph conn="5,12,3,1,36">
        <action box="0,-2,10,2"/>
       </tran_glyph>
      </tran>
      <tran trig="BUTTONA" target="../4">
-      <tran_glyph conn="4,42,3,3,11">
-       <action box="0,-2,9,2"/>
+      <action>lcd.clear();</action>
+      <tran_glyph conn="5,15,3,3,10">
+       <action box="0,-2,10,2"/>
       </tran_glyph>
      </tran>
      <tran trig="Q_TIMEOUT" target="..">
-      <tran_glyph conn="4,69,3,1,36">
-       <action box="0,-2,10,2"/>
+      <tran_glyph conn="41,42,1,3,-36">
+       <action box="-10,-2,10,2"/>
       </tran_glyph>
      </tran>
      <state name="drive_control">
@@ -80,22 +92,30 @@ lcd.print(me-&gt;collisionDetect);</action>
 
 uint32_t result = sqrt(sq(compass.a.x) + sq(compass.a.y));
 
+static uint32_t lastResult;
+if (result &gt; lastResult) {
+    lastResult = result;
+}
+
 lcd.clear();
 lcd.print(&quot;r &quot;);
-lcd.print(result);
+lcd.print(lastResult);
 
 if(result &gt; me-&gt;collisionDetect) {
     QACTIVE_POST((QActive *)me, COLLISION_SIG, 0U);
-    }
+}
+
 else {
     QACTIVE_POST((QActive *)me, FREE_SIG, 0U);
-    }
+}
 
 QActive_armX((QActive *)me,
     0U, BSP_TICKS_PER_SEC / 10U, 0U);</entry>
-      <exit>QActive_disarmX((QActive *)me, 0U);</exit>
       <tran trig="COLLISION" target="../3">
-       <tran_glyph conn="15,48,3,3,10">
+       <action>ledRed(1);
+ledYellow(0);
+ledGreen(0);</action>
+       <tran_glyph conn="15,21,3,3,10">
         <action box="0,-2,11,2"/>
        </tran_glyph>
       </tran>
@@ -103,12 +123,12 @@ QActive_armX((QActive *)me,
        <action>ledRed(0);
 ledYellow(0);
 ledGreen(1);</action>
-       <tran_glyph conn="15,57,3,3,10">
+       <tran_glyph conn="15,30,3,3,10">
         <action box="0,-2,6,2"/>
        </tran_glyph>
       </tran>
       <tran trig="Q_TIMEOUT" target="..">
-       <tran_glyph conn="38,64,1,3,-23">
+       <tran_glyph conn="38,37,1,3,-23">
         <action box="-11,-2,11,2"/>
        </tran_glyph>
       </tran>
@@ -117,30 +137,29 @@ ledGreen(1);</action>
 
 QACTIVE_POST((QActive *)me, BACK_SIG, 0U);</entry>
        <tran trig="BACK" target="../../..">
-        <tran_glyph conn="36,51,1,3,-32">
+        <tran_glyph conn="35,24,1,3,-30">
          <action box="-5,-2,6,2"/>
         </tran_glyph>
        </tran>
-       <state_glyph node="25,46,11,7">
+       <state_glyph node="25,19,10,7">
         <entry box="1,2,4,2"/>
        </state_glyph>
       </state>
       <state name="drive">
        <entry>motors.setSpeeds((a * me-&gt;prox + e), (a * me-&gt;prox + e));</entry>
-       <state_glyph node="25,55,11,6">
+       <state_glyph node="25,28,10,6">
         <entry box="1,2,4,2"/>
        </state_glyph>
       </state>
-      <state_glyph node="15,40,23,26">
+      <state_glyph node="15,13,23,26">
        <entry box="1,2,4,2"/>
-       <exit box="1,4,4,2"/>
       </state_glyph>
      </state>
-     <state_glyph node="4,2,36,69">
+     <state_glyph node="5,2,36,42">
       <entry box="1,2,4,2"/>
      </state_glyph>
     </state>
-    <state_diagram size="42,73"/>
+    <state_diagram size="43,46"/>
    </statechart>
   </class>
  </package>
@@ -163,8 +182,8 @@ Zumo AO_Zumo;
 // Other objects
 Zumo32U4LCD lcd;
 Zumo32U4ButtonA buttonA;
-Zumo32U4ButtonA buttonB;
-Zumo32U4ButtonA buttonC;
+Zumo32U4ButtonB buttonB;
+Zumo32U4ButtonC buttonC;
 Zumo32U4Motors motors;
 LSM303 compass;
 
