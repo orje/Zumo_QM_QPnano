@@ -563,7 +563,7 @@
 <node CREATED="1539109191580" ID="ID_596105360" MODIFIED="1555399708182" TEXT="Frontsensoren abtasten">
 <icon BUILTIN="button_ok"/>
 </node>
-<node CREATED="1548267814460" ID="ID_922834610" MODIFIED="1565275362236" TEXT="Kollision abtasten">
+<node CREATED="1548267814460" ID="ID_922834610" MODIFIED="1565546890162" TEXT="Kollision abtasten">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -626,6 +626,13 @@
     <p>
       W: -310,&#160;&#160;&#160;&#160;&#160;80
     </p>
+    <p>
+      
+    </p>
+    <p>
+      
+    </p>
+    Linear acceleration sensor sensitivity Sensitivity describes the gain of the sensor and can be determined, for example, by applying 1 g acceleration to it. As the sensor can measure DC accelerations this can be done easily by pointing the axis of interest towards the center of the earth, noting the output value, rotating the sensor by 180 degrees (pointing to the sky) and noting the output value again. By doing so, &#177;1 g acceleration is applied to the sensor. Subtracting the larger output value from the smaller one, and dividing the result by 2, leads to the actual sensitivity of the sensor. This value changes very little over temperature and also time. The sensitivity tolerance describes the range of sensitivities of a large population of sensors.
   </body>
 </html>
 </richcontent>
