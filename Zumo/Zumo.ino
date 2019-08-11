@@ -169,13 +169,13 @@ static QState Zumo_start(Zumo * const me) {
                 BUTTONA_SIG, 0U);
                 }
 
-            else if (buttonC.isPressed()) {
+            else if(buttonC.isPressed()) {
                 lcd.clear();
                 QACTIVE_POST((QActive *)me,
                 BUTTONC_SIG, 0U);
                 }
 
-            else if (buttonB.isPressed()) {
+            else if(buttonB.isPressed()) {
                 lcd.clear();
                 QACTIVE_POST((QActive *)me,
                 BUTTONB_SIG, 0U);
@@ -186,18 +186,12 @@ static QState Zumo_start(Zumo * const me) {
             status_ = Q_HANDLED();
             break;
         }
-        /*${AOs::Zumo::SM::start} */
-        case Q_EXIT_SIG: {
-            QActive_disarmX((QActive *)me, 0U);
-            status_ = Q_HANDLED();
-            break;
-        }
         /*${AOs::Zumo::SM::start::BUTTONC} */
         case BUTTONC_SIG: {
             me->prox++;
             lcd.print("s ");
             lcd.print(me->prox);
-            status_ = Q_HANDLED();
+            status_ = Q_TRAN(&Zumo_start);
             break;
         }
         /*${AOs::Zumo::SM::start::BUTTONB} */
@@ -205,7 +199,7 @@ static QState Zumo_start(Zumo * const me) {
             me->collisionDetect = me->collisionDetect + 100;
             lcd.print("cd ");
             lcd.print(me->collisionDetect);
-            status_ = Q_HANDLED();
+            status_ = Q_TRAN(&Zumo_start);
             break;
         }
         /*${AOs::Zumo::SM::start::BUTTONA} */
