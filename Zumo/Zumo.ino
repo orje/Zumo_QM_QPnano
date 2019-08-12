@@ -16,8 +16,8 @@
 * for more details.
 */
 /*$endhead${.::Zumo.ino} ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
-#include "qpn.h" // QP-nano framework
-#include "Arduino.h" // Arduino API
+#include "qpn.h"              // QP-nano framework
+#include "Arduino.h"          // Arduino API
 
 #include <Wire.h>
 #include <Zumo32U4.h>
@@ -57,7 +57,7 @@ Zumo32U4ButtonC buttonC;
 Zumo32U4Motors motors;
 LSM303 compass;
 
-static QEvt l_zumoQSto[10]; // Event queue storage for Zumo
+static QEvt l_zumoQSto[10];   // Event queue storage for Zumo
 //...
 
 //============================================================================
@@ -80,7 +80,7 @@ enum {
 
 // various signals for the application...
 enum {
-    BUTTONA_SIG = Q_USER_SIG,  // end of data
+    BUTTONA_SIG = Q_USER_SIG, // end of data
     BUTTONB_SIG,
     BUTTONC_SIG,
     COLLISION_SIG,
@@ -104,13 +104,13 @@ void setup() {
 
 //............................................................................
 void loop() {
-    QF_run(); // run the QF-nano framework
+    QF_run();                 // run the QF-nano framework
 }
 
 //============================================================================
 // interrupts...
 ISR(TIMER4_COMPA_vect) {
-    QF_tickXISR(0); // process time events for tick rate 0
+    QF_tickXISR(0);           // process time events for tick rate 0
 }
 
 //============================================================================
@@ -118,7 +118,7 @@ ISR(TIMER4_COMPA_vect) {
 void QF_onStartup(void) {
 // 1/1024 prescaler, interrupt enabling...
 TCCR4B = (1U << CS43) | (1U << CS41) | (1U << CS40); // CK/1024
-TIMSK4 = (1U << OCIE4A); // Interrupt enabled
+TIMSK4 = (1U << OCIE4A);      // Interrupt enabled
 TCNT4  = 0U;
 
 // set the output-compare register based on the desired tick frequency
@@ -136,8 +136,8 @@ void QV_onIdle(void) { // called with interrupts DISABLED
 //............................................................................
 void Q_onAssert(char const Q_ROM * const file, int line) {
     // implement the error-handling policy for your application!!!
-    QF_INT_DISABLE(); // disable all interrupts
-    QF_RESET();  // reset the CPU
+    QF_INT_DISABLE();         // disable all interrupts
+    QF_RESET();               // reset the CPU
 }
 
 //============================================================================
@@ -283,7 +283,7 @@ static QState Zumo_drive_control(Zumo * const me) {
             }
 
             QActive_armX((QActive *)me,
-                0U, BSP_TICKS_PER_SEC / 10U, 0U);
+                0U, BSP_TICKS_PER_SEC / 100U, 0U);
             status_ = Q_HANDLED();
             break;
         }
@@ -305,6 +305,9 @@ static QState Zumo_drive_control(Zumo * const me) {
         }
         /*${AOs::Zumo::SM::start::drive_control::Q_TIMEOUT} */
         case Q_TIMEOUT_SIG: {
+            ledRed(0);
+            ledYellow(1);
+            ledGreen(0);
             status_ = Q_TRAN(&Zumo_drive_control);
             break;
         }

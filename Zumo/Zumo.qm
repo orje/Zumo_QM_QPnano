@@ -128,7 +128,7 @@ else {
 }
 
 QActive_armX((QActive *)me,
-    0U, BSP_TICKS_PER_SEC / 10U, 0U);</entry>
+    0U, BSP_TICKS_PER_SEC / 100U, 0U);</entry>
       <tran trig="COLLISION" target="../3">
        <action>ledRed(1);
 ledYellow(0);
@@ -146,6 +146,9 @@ ledGreen(1);</action>
        </tran_glyph>
       </tran>
       <tran trig="Q_TIMEOUT" target="..">
+       <action>ledRed(0);
+ledYellow(1);
+ledGreen(0);</action>
        <tran_glyph conn="37,36,1,3,-22">
         <action box="-11,-2,11,2"/>
        </tran_glyph>
