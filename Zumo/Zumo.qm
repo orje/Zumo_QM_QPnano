@@ -1,11 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <model version="4.5.1" links="0">
- <documentation>A simple version to let the Zumo drive freely and try to avoid barriers.
-The Zumo is started with a button.
-The proximity sensors are used to detect barriers.
-The motors are controlled according to the measure values.
-If the acceleration sensor detects a collision, the zumo drives backwards and turn.
-The program goes cyclic around between measurement and motor control.</documentation>
  <framework name="qpn"/>
  <package name="AOs" stereotype="0x02">
   <class name="Zumo" superclass="qpn::QActive">
@@ -59,7 +53,7 @@ else me-&gt;prox = 0;
 
 lcd.print(&quot;s &quot;);
 lcd.print(me-&gt;prox);</action>
-      <tran_glyph conn="5,9,3,1,36">
+      <tran_glyph conn="5,8,3,1,34">
        <action box="0,-2,10,2"/>
       </tran_glyph>
      </tran>
@@ -72,18 +66,18 @@ if (me-&gt;collisionDetect &lt;= xyz) {
 
 lcd.print(&quot;cd &quot;);
 lcd.print(me-&gt;collisionDetect);</action>
-      <tran_glyph conn="5,12,3,1,36">
+      <tran_glyph conn="5,12,3,1,34">
        <action box="0,-2,10,2"/>
       </tran_glyph>
      </tran>
      <tran trig="BUTTONA" target="../4">
       <action>lcd.clear();</action>
-      <tran_glyph conn="5,15,3,3,10">
+      <tran_glyph conn="5,16,3,3,10">
        <action box="0,-2,10,2"/>
       </tran_glyph>
      </tran>
      <tran trig="Q_TIMEOUT" target="..">
-      <tran_glyph conn="41,42,1,3,-36">
+      <tran_glyph conn="39,41,1,3,-34">
        <action box="-10,-2,10,2"/>
       </tran_glyph>
      </tran>
@@ -125,8 +119,8 @@ lcd.gotoXY(0, 1);
 lcd.print(&quot;y &quot;);
 lcd.print(lastY);
 
-if((abs(compass.a.x) &lt; me-&gt;collisionDetect) ||
-    (abs(compass.a.y) &lt; me-&gt;collisionDetect)) {
+if((abs(compass.a.x) &gt; me-&gt;collisionDetect) ||
+    (abs(compass.a.y) &gt; me-&gt;collisionDetect)) {
         QACTIVE_POST((QActive *)me, COLLISION_SIG, 0U);
 }
 else {
@@ -139,7 +133,7 @@ QActive_armX((QActive *)me,
        <action>ledRed(1);
 ledYellow(0);
 ledGreen(0);</action>
-       <tran_glyph conn="15,21,3,3,10">
+       <tran_glyph conn="15,20,3,3,10">
         <action box="0,-2,11,2"/>
        </tran_glyph>
       </tran>
@@ -147,12 +141,12 @@ ledGreen(0);</action>
        <action>ledRed(0);
 ledYellow(0);
 ledGreen(1);</action>
-       <tran_glyph conn="15,30,3,3,10">
+       <tran_glyph conn="15,29,3,3,10">
         <action box="0,-2,6,2"/>
        </tran_glyph>
       </tran>
       <tran trig="Q_TIMEOUT" target="..">
-       <tran_glyph conn="38,37,1,3,-23">
+       <tran_glyph conn="37,36,1,3,-22">
         <action box="-11,-2,11,2"/>
        </tran_glyph>
       </tran>
@@ -161,36 +155,36 @@ ledGreen(1);</action>
 
 QACTIVE_POST((QActive *)me, BACK_SIG, 0U);</entry>
        <tran trig="BACK" target="../../..">
-        <tran_glyph conn="35,24,1,3,-30">
+        <tran_glyph conn="35,23,1,3,-30">
          <action box="-5,-2,6,2"/>
         </tran_glyph>
        </tran>
-       <state_glyph node="25,19,10,7">
+       <state_glyph node="25,18,10,7">
         <entry box="1,2,4,2"/>
        </state_glyph>
       </state>
       <state name="drive">
        <entry>motors.setSpeeds((a * me-&gt;prox + e), (a * me-&gt;prox + e));</entry>
-       <state_glyph node="25,28,10,6">
+       <state_glyph node="25,27,10,6">
         <entry box="1,2,4,2"/>
        </state_glyph>
       </state>
-      <state_glyph node="15,13,23,26">
+      <state_glyph node="15,14,22,24">
        <entry box="1,2,4,2"/>
       </state_glyph>
      </state>
-     <state_glyph node="5,2,36,42">
+     <state_glyph node="5,2,34,41">
       <entry box="1,2,4,2"/>
      </state_glyph>
     </state>
-    <state_diagram size="43,46"/>
+    <state_diagram size="41,45"/>
    </statechart>
   </class>
  </package>
  <directory name=".">
   <file name="Zumo.ino">
-   <text>#include &quot;qpn.h&quot; // QP-nano framework
-#include &quot;Arduino.h&quot; // Arduino API
+   <text>#include &quot;qpn.h&quot;              // QP-nano framework
+#include &quot;Arduino.h&quot;          // Arduino API
 
 #include &lt;Wire.h&gt;
 #include &lt;Zumo32U4.h&gt;
@@ -211,7 +205,7 @@ Zumo32U4ButtonC buttonC;
 Zumo32U4Motors motors;
 LSM303 compass;
 
-static QEvt l_zumoQSto[10]; // Event queue storage for Zumo
+static QEvt l_zumoQSto[10];   // Event queue storage for Zumo
 //...
 
 //============================================================================
@@ -234,7 +228,7 @@ enum {
 
 // various signals for the application...
 enum {
-    BUTTONA_SIG = Q_USER_SIG,  // end of data
+    BUTTONA_SIG = Q_USER_SIG, // end of data
     BUTTONB_SIG,
     BUTTONC_SIG,
     COLLISION_SIG,
@@ -258,13 +252,13 @@ void setup() {
 
 //............................................................................
 void loop() {
-    QF_run(); // run the QF-nano framework
+    QF_run();                 // run the QF-nano framework
 }
 
 //============================================================================
 // interrupts...
 ISR(TIMER4_COMPA_vect) {
-    QF_tickXISR(0); // process time events for tick rate 0
+    QF_tickXISR(0);           // process time events for tick rate 0
 }
 
 //============================================================================
@@ -272,7 +266,7 @@ ISR(TIMER4_COMPA_vect) {
 void QF_onStartup(void) {
 // 1/1024 prescaler, interrupt enabling...
 TCCR4B = (1U &lt;&lt; CS43) | (1U &lt;&lt; CS41) | (1U &lt;&lt; CS40); // CK/1024
-TIMSK4 = (1U &lt;&lt; OCIE4A); // Interrupt enabled
+TIMSK4 = (1U &lt;&lt; OCIE4A);      // Interrupt enabled
 TCNT4  = 0U;
 
 // set the output-compare register based on the desired tick frequency
@@ -290,8 +284,8 @@ void QV_onIdle(void) { // called with interrupts DISABLED
 //............................................................................
 void Q_onAssert(char const Q_ROM * const file, int line) {
     // implement the error-handling policy for your application!!!
-    QF_INT_DISABLE(); // disable all interrupts
-    QF_RESET();  // reset the CPU
+    QF_INT_DISABLE();         // disable all interrupts
+    QF_RESET();               // reset the CPU
 }
 
 //============================================================================

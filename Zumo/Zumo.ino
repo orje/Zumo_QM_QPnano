@@ -261,7 +261,6 @@ static QState Zumo_drive_control(Zumo * const me) {
                 lastX = abs(compass.a.x);
             }
 
-
             static int32_t lastY;
             if (abs(compass.a.y) > lastY) {
                 lastY = abs(compass.a.y);
@@ -275,9 +274,10 @@ static QState Zumo_drive_control(Zumo * const me) {
             lcd.print("y ");
             lcd.print(lastY);
 
-            if((abs(compass.a.x) < me->collisionDetect) || (abs(compass.a.y) < me->collisionDetect)) {
-                QACTIVE_POST((QActive *)me, COLLISION_SIG, 0U);
-                }
+            if((abs(compass.a.x) > me->collisionDetect) ||
+                (abs(compass.a.y) > me->collisionDetect)) {
+                    QACTIVE_POST((QActive *)me, COLLISION_SIG, 0U);
+            }
             else {
                 QACTIVE_POST((QActive *)me, FREE_SIG, 0U);
             }
