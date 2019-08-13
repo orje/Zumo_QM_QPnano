@@ -61,7 +61,7 @@ lcd.print(me-&gt;prox);</action>
       <action>/*
 if (me-&gt;collisionDetect &lt;= xyz) {
 */
-    me-&gt;collisionDetect = me-&gt;collisionDetect + 100;
+    me-&gt;collisionDetect = me-&gt;collisionDetect + 10;
 // }
 
 lcd.print(&quot;cd &quot;);
@@ -84,7 +84,8 @@ lcd.print(me-&gt;collisionDetect);</action>
      <state name="drive_control">
       <entry>compass.read();
 
-/*
+/*------*/
+
 uint32_t result = sqrt(sq(compass.a.x) + sq(compass.a.y));
 
 static uint32_t lastResult;
@@ -99,8 +100,10 @@ lcd.print(lastResult);
 if(result &gt; me-&gt;collisionDetect) {
     QACTIVE_POST((QActive *)me, COLLISION_SIG, 0U);
 }
-*/
 
+/*------*/
+
+/*
 static int32_t lastX;
 if (abs(compass.a.x) &gt; lastX) {
     lastX = abs(compass.a.x);
@@ -123,12 +126,16 @@ if((abs(compass.a.x) &gt; me-&gt;collisionDetect) ||
     (abs(compass.a.y) &gt; me-&gt;collisionDetect)) {
         QACTIVE_POST((QActive *)me, COLLISION_SIG, 0U);
 }
+*/
+
+/*------*/
+
 else {
     QACTIVE_POST((QActive *)me, FREE_SIG, 0U);
 }
 
 QActive_armX((QActive *)me,
-    0U, BSP_TICKS_PER_SEC / 100U, 0U);</entry>
+    0U, BSP_TICKS_PER_SEC / 10U, 0U);</entry>
       <tran trig="COLLISION" target="../3">
        <action>ledRed(1);
 ledYellow(0);

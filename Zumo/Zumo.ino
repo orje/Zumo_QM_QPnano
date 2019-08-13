@@ -205,7 +205,7 @@ static QState Zumo_start(Zumo * const me) {
             /*
             if (me->collisionDetect <= xyz) {
             */
-                me->collisionDetect = me->collisionDetect + 100;
+                me->collisionDetect = me->collisionDetect + 10;
             // }
 
             lcd.print("cd ");
@@ -239,7 +239,8 @@ static QState Zumo_drive_control(Zumo * const me) {
         case Q_ENTRY_SIG: {
             compass.read();
 
-            /*
+            /*------*/
+
             uint32_t result = sqrt(sq(compass.a.x) + sq(compass.a.y));
 
             static uint32_t lastResult;
@@ -254,8 +255,10 @@ static QState Zumo_drive_control(Zumo * const me) {
             if(result > me->collisionDetect) {
                 QACTIVE_POST((QActive *)me, COLLISION_SIG, 0U);
             }
-            */
 
+            /*------*/
+
+            /*
             static int32_t lastX;
             if (abs(compass.a.x) > lastX) {
                 lastX = abs(compass.a.x);
@@ -278,12 +281,16 @@ static QState Zumo_drive_control(Zumo * const me) {
                 (abs(compass.a.y) > me->collisionDetect)) {
                     QACTIVE_POST((QActive *)me, COLLISION_SIG, 0U);
             }
+            */
+
+            /*------*/
+
             else {
                 QACTIVE_POST((QActive *)me, FREE_SIG, 0U);
             }
 
             QActive_armX((QActive *)me,
-                0U, BSP_TICKS_PER_SEC / 100U, 0U);
+                0U, BSP_TICKS_PER_SEC / 10U, 0U);
             status_ = Q_HANDLED();
             break;
         }
