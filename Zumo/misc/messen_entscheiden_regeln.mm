@@ -66,8 +66,7 @@
       Ein negativer vierstelliger Wert von X oder Y bedeutet crash
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1559320993183" ID="ID_195238863" MODIFIED="1560275594949" TEXT="Kehrtwendung">
 <richcontent TYPE="NOTE"><html>
   <head>
@@ -104,7 +103,7 @@
 </node>
 <node CREATED="1555442146122" ID="ID_285132072" MODIFIED="1559320957872" TEXT="s &gt;= 5">
 <icon BUILTIN="button_ok"/>
-<node CREATED="1555442258170" ID="ID_1443366646" MODIFIED="1556991395665" TEXT="wenden">
+<node CREATED="1555442258170" ID="ID_1443366646" MODIFIED="1568471585118" TEXT="wenden">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -140,7 +139,8 @@
       <font size="4">&#160;</font>
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="button_ok"/>
 <icon BUILTIN="attach"/>
 </node>

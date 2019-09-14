@@ -33,8 +33,9 @@ typedef struct Zumo {
 /* private: */
     uint16_t leftSpeed = 0;;
     uint16_t rightSpeed = 0;;
-    int32_t collisionDetect = 0;
+    int32_t collisionDetect = 180;
     uint8_t prox = 0;
+    uint32_t lastResult = 0;
 } Zumo;
 
 /* protected: */
@@ -76,6 +77,8 @@ enum {
     // Funktionsgleichung: y = a * x + e
     a =  -50,                 // Steigung für's Regeln
     e = 300U,                 // Scheitelpunkt y
+
+    m = 3U                    // Messzyklen
 };
 
 // various signals for the application...
@@ -215,7 +218,7 @@ static QState Zumo_start(Zumo * const me) {
         }
         /*${AOs::Zumo::SM::start::BUTTONA} */
         case BUTTONA_SIG: {
-            lcd.clear();
+            me->lastResult = 0;
             status_ = Q_TRAN(&Zumo_drive_control);
             break;
         }
@@ -237,22 +240,27 @@ static QState Zumo_drive_control(Zumo * const me) {
     switch (Q_SIG(me)) {
         /*${AOs::Zumo::SM::start::drive_control} */
         case Q_ENTRY_SIG: {
-            compass.read();
+            me->lastResult = 0;
 
-            /*------*/
+            for(uint8_t i = 0; i < m; i++) {
+                compass.read();
 
-            uint32_t result = sqrt(sq(compass.a.x) + sq(compass.a.y));
-
-            static uint32_t lastResult;
-            if (result > lastResult) {
-                lastResult = result;
+                uint32_t result = sqrt(sq(compass.a.x) + sq(compass.a.y));
+            /*
+                lcd.clear();
+                lcd.gotoXY(0, 1);
+                lcd.print("r ");
+                lcd.print(result);
+            */
+                me->lastResult = me->lastResult + result;
             }
+            me->lastResult = me->lastResult / m;
 
-            lcd.clear();
-            lcd.print("r ");
-            lcd.print(lastResult);
+            lcd.gotoXY(0, 0);
+            lcd.print("lr ");
+            lcd.print(me->lastResult);
 
-            if(result > me->collisionDetect) {
+            if(me->lastResult >= me->collisionDetect) {
                 QACTIVE_POST((QActive *)me, COLLISION_SIG, 0U);
             }
 

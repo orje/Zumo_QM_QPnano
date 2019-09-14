@@ -563,7 +563,7 @@
 <node CREATED="1539109191580" ID="ID_596105360" MODIFIED="1555399708182" TEXT="Frontsensoren abtasten">
 <icon BUILTIN="button_ok"/>
 </node>
-<node CREATED="1548267814460" ID="ID_922834610" MODIFIED="1565431367491" TEXT="Kollision abtasten">
+<node CREATED="1548267814460" ID="ID_922834610" MODIFIED="1568479010522" TEXT="Kollision abtasten">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -626,6 +626,15 @@
     <p>
       W: -310,&#160;&#160;&#160;&#160;&#160;80
     </p>
+    <p>
+      
+    </p>
+    <p>
+      Schei&#223;e! Egal welche Formel ich verwende, ich komme immer auf 180 schon beim Stehen. Die Messwerte schlagen ohne Grund so hoch aus, dass kein sinnvoller, geschwindigkeitsabh&#228;ngiger Schwellwert gefunden werden kann. Nicht mal bei Geschwindigkeit 300 wird beim Aufprall ein Wert gr&#246;&#223;er 180 generiert.
+    </p>
+    <p>
+      <b>Ich m&#252;&#223;te eigentlich abh&#228;ngig von der Geschwindigkeit einen g&#252;ltigen Messbereich definieren. </b>
+    </p>
   </body>
 </html>
 </richcontent>
@@ -679,7 +688,7 @@
 <icon BUILTIN="help"/>
 </node>
 </node>
-<node CREATED="1546970408663" FOLDED="true" ID="ID_1980648924" MODIFIED="1558708823931" TEXT="Algorithmus">
+<node CREATED="1546970408663" ID="ID_1980648924" MODIFIED="1568471679769" TEXT="Algorithmus">
 <arrowlink DESTINATION="ID_1980648924" ENDARROW="Default" ENDINCLINATION="0;0;" ID="Arrow_ID_1184872118" STARTARROW="None" STARTINCLINATION="0;0;"/>
 <linktarget COLOR="#b0b0b0" DESTINATION="ID_1980648924" ENDARROW="Default" ENDINCLINATION="0;0;" ID="Arrow_ID_1184872118" SOURCE="ID_1980648924" STARTARROW="None" STARTINCLINATION="0;0;"/>
 <font NAME="Cambria" SIZE="12"/>

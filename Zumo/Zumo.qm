@@ -12,8 +12,9 @@ ledGreen(0);</documentation>
    <attribute name="rightSpeed = 0;" type="uint16_t" visibility="0x02" properties="0x00">
     <documentation>variable for the right motor speed</documentation>
    </attribute>
-   <attribute name="collisionDetect = 0" type="int32_t" visibility="0x02" properties="0x00"/>
+   <attribute name="collisionDetect = 180" type="int32_t" visibility="0x02" properties="0x00"/>
    <attribute name="prox = 0" type="uint8_t" visibility="0x02" properties="0x00"/>
+   <attribute name="lastResult = 0" type="uint32_t" visibility="0x02" properties="0x00"/>
    <statechart properties="0x01">
     <initial target="../1">
      <action>lcd.clear();
@@ -46,7 +47,7 @@ else if (buttonB.getSingleDebouncedPress()) {
 QActive_armX((QActive *)me,
     0U, BSP_TICKS_PER_SEC / 10U, 0U);</entry>
      <tran trig="BUTTONC" target="..">
-      <action>if (me-&gt;prox &lt; 6U) {
+      <action brief="set the speed">if (me-&gt;prox &lt; 6U) {
     me-&gt;prox++;
 }
 else me-&gt;prox = 0;
@@ -54,11 +55,11 @@ else me-&gt;prox = 0;
 lcd.print(&quot;s &quot;);
 lcd.print(me-&gt;prox);</action>
       <tran_glyph conn="5,8,3,1,34">
-       <action box="0,-2,10,2"/>
+       <action box="0,-2,21,2"/>
       </tran_glyph>
      </tran>
      <tran trig="BUTTONB" target="..">
-      <action>/*
+      <action brief="adjust the sensitivity">/*
 if (me-&gt;collisionDetect &lt;= xyz) {
 */
     me-&gt;collisionDetect = me-&gt;collisionDetect + 10;
@@ -67,13 +68,13 @@ if (me-&gt;collisionDetect &lt;= xyz) {
 lcd.print(&quot;cd &quot;);
 lcd.print(me-&gt;collisionDetect);</action>
       <tran_glyph conn="5,12,3,1,34">
-       <action box="0,-2,10,2"/>
+       <action box="0,-2,24,2"/>
       </tran_glyph>
      </tran>
      <tran trig="BUTTONA" target="../4">
-      <action>lcd.clear();</action>
+      <action brief="Start">me-&gt;lastResult = 0;</action>
       <tran_glyph conn="5,16,3,3,10">
-       <action box="0,-2,10,2"/>
+       <action box="0,-2,9,4"/>
       </tran_glyph>
      </tran>
      <tran trig="Q_TIMEOUT" target="..">
@@ -82,22 +83,27 @@ lcd.print(me-&gt;collisionDetect);</action>
       </tran_glyph>
      </tran>
      <state name="drive_control">
-      <entry>compass.read();
+      <entry>me-&gt;lastResult = 0;
 
-/*------*/
+for(uint8_t i = 0; i &lt; m; i++) {
+    compass.read();
 
-uint32_t result = sqrt(sq(compass.a.x) + sq(compass.a.y));
-
-static uint32_t lastResult;
-if (result &gt; lastResult) {
-    lastResult = result;
+    uint32_t result = sqrt(sq(compass.a.x) + sq(compass.a.y));
+/*
+    lcd.clear();
+    lcd.gotoXY(0, 1);
+    lcd.print(&quot;r &quot;);
+    lcd.print(result);
+*/
+    me-&gt;lastResult = me-&gt;lastResult + result;
 }
+me-&gt;lastResult = me-&gt;lastResult / m;
 
-lcd.clear();
-lcd.print(&quot;r &quot;);
-lcd.print(lastResult);
+lcd.gotoXY(0, 0);
+lcd.print(&quot;lr &quot;);
+lcd.print(me-&gt;lastResult);
 
-if(result &gt; me-&gt;collisionDetect) {
+if(me-&gt;lastResult &gt;= me-&gt;collisionDetect) {
     QACTIVE_POST((QActive *)me, COLLISION_SIG, 0U);
 }
 
@@ -234,6 +240,8 @@ enum {
     // Funktionsgleichung: y = a * x + e
     a =  -50,                 // Steigung für's Regeln
     e = 300U,                 // Scheitelpunkt y
+
+    m = 3U                    // Messzyklen
 };
 
 // various signals for the application...
