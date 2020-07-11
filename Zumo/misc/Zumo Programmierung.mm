@@ -114,7 +114,7 @@
 <font NAME="Cambria" SIZE="14"/>
 </node>
 </node>
-<node CREATED="1538675191977" FOLDED="true" ID="ID_187336572" MODIFIED="1564504115728" POSITION="right" TEXT="Welche Programmierumgebung benutzen?">
+<node CREATED="1538675191977" FOLDED="true" ID="ID_187336572" MODIFIED="1592735393844" POSITION="right" TEXT="Welche Programmierumgebung benutzen?">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -126,7 +126,8 @@
       </li>
     </ol>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <font NAME="Cambria" SIZE="12"/>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1538675256437" FOLDED="true" ID="ID_1244246604" MODIFIED="1555399845140" TEXT="Arduino IDE">
@@ -634,8 +635,7 @@
     </p>
     Linear acceleration sensor sensitivity Sensitivity describes the gain of the sensor and can be determined, for example, by applying 1 g acceleration to it. As the sensor can measure DC accelerations this can be done easily by pointing the axis of interest towards the center of the earth, noting the output value, rotating the sensor by 180 degrees (pointing to the sky) and noting the output value again. By doing so, &#177;1 g acceleration is applied to the sensor. Subtracting the larger output value from the smaller one, and dividing the result by 2, leads to the actual sensitivity of the sensor. This value changes very little over temperature and also time. The sensitivity tolerance describes the range of sensitivities of a large population of sensors.
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <font NAME="Courier New" SIZE="12"/>
 </node>
 <node CREATED="1539109206683" ID="ID_396289365" MODIFIED="1555305608137" TEXT="Seitensensoren abtasten">
